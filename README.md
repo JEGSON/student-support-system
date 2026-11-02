@@ -3,8 +3,9 @@
 Python/Flask/MongoDB university support demonstration. Stages 01–19 are delivered
 for local synthetic testing: student requests, scoped staff work, conversation and
 internal notes, lifecycle, referrals, generic captured notifications, access controls,
-retention framework and isolated encrypted recovery. No production deployment,
-real student data, external email or remote push occurred.
+retention framework and isolated encrypted recovery. Production deployment,
+real student data and external email remain excluded. The user separately authorised
+publishing the source and local development history to the configured GitHub repository.
 
 Start with [the testing checklist](docs/handbook/testing-checklist.md),
 [setup](docs/handbook/setup.md) and [student/staff guide](docs/handbook/user-guide.md).

@@ -5,8 +5,9 @@
   on-call approvals remain OD-02–07; no live data/service is authorised.
 - Full assessment rubric, inaccessible original attachment, deadline and institutional
   AI policy remain missing (OD-01). FR-04/06 are undefined. Assessment conformity cannot
-  be certified. Local Git history is real; configured GitHub origin is not verified
-  remote publication/history. No push occurred.
+  be certified. Local Git history is real. Source publication to the configured GitHub origin
+  is now separately authorised; the initial handover excluded that action.
+  Production deployment remains outside this authorisation.
 - Axe/browser/keyboarding/large-text checks do not certify WCAG 2.2 AA. Native screen-
   reader and complete manual zoom/usability review still require a human reviewer.
 - Audit read is an explicit offline scoped service, not a public dashboard/export.

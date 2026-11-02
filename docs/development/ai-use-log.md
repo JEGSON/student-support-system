@@ -172,3 +172,15 @@ redirect; the flow was corrected to normal OIDC GET initiation without relaxing
 CSP. Test identities are unique synthetic accounts removed after testing. No new
 runtime dependencies, external contact, real data or production registration.
 The full suite and feature evidence record the final verification scope.
+
+## 2 November 2026 — Editor environment and authorised source publication
+
+Codex verified that every import in test_registration_browser.py loads with the
+project virtual environment and that all four tests collect. Added VS Code/Pyright
+settings for the local interpreter/import root; lint passed. The user then explicitly
+authorised pushing the code to GitHub with an explanatory commit message, superseding
+the earlier no-push restriction for source publication only. Remote fetch succeeded;
+16 existing local commits were preserved. Outgoing history comparison checked 713
+file versions against 30 actual private secret values with zero matches. Generated
+credentials, environments, database files and backups remain ignored. No production
+deployment or external student-information processing is authorised by this change.
