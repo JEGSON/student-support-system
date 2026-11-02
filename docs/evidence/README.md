@@ -21,3 +21,7 @@ Current delivery adds [staff work](stage-09/README.md), [communication](stage-10
 [integrated evaluation](stage-16/README.md). Final packaging is documented in the
 [release checklist](../handbook/release-checklist.md); the external dist receipt
 identifies the actual archive commit and checksum.
+
+The post-handover [student registration and profile extension](account-profiles/README.md)
+adds real synthetic provider signup, own-profile edits and an integrated 301-pass
+regression, without enabling production signup or self-assigned staff access.

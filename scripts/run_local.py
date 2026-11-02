@@ -21,6 +21,7 @@ def local_web_settings():
     # and os.environ. This local account can still read its own private .env file.
     allowed = {
         "APP_ENV",
+        "SELF_REGISTRATION_ENABLED",
         "SECRET_KEY",
         "FLASK_DEBUG",
         "APP_BASE_URL",

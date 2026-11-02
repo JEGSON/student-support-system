@@ -84,3 +84,4 @@ SR-04 SR-06 SR-09 SR-11,,T07 T10 T11,V16,03,app,docs/evidence/stage-16/README.md
 SR-04 SR-06 SR-09 SR-11,,T07 T10 T11,V14 V16,03,app,docs/evidence/stage-16/README.md,verified local scope; see limitations and requirement register; human/production controls partial
 SR-02 SR-06 BR-01 BR-02 BR-03 BR-04 BR-09,WF-01 WF-02,T02 T03 T05,V07 V10,04,app,docs/evidence/stage-16/README.md,verified local scope; see limitations and requirement register
 SR-02 SR-04 SR-06 SR-10 BR-09,WF-01 WF-02,T02 T03 T07 T11,V07 V10 V14 V16,04,app,docs/evidence/stage-16/README.md,verified local scope; see limitations and requirement register; human/production controls partial
+FR-01 SR-01 SR-02 SR-05 SR-06 SR-08,WF-01,T01 T02 T04 T08 T09 T10,V01 V06 V07 V08 V10 V11,19,app/services/accounts.py,docs/evidence/account-profiles/README.md,post-handover student registration and own-profile extension verified locally; production enrolment excluded

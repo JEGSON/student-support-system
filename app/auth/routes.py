@@ -3,9 +3,23 @@
 from functools import wraps
 from urllib.parse import unquote, urlsplit
 
-from flask import Blueprint, current_app, g, redirect, render_template, request, session, url_for
+from flask import (
+    Blueprint,
+    abort,
+    current_app,
+    g,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
+from pymongo.errors import PyMongoError
 
 from app.repositories.core import utc_now
+from app.services.accounts import Accounts, profile_errors
+from app.services.policy import AccessDenied
+from app.services.transactions import VersionConflict
 
 identity = Blueprint("identity", __name__)
 
@@ -27,7 +41,7 @@ def safe_return_path(value):
         or any(ord(c) < 32 for c in decoded)
     ):
         return "/account"
-    return decoded if decoded in {"/account", "/access"} else "/account"
+    return decoded if decoded in {"/account", "/access", "/account/profile"} else "/account"
 
 
 def available_contexts(database, user, db_session=None):
@@ -69,6 +83,10 @@ def authenticated(view):
 
 @identity.get("/sign-in")
 def sign_in():
+    return start_sign_in()
+
+
+def start_sign_in(registration=False):
     if g.user:
         return redirect(url_for("identity.account"))
     if session.storage_failed:
@@ -78,7 +96,8 @@ def sign_in():
     try:
         client = current_app.extensions["university_oidc"]
         return client.authorize_redirect(
-            current_app.config["APP_BASE_URL"].rstrip("/") + "/auth/callback"
+            current_app.config["APP_BASE_URL"].rstrip("/") + "/auth/callback",
+            **({"prompt": "create"} if registration else {}),
         )
     except Exception:
         session.logout()
@@ -114,12 +133,8 @@ def callback():
         if not claims or not isinstance(claims.get("sub"), str):
             raise ValueError("Verified identity required.")
         database = current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]]
-        user = database.users.find_one(
-            {
-                "identity_issuer": issuer,
-                "identity_subject": claims["sub"],
-                "account_status": "active",
-            }
+        user = Accounts(database).resolve(
+            issuer, claims, allow_registration=current_app.config["SELF_REGISTRATION_ENABLED"]
         )
         if not user:
             raise ValueError("Account is unavailable.")
@@ -177,3 +192,78 @@ def choose_context():
 def sign_out():
     session.logout()
     return render_template("auth/signed_out.html", title="Signed out", context="public")
+
+
+@identity.get("/register")
+def register():
+    if not current_app.config["SELF_REGISTRATION_ENABLED"]:
+        abort(404)
+    if g.user:
+        return redirect(url_for("identity.profile"))
+    return render_template("auth/register.html", title="Create your account", context="public")
+
+
+@identity.get("/register/start")
+def register_start():
+    if not current_app.config["SELF_REGISTRATION_ENABLED"]:
+        abort(404)
+    return start_sign_in(registration=True)
+
+
+@identity.route("/account/profile", methods=["GET", "POST"])
+@authenticated
+def profile():
+    service = Accounts(current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]])
+    errors = {}
+    status = 200
+    try:
+        data = service.read(g.user["_id"])
+        version = data.get("profile_version", 0)
+        values = {field: data.get(field, "") for field in ["display_name", "course_label"]}
+        if request.method == "POST":
+            if set(request.form) != {
+                "csrf_token",
+                "version",
+                "display_name",
+                "course_label",
+            } or any(len(request.form.getlist(key)) != 1 for key in request.form):
+                abort(400)
+            values = {field: request.form[field] for field in values}
+            errors = profile_errors(values)
+            try:
+                submitted_version = int(request.form["version"])
+                if submitted_version < 0:
+                    raise ValueError
+            except ValueError:
+                abort(400)
+            if errors:
+                status = 400
+            else:
+                try:
+                    service.update(g.user["_id"], submitted_version, values)
+                except VersionConflict:
+                    errors["service"] = (
+                        "Your profile changed in another tab. Review these details and save again."
+                    )
+                    status = 409
+                else:
+                    return redirect(url_for("identity.profile", saved="1"), code=303)
+        return render_template(
+            "auth/profile.html",
+            title="Your profile",
+            context=session.get("context", "account"),
+            values=values,
+            profile=data,
+            version=version,
+            errors=errors,
+            saved=request.args.get("saved") == "1" and request.method == "GET",
+        ), status
+    except AccessDenied:
+        abort(403)
+    except PyMongoError:
+        return render_template(
+            "error.html",
+            title="Profile temporarily unavailable",
+            context="account",
+            message="We could not confirm your profile. Please try again shortly.",
+        ), 503

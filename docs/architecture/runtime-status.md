@@ -29,3 +29,12 @@ and [handover](../handbook/handover.md) for practical limits.
 The origin URL is configured; remote history/publication was not verified. Local
 Git commits supply development evidence. Earlier contracts are historical stage
 checkpoints; this document and the source describe the completed local runtime.
+
+## Post-handover account/profile extension
+
+User-authorised synthetic student self-registration now uses the existing Keycloak
+OIDC/PKCE flow. Config gates it to the exact local provider and rejects production
+enablement. Staff/privileged grants remain controlled. Own profiles allow only
+preferred name/optional course changes with CSRF, version/account guards and atomic
+metadata auditing. Two optional users fields support profile version/time; collection
+count remains 18. See [account/profile contract](account-profile-contract.md).

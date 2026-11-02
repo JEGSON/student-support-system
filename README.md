@@ -15,7 +15,9 @@ cd /Users/wealth/Documents/Codex/2026-11-02/go/student-support-system
 .venv/bin/python scripts/run_local.py
 ```
 
-Open http://127.0.0.1:5050. Docker dependencies must already be running. For a new
+Open http://127.0.0.1:5050. Choose **Create a student account** to register with
+synthetic details, then **Your profile** to edit your preferred name/course.
+Docker dependencies must already be running. For a new
 installation follow setup, including frozen dependency sync, private configuration,
 database contracts/routing and synthetic identity provisioning. Generated passwords
 are in ignored runtime/synthetic-logins.json; none are committed or packaged.
@@ -41,3 +43,8 @@ Local Git history records incremental development. An origin is configured; remo
 publication/history has not been verified. The assessment ZIP excludes Git metadata;
 review history in this repository. Package and extraction checks are documented in
 [the release checklist](docs/handbook/release-checklist.md).
+
+Student registration and editable profiles were added after the initial handover.
+See [the account/profile contract](docs/architecture/account-profile-contract.md) and
+[feature evidence](docs/evidence/account-profiles/README.md). Staff/administrator
+access remains controlled; production self-registration is forbidden by config.

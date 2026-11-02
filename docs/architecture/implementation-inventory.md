@@ -20,6 +20,9 @@ metadata may change). Health and authentication routes have their specific publi
 | GET | `/health/live` | Metadata-only liveness/readiness; no narratives. |
 | GET | `/health/ready` | Metadata-only liveness/readiness; no narratives. |
 | GET, POST | `/retention` | Admin metadata/holds/request or independent approver; offline-only execution. |
+| GET | `/register` | Local synthetic registration explanation; disabled unless explicitly configured. |
+| GET | `/register/start` | Local-only OIDC/S256 prompt=create initiation; provider performs credential registration. |
+| GET, POST | `/account/profile` | Current active user only; name/course edit with CSRF, expected profile version and atomic audit; no role/contact/identity changes. |
 | GET | `/sign-in` | Public OIDC/S256 initiation; exact safe return target. |
 | POST | `/sign-out` | Authenticated local session invalidation. |
 | GET | `/staff` | Current staff context/team; officer assigned-only, manager/triage permitted metadata. |

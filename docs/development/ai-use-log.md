@@ -161,3 +161,14 @@ or third-party messages occurred. See stage evidence for actual observed limits,
 including one workload GET503 and incomplete human accessibility/policy review.
 The separate AI-USE-STATEMENT.md records substantial assistance; no independent
 human review or missing institutional AI-policy compliance is asserted.
+
+## 2 November 2026 — User-authorised account/profile extension
+
+Codex implemented local provider registration configuration, gated first-login
+student mapping, editable own profiles, additive schema/audit changes and browser/
+negative/concurrency checks. Official Keycloak guidance informed prompt=create and
+reserved-domain profile validation. Browser testing caught a CSP-blocked form
+redirect; the flow was corrected to normal OIDC GET initiation without relaxing
+CSP. Test identities are unique synthetic accounts removed after testing. No new
+runtime dependencies, external contact, real data or production registration.
+The full suite and feature evidence record the final verification scope.

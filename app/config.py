@@ -165,7 +165,15 @@ def load_config(overrides=None):
         if not 1 <= value <= 10000:
             raise ConfigurationError("Rate limit must be 1–10000.")
         rates["RATE_LIMIT_" + name] = value
+    registration = str(source.get("SELF_REGISTRATION_ENABLED", "0"))
+    if registration not in {"0", "1"}:
+        raise ConfigurationError("SELF_REGISTRATION_ENABLED must be 0 or 1.")
+    if registration == "1" and (
+        not local or source["OIDC_ISSUER"] != "http://127.0.0.1:8180/realms/student-support"
+    ):
+        raise ConfigurationError("Self-registration is restricted to the local synthetic provider.")
     return {
+        "SELF_REGISTRATION_ENABLED": registration == "1",
         "TRUST_PROXY": trust_proxy == "1",
         "PROXY_TRUSTED_IP": trusted_ip,
         "RATE_LIMIT_ENABLED": enabled == "1",

@@ -27,6 +27,14 @@ changes; do not launch a second listener on 5050 or stop unrelated services.
 Open http://127.0.0.1:5050. Generated credentials for 17 synthetic accounts are
 private in runtime/synthetic-logins.json (0600), excluded from Git/package. There
 is no shared/default password. Account labels and flows are in user-guide.md.
+The provisioning command also configures local student registration and enforces
+reserved @example.invalid addresses. On an existing seeded installation you may run
+`.venv/bin/python scripts/configure_registration.py` to configure only registration
+without remapping fixture identities. Restart the app afterwards. SELF_REGISTRATION_ENABLED
+defaults to 0 and can only be enabled with the exact synthetic provider; it is
+forbidden in production. New student passwords are chosen on the provider page,
+not written into synthetic-logins.json. Profile changes live in the application.
+
 Local addresses: Keycloak 8180, MongoDB 27017, Mailpit UI 8025/SMTP 1025. All bind
 127.0.0.1. No real external email is enabled. Worker in a separate terminal:
 

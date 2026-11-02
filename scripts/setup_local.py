@@ -44,6 +44,7 @@ def main():
     app_uri = f"mongodb://support_app:{values['MONGO_APP_PASSWORD']}@localhost:27017/admin?replicaSet=rs0&directConnection=true"
     config = {
         "APP_ENV": "development",
+        "SELF_REGISTRATION_ENABLED": "0",
         "FLASK_DEBUG": "0",
         "APP_BASE_URL": "http://127.0.0.1:5050",
         "SECRET_KEY": "dev-" + secrets.token_urlsafe(64),

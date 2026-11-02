@@ -6,6 +6,23 @@ are available. Logout is a CSRF-protected local action through Your account. It
 does not terminate Keycloak/university SSO; shared-device users must also follow
 the provider's logout process.
 
+## Create an account and manage your profile
+
+On the homepage choose Create a student account → Continue to account creation.
+Use an invented name, a unique username, an @example.invalid email and a password
+of at least 12 characters with upper/lowercase and a number. The sign-in service
+validates the form and returns you to Your support space. New accounts get student
+access only; no staff/admin role can be selected during registration. Returning
+users sign in with the username/password they chose.
+
+Choose Your profile from the navigation or View and edit your profile on Your
+account. Change your preferred name and optional fictional course, then Save profile.
+Empty course clears it. An out-of-date tab asks you to review changes before saving.
+Your student reference and local notification address are read-only. These details
+and service access are managed separately; profile edits do not change case ownership.
+Use synthetic details only. Live university eligibility/contact verification is not
+implemented. Existing synthetic fixture accounts can also edit their own profile.
+
 ## Students
 
 student_a and student_b have separate ownership. Open Your requests → New support

@@ -864,7 +864,7 @@ revise(
     1,
     "idp",
     "Identity provider",
-    "Local Keycloak uses synthetic users and OIDC/PKCE. University MFA/registration remain unapproved.",
+    "Local OIDC/PKCE and synthetic student signup. University identity/MFA integration remains unapproved.",
 )
 revise(
     1,
@@ -924,7 +924,7 @@ revise(
     5,
     "user",
     "USERS",
-    "issuer + subject; account status\nauthorization_revision; guard_version\nRoles from controlled internal grants",
+    "issuer + subject; account status\nPreferred name/course; profile_version\nAccount guard; controlled staff grants",
 )
 revise(
     5,

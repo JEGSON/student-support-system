@@ -16,6 +16,12 @@ the last command again. Open http://127.0.0.1:5050. Private generated credential
 are in runtime/synthetic-logins.json. Do not share that file. If starting from a
 fresh extract, first follow setup.md; the packaged source deliberately has no secrets.
 
+You can now create a separate synthetic student account: homepage → Create a student
+account → Continue to account creation. Choose an invented name, a unique username,
+an @example.invalid email and a 12+ character password with upper/lowercase and a
+number. After registration choose Your profile, update your preferred name/course,
+and submit your own support request. Existing staff fixtures still handle assignment.
+
 1. Sign in as student_a. Create a finance request with invented text; note its reference.
 2. Sign out; manager_finance → staff workspace → assign to officer_assigned. New stays New.
 3. officer_assigned → start work, add an internal note, then ask a student-visible question.

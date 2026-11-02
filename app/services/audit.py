@@ -11,6 +11,9 @@ from app.services.policy import Policy
 from app.services.transactions import transaction
 
 ACTIONS = {
+    "account_created",
+    "profile_read",
+    "profile_updated",
     "access_denied",
     "reassignment_review",
     "case_archived",
@@ -43,6 +46,8 @@ ACTIONS = {
 }
 TARGETS = {"user", "case", "privileged_grant"}
 FIELDS = {
+    "display_name",
+    "course_label",
     "legal_hold",
     "body",
     "active",
