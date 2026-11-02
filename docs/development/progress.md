@@ -62,3 +62,16 @@ attempt timed out and the checkbox state/restoration could not be verified (orig
 OFF). See `../evidence/stage-03-safari-access.md`. Stage 03 remains incomplete.
 An origin URL is now configured locally by an external/user action; no remote
 history was verified and no fetch/push was performed in this turn.
+
+## 2 November 2026 — Stage 03 redo complete
+
+Reread all architecture artefacts and Stage 03 requirements. Preserved the modular
+Flask/Jinja/MongoDB design. Tightened local database destination and OIDC readiness
+validation. Verified a clean runtime-only hash-checked install. User explicitly
+approved Playwright; isolated Chromium/WebKit at 390/768/1440 now verify four actual
+runtime pages and save 30 screenshots. Fixed tablet action shrink/wrapping after
+visual review. Final suite: 29 passed in 77.89s. Stage 03 COMPLETE; full V14/V16
+remain partial for their later-stage scope. Safari developer setting restored OFF
+and verified. See `../evidence/stage-03-recheck/README.md`.
+
+Next: Stage 04 validators, indexes, repositories and controlled synthetic fixtures.

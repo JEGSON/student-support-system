@@ -61,3 +61,15 @@ enable Safari developer features, native access timed out. The checkbox's result
 state and restoration could not be verified. Responsive checks remain incomplete;
 no application implementation or new runtime test result is claimed. Recorded the
 limitation and newly present local origin configuration without contacting GitHub.
+
+## 2 November 2026 — Stage 03 redo
+
+Codex refreshed architecture/context, reviewed the runtime, tightened configuration/
+discovery checks and fixed a tablet action layout. With explicit user authorisation,
+Codex used isolated headless Playwright (official docs checked) to run actual
+Chromium/WebKit responsive/focus/reduced-motion checks and save synthetic screenshots.
+Reviewed representative rendered screenshots and recorded actual failures/reruns.
+Final result: 29 tests passed; clean locked runtime installation/startup also passed.
+Recovered Safari access and verified restoration of the temporarily approved developer
+preference to OFF. No full accessibility or production assurance claimed. Full
+institutional AI policy remains pending. No remote push or real student data.

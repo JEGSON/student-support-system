@@ -105,5 +105,15 @@ recovery and institutional approvals are still pending. Local `readWrite` databa
 roles are scoped separately by database; Stage 07 must restrict audit/worker roles
 before business features. A single node demonstrates transactions, not failover.
 
-See `../evidence/stage-03.md` for observed results and remaining responsive-browser
-verification. Do not advance past an incomplete required stage gate.
+Stage 03 is complete; see `../evidence/stage-03-recheck/README.md` for current
+results. Prior records preserve earlier failures. For isolated browser verification:
+
+```sh
+PLAYWRIGHT_BROWSERS_PATH=runtime/playwright-browsers .venv/bin/python -m playwright install chromium webkit
+RUN_BROWSER=1 RUN_RUNTIME=1 PLAYWRIGHT_BROWSERS_PATH=runtime/playwright-browsers .venv/bin/python -m pytest -q
+```
+
+Playwright is a locked dev dependency; browser downloads stay ignored. Browser tests
+start and stop their own loopback fixture server, use no personal browser profile,
+block external requests and save synthetic evidence. Native Safari is not required.
+The 29-test result verifies Stage 03 scope, not future authenticated journeys.

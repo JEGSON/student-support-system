@@ -45,3 +45,6 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0;color:var(--muted);font
 .nav a{display:inline-flex;align-items:center;min-height:44px}
 .message{max-width:70ch}
 .pending-copy{margin-top:1rem}.service-notice{margin-top:2rem}
+
+/* Allow tablet page actions to keep their label and wrap below the heading. */
+.page-head{flex-wrap:wrap}.page-head>div{flex:1;min-width:min(100%,28rem)}.page-head>.button{flex-shrink:0}

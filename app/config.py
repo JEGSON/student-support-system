@@ -51,6 +51,18 @@ def load_config(overrides=None):
     # Deeper URI validation is performed by PyMongo without printing the URI.
     if not source['MONGODB_URI'].startswith(('mongodb://', 'mongodb+srv://')):
         raise ConfigurationError('Invalid database connection configuration.')
+    if local:
+        # Local tooling must not accidentally contact an institutional/production
+        # database even if its database name happens to match the test convention.
+        try:
+            mongo = urlsplit(source['MONGODB_URI'])
+            valid_local = (mongo.scheme == 'mongodb' and
+                           mongo.hostname in {'localhost', '127.0.0.1'} and
+                           ',' not in mongo.netloc)
+        except ValueError:
+            valid_local = False
+        if not valid_local:
+            raise ConfigurationError('Local databases must use the loopback development topology.')
     if not local:
         options = [(k.lower(), v.lower()) for k, v in parse_qsl(urlsplit(source['MONGODB_URI']).query)]
         if len({k for k, _ in options}) != len(options):

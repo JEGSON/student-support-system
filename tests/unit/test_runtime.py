@@ -129,3 +129,22 @@ def test_body_limit_and_absent_client_session_fallback(config):
     response=client.get('/session-probe')
     assert response.status_code==500 and 'Set-Cookie' not in response.headers
     application.extensions['mongo'].close()
+
+
+@pytest.mark.parametrize('uri', ['mongodb://database.example.invalid:27017/', 'mongodb+srv://cluster.example.invalid/', 'mongodb://localhost:27017,database.example.invalid:27017/'])
+def test_local_config_cannot_target_external_database(config,uri):
+    with pytest.raises(ConfigurationError,match='loopback'):
+        create_app({**config,'MONGODB_URI':uri})
+
+
+@pytest.mark.parametrize('payload', [b'[]',b'{"issuer":"http://127.0.0.1:8080/realms/student-support","code_challenge_methods_supported":"S256"}',b' '*65537])
+def test_identity_readiness_rejects_malformed_discovery(app,monkeypatch,payload):
+    from app.health import identity_ready
+    class Response:
+        status=200
+        def __enter__(self): return self
+        def __exit__(self,*args): return None
+        def read(self,limit): return payload[:limit]
+    monkeypatch.setattr('app.health.urlopen',lambda *args,**kwargs:Response())
+    with app.app_context():
+        assert identity_ready() is False

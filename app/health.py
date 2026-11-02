@@ -21,8 +21,15 @@ def identity_ready():
     with urlopen(issuer + '/.well-known/openid-configuration', timeout=2) as response:
         if response.status != 200:
             return False
-        document = json.loads(response.read(65537))
-    return document.get('issuer') == issuer and 'S256' in document.get('code_challenge_methods_supported', [])
+        payload = response.read(65537)
+        if len(payload) > 65536:
+            return False
+        document = json.loads(payload)
+    if not isinstance(document, dict):
+        return False
+    methods = document.get('code_challenge_methods_supported')
+    return (document.get('issuer') == issuer and isinstance(methods, list)
+            and 'S256' in methods)
 
 
 def email_ready():

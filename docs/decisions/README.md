@@ -35,3 +35,11 @@ No institutional policy or business access boundary changed. Audit/worker databa
 privileges are still Stage 07 work before business features; initial database-level
 readWrite roles are isolated between development and test. Responsive verification
 remains an unresolved Stage 03 gate, not an accepted accessibility claim.
+
+Stage 03 redo: user explicitly approved isolated Playwright browser checks after
+native connection failures. Locked the development tool and used ephemeral browser
+contexts/loopback fixture servers, with external requests blocked and no personal
+profiles. This verification choice preserves ADR-01/02/03/07/09. The reviewed shared
+CSS permits tablet actions to wrap without compression. Local runtime database URIs
+are restricted to loopback to prevent accidental external-data access. Scoped
+results and limitations are in `../evidence/stage-03-recheck/README.md`.

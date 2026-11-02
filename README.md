@@ -6,12 +6,12 @@ A proposed secure UK university support service using Python, Flask and MongoDB.
 
 Stage 01 foundation and Stage 02 visual specification are committed. Stage 03 now
 has a local Flask runtime, shared Jinja components and isolated MongoDB/OIDC/email
-capture. All 17 runtime tests pass. Stage 03 remains incomplete pending rendered
-responsive browser verification; no case management or sign-in is implemented.
+capture. Stage 03 is complete: 29 tests pass, including isolated responsive browser checks
+at 390/768/1440px. No case management or sign-in is implemented.
 Use synthetic data only. No remote push or deployment has occurred.
 
 See [local setup and verification](docs/development/local-runtime.md) and
-[the runtime evidence/remaining gate](docs/evidence/stage-03.md).
+[the completed runtime verification](docs/evidence/stage-03-recheck/README.md).
 
 ## Start here
 
@@ -23,8 +23,8 @@ See [local setup and verification](docs/development/local-runtime.md) and
    [open decisions](docs/decisions/open-decisions.csv),
    [prioritised backlog](docs/development/backlog.csv) and
    [delivery contract](docs/development/delivery.md).
-5. Follow the sequential backlog. Stage 03 responsive verification is the current
-   gate; do not start Stage 04 before it is resolved. The user authorised sequential
+5. Follow the sequential backlog. Stage 03 is verified; Stage 04 database contracts
+   and synthetic fixtures come next. The user authorised sequential
    local stages; remote actions and real-data processing remain excluded.
 
 ## Planning and evidence

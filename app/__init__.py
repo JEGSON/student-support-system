@@ -3,7 +3,7 @@ from flask import Flask, render_template
 from flask.sessions import SessionInterface
 from pymongo import MongoClient
 from .config import ConfigurationError, load_config
-from .health import health, database_ready, identity_ready, email_ready
+from .health import health as health_blueprint, database_ready, identity_ready, email_ready
 
 
 class NoSessionInterface(SessionInterface):
@@ -30,7 +30,7 @@ def create_app(config=None):
     except Exception:
         raise ConfigurationError('Invalid database connection configuration.') from None
     app.extensions['readiness_checks'] = [database_ready, identity_ready, email_ready]
-    app.register_blueprint(health)
+    app.register_blueprint(health_blueprint)
 
     @app.get('/')
     def index():
