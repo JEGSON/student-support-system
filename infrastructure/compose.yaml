@@ -8,6 +8,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: support_bootstrap
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?Run scripts/setup_local.py}
       SUPPORT_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Run scripts/setup_local.py}
+      SUPPORT_SCHEMA_PASSWORD: ${MONGO_SCHEMA_PASSWORD:?Run scripts/prepare_schema_secret.py}
       SUPPORT_TEST_PASSWORD: ${MONGO_TEST_PASSWORD:?Run scripts/setup_local.py}
     ports: ["127.0.0.1:27017:27017"]
     volumes:

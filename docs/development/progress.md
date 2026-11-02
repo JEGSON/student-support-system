@@ -75,3 +75,15 @@ remain partial for their later-stage scope. Safari developer setting restored OF
 and verified. See `../evidence/stage-03-recheck/README.md`.
 
 Next: Stage 04 validators, indexes, repositories and controlled synthetic fixtures.
+
+## 2 November 2026 — Stage 04 complete
+
+Installed/tested 15 collection contracts and explicit indexes on the actual replica
+set. Added typed repositories/reference integrity, UUID/UTC/London helpers, a
+separate schema setup identity and 27 idempotent synthetic records. Fixtures cover
+the required actor/team relationships without usable login credentials. Safe reset
+preserves unlabelled data and rejects dependent records. Runtime suite: 79 passed,
+six unchanged browser configurations skipped; prior Stage 03 browser evidence remains.
+Documented schema additions, migration limits, fixture setup/reset and actual failed/
+corrected test expectation. See `../evidence/stage-04.md`. No case-management routes.
+Next: Stage 05 OIDC and opaque server-side sessions; no local-password substitute.

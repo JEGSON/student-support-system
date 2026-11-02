@@ -4,10 +4,11 @@ A proposed secure UK university support service using Python, Flask and MongoDB.
 
 ## Current state
 
-Stage 01 foundation and Stage 02 visual specification are committed. Stage 03 now
+Stages 01–04 are complete. Stage 03 provides
 has a local Flask runtime, shared Jinja components and isolated MongoDB/OIDC/email
-capture. Stage 03 is complete: 29 tests pass, including isolated responsive browser checks
-at 390/768/1440px. No case management or sign-in is implemented.
+capture. Stage 03 has 29 passing tests, including responsive browser checks at 390/768/1440px.
+Stage 04 adds tested database contracts and synthetic fixtures; its suite has 79
+passes and six unchanged browser skips. No case management or sign-in is implemented.
 Use synthetic data only. No remote push or deployment has occurred.
 
 See [local setup and verification](docs/development/local-runtime.md) and
@@ -23,8 +24,8 @@ See [local setup and verification](docs/development/local-runtime.md) and
    [open decisions](docs/decisions/open-decisions.csv),
    [prioritised backlog](docs/development/backlog.csv) and
    [delivery contract](docs/development/delivery.md).
-5. Follow the sequential backlog. Stage 03 is verified; Stage 04 database contracts
-   and synthetic fixtures come next. The user authorised sequential
+5. Follow the sequential backlog. Stages 03/04 are verified; Stage 05 OIDC
+   and server-side sessions come next. The user authorised sequential
    local stages; remote actions and real-data processing remain excluded.
 
 ## Planning and evidence
@@ -52,6 +53,7 @@ uv sync --frozen --cache-dir runtime/uv-cache
 ```
 
 Start Docker first. The first-use generator preserves existing configuration.
+For the persistence setup/fixtures, follow [database setup](docs/development/database-setup.md).
 Open `http://127.0.0.1:5050/`. The development-only component gallery is at
 `/_dev/components`. See the setup guide for ports, stops, tests and explicit local
 HTTP exceptions. Never commit the generated `.env` or runtime files.

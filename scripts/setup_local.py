@@ -22,7 +22,7 @@ def main():
     if any((runtime / name).exists() for name in ['mongo-keyfile', 'keycloak-import']):
         raise SystemExit('Existing runtime setup preserved. Resolve incomplete setup explicitly.')
     values = {key: secrets.token_urlsafe(48) for key in
-              ['MONGO_ROOT_PASSWORD', 'MONGO_APP_PASSWORD', 'MONGO_TEST_PASSWORD', 'OIDC_ADMIN_PASSWORD']}
+              ['MONGO_ROOT_PASSWORD', 'MONGO_APP_PASSWORD', 'MONGO_TEST_PASSWORD', 'MONGO_SCHEMA_PASSWORD', 'OIDC_ADMIN_PASSWORD']}
     app_uri = f"mongodb://support_app:{values['MONGO_APP_PASSWORD']}@localhost:27017/admin?replicaSet=rs0&directConnection=true"
     config = {
         'APP_ENV':'development', 'FLASK_DEBUG':'0', 'APP_BASE_URL':'http://127.0.0.1:5050',

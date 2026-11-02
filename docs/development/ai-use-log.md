@@ -73,3 +73,14 @@ Final result: 29 tests passed; clean locked runtime installation/startup also pa
 Recovered Safari access and verified restoration of the temporarily approved developer
 preference to OFF. No full accessibility or production assurance claimed. Full
 institutional AI policy remains pending. No remote push or real student data.
+
+## 2 November 2026 — Stage 04
+
+Codex consulted primary MongoDB/PyMongo validation/index/transaction/role documentation;
+implemented schema/index definitions, typed repositories, reference guards, synthetic
+fixtures and local schema setup/reset tooling. Codex wrote and ran actual replica-set
+negative/integrity/uniqueness/rollback/reset tests, corrected a test expectation about
+MongoDB reserved `_id` fields, and recorded 79 passing tests with six browser skips.
+Reviewed/updated data-model, evidence and progress documentation. No independent
+review, complete security assurance or usable OIDC fixture accounts are claimed.
+No real student data, remote push or production deployment. Full AI policy pending.

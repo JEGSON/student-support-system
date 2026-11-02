@@ -21,3 +21,8 @@ for (const [name,password,database] of [
   if (!admin.getUser(name)) admin.createUser({user:name,pwd:password,roles:[{role:'readWrite',db:database}]});
 }
 print('Replica set and separate development/test users ready.');
+
+if (!admin.getUser('support_schema')) {
+  admin.createUser({user:'support_schema',pwd:process.env.SUPPORT_SCHEMA_PASSWORD,
+    roles:[{role:'dbAdmin',db:'student_support_dev'},{role:'dbAdmin',db:'student_support_test'}]});
+}

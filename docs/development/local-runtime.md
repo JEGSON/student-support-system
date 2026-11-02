@@ -47,8 +47,8 @@ private `.env` under `OIDC_ADMIN_PASSWORD`. No working credentials are in source
 control. Never paste that file into chat/logs. The local public OIDC client requires
 S256 PKCE and the exact `http://127.0.0.1:5050/auth/callback` redirect. Its application
 callback is not implemented until Stage 05. No local-password alternative exists.
-No student/staff accounts have been provisioned yet; Stage 04 introduces controlled
-synthetic fixtures. Public sign-in currently returns a safe 503 explanation.
+No student/staff OIDC accounts have been provisioned yet; Stage 04 supplies labelled
+persistence fixtures with placeholder identity subjects. See `database-setup.md`. Public sign-in currently returns a safe 503 explanation.
 
 ## Verification
 

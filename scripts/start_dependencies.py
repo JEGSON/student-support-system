@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from dotenv import dotenv_values
 from app import create_app
+from prepare_schema_secret import prepare
 
 ROOT = Path(__file__).resolve().parents[1]
 COMPOSE = ['docker','compose','--env-file',str(ROOT/'.env'),'-f',str(ROOT/'infrastructure/compose.yaml')]
@@ -14,6 +15,7 @@ COMPOSE = ['docker','compose','--env-file',str(ROOT/'.env'),'-f',str(ROOT/'infra
 def main():
     if not (ROOT/'.env').exists():
         raise SystemExit('Run python3 scripts/setup_local.py first.')
+    prepare()
     subprocess.run(COMPOSE+['up','-d'], cwd=ROOT, check=True)
     script = (ROOT/'infrastructure/bootstrap-mongo.js').read_text()
     # Do not print bootstrap stderr; database errors may include connection details.

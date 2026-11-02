@@ -13,3 +13,9 @@ Do not reduce risk ratings based on a passing runtime unit suite. Static synthet
 previews are not evidence of authorisation enforcement. Browser verification is
 still required before the next stage. This status accompanies the preserved
 baseline threat model; no new production trust boundary has been introduced.
+
+Stage 04 adds scoped T02/T03/T05 integrity evidence: strict BSON validators, typed
+query inputs, uniqueness, transaction-backed fixture operations and reference
+checks. It does not implement caller authorisation or audit-before-read. Database
+setup uses a separate local schema role; collection-level audit/worker restrictions
+remain pending. Initial/residual risk estimates are unchanged and unaccepted.

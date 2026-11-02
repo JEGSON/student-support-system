@@ -43,3 +43,12 @@ profiles. This verification choice preserves ADR-01/02/03/07/09. The reviewed sh
 CSS permits tablet actions to wrap without compression. Local runtime database URIs
 are restricted to loopback to prevent accidental external-data access. Scoped
 results and limitations are in `../evidence/stage-03-recheck/README.md`.
+
+Stage 04 schema decisions: canonical UUID `_id` strings; UTC BSON dates; explicit
+strict/error validators/indexes; deterministic labelled synthetic fixtures; a
+separate local dbAdmin schema identity. Added user/team auth revisions and separate
+triage_claims, privileged_grants and service_principals contracts. These are proposed
+engineering additions, not university policy. `../architecture/persistence-contract.md`
+records fields, indexes, service integrity boundaries and non-atomic migration limits.
+Fixture reset rejects dependencies outside its version. No case-content web access
+or Stage 06 approval/authorisation behaviour is implemented by this contract alone.
