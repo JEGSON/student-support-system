@@ -51,3 +51,14 @@ working on browser access; latest browser-host inventory still reports unavailab
 Do not claim Stage 03 complete or start Stage 04 until that gate is resolved.
 Local preview runs on 127.0.0.1:5050. No case management, login/session features,
 real student information, remote push or deployment have been introduced.
+
+## 2 November 2026 — Safari access retry
+
+The user requested checking access again or using Safari. Safari opened the actual
+local site and desktop rendering was inspected. Responsive developer controls
+remained blocked by repeated native timeouts; the browser connector also remained
+unavailable. The user approved temporarily enabling developer features, but the
+attempt timed out and the checkbox state/restoration could not be verified (original
+OFF). See `../evidence/stage-03-safari-access.md`. Stage 03 remains incomplete.
+An origin URL is now configured locally by an external/user action; no remote
+history was verified and no fetch/push was performed in this turn.

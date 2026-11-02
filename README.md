@@ -39,7 +39,8 @@ See [local setup and verification](docs/development/local-runtime.md) and
 
 Run the documentation integrity check with `python3 scripts/check_foundation.py`.
 It validates planning records and local design links, not application security.
-Local Git history starts with the foundation commit; no GitHub remote is configured.
+Local Git history starts with the foundation commit. An origin URL is now configured;
+remote history has not been verified by this implementation workflow.
 
 ## Local Python environment
 

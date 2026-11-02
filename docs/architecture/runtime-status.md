@@ -15,4 +15,5 @@ or demonstration access rules is authorised by a layout preview.
 | ADR-08/09 | Generated ignored local secrets; image digests and dependency lock; local database separation | Production encryption, backups, recovery, CI and institutional operation |
 
 Local ports: Flask 5050, identity 8180→container 8080, MongoDB 27017, Mailpit
-8025/1025. None is a public endpoint. No GitHub remote/deployment exists.
+8025/1025. None is a public endpoint. An origin URL is now configured locally; remote history
+has not been verified and no deployment is claimed.

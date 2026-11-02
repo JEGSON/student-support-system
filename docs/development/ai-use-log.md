@@ -52,3 +52,12 @@ seen in chat, but width-specific evidence was not captured. Stage 03 remains
 incomplete for that reason; no visual/accessibility success is claimed. No login,
 case-management or production readiness is claimed. Full institutional AI policy
 and assessment evidence remain pending.
+
+## 2 November 2026 — Safari access retry
+
+Codex retried browser access, opened the synthetic local site in Safari and inspected
+its desktop screenshot/accessibility tree. After the user's approval to temporarily
+enable Safari developer features, native access timed out. The checkbox's resulting
+state and restoration could not be verified. Responsive checks remain incomplete;
+no application implementation or new runtime test result is claimed. Recorded the
+limitation and newly present local origin configuration without contacting GitHub.
