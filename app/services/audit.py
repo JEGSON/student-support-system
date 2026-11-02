@@ -11,6 +11,12 @@ from app.services.policy import Policy
 from app.services.transactions import transaction
 
 ACTIONS = {
+    "messages_read",
+    "notes_read",
+    "communication_changed",
+    "staff_queue",
+    "triage_read",
+    "triage_released",
     "membership_changed",
     "account_disabled",
     "grant_requested",
@@ -26,6 +32,7 @@ ACTIONS = {
 }
 TARGETS = {"user", "case", "privileged_grant"}
 FIELDS = {
+    "body",
     "active",
     "role",
     "account_status",

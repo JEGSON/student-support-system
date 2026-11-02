@@ -185,3 +185,7 @@ locked environment; 84 current synthetic screenshots. Dependency advisory report
 53 packages, zero known findings. Secret comparison and lint/format/compile/lock/
 document/design checks pass. See `../evidence/stage-08/README.md`. Stages 07/08
 complete locally; next authorised stage would be 09 on a new user instruction.
+
+## Stages 09/10
+
+User authorised all remaining local stages. Implemented scoped staff/triage workspace and the full core communication/lifecycle flow. Actual stage gates: 42 staff/policy tests; 221 complete unit/integration tests. Corrected a test fixture label; no application bypass added. Evidence: stage-09 and stage-10. Next: restricted local capture worker.

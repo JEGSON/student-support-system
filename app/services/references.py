@@ -62,6 +62,12 @@ def validate_references(database, collection, document, session=None):
         for key in ["_id", "case_id", "global_roles", "account_status", "category_scope", "active"]
     }
     for field, target in REFERENCES[collection].items():
+        if (
+            collection == "submission_keys"
+            and field == "result_id"
+            and document.get("operation") == "send_message"
+        ):
+            target = "messages"
         if field not in document:
             if field in required:
                 raise InvalidInput("A required reference is missing.")

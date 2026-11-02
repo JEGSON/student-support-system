@@ -130,6 +130,7 @@ SCHEMAS = {
         ["case_id", "author_id", "body", "created_at"],
         case_id=ID,
         author_id=ID,
+        author_context=enum(["student", "staff"]),
         body=text(10000),
         created_at=DATE,
         correction_of=nullable(ID),
@@ -138,6 +139,7 @@ SCHEMAS = {
         ["case_id", "author_id", "body", "created_at"],
         case_id=ID,
         author_id=ID,
+        author_context=enum(["student", "staff"]),
         body=text(10000),
         created_at=DATE,
         supersedes_id=nullable(ID),
@@ -158,6 +160,7 @@ SCHEMAS = {
                 "note_added",
                 "closed",
                 "reopened",
+                "resumed",
                 "archived",
                 "referral_created",
             ]

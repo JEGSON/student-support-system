@@ -191,8 +191,18 @@ def new_request():
 def detail(case_id):
     try:
         case = service().detail(g.user["_id"], session.get("context"), case_id)
+        from app.cases.thread_helpers import cursor, encode_cursor
+        from app.services.communication import Communication
+
+        thread, older, version = Communication(
+            current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]]
+        ).thread(g.user["_id"], session.get("context"), case_id, before=cursor(case_id, "messages"))
+        case["version"] = version
         return render_template(
             "cases/detail.html",
+            messages=thread,
+            older=encode_cursor(case_id, "messages", older),
+            submission_key=form_key(),
             title="Your support request",
             context="student",
             case=case,
@@ -200,9 +210,54 @@ def detail(case_id):
         )
     except (AccessDenied, InvalidInput):
         abort(404)
+    except (BadData, KeyError, TypeError, ValueError):
+        abort(400)
     except PyMongoError:
         return error_page(
             "Your request is temporarily unavailable",
             "Please try again. No change has been made.",
             503,
+        )
+
+
+@cases.post("/cases/<case_id>/message")
+@authenticated
+def message(case_id):
+    from app.services.communication import Communication
+
+    try:
+        if set(request.form) - {
+            "csrf_token",
+            "submission_key",
+            "version",
+            "body",
+            "correction",
+        } or any(len(request.form.getlist(k)) != 1 for k in request.form):
+            raise InvalidInput("Invalid form.")
+        Communication(current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]]).act(
+            g.user["_id"],
+            session.get("context"),
+            case_id,
+            int(request.form.get("version", "0")),
+            "message",
+            body=request.form.get("body"),
+            correction=request.form.get("correction") or None,
+            key_hash=verified_key(request.form.get("submission_key")),
+        )
+        return redirect(url_for("cases.detail", case_id=case_id), code=303)
+    except AccessDenied:
+        abort(404)
+    except VersionConflict:
+        return error_page(
+            "This request has changed",
+            "Review the latest conversation and retry with the same text.",
+            409,
+        )
+    except (ValueError, TypeError):
+        return error_page(
+            "Check your message", "Use plain text up to 10,000 characters and a current form.", 400
+        )
+    except PyMongoError:
+        return error_page(
+            "Message not confirmed", "Check the conversation before retrying the same form.", 503
         )

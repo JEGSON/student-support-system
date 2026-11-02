@@ -34,6 +34,7 @@ class Outbox:
                 "attempts": 0,
                 "next_attempt_at": now,
                 "created_at": now,
+                "expires_at": now + timedelta(hours=24),
             },
             session=sid,
         )

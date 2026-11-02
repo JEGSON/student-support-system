@@ -14,6 +14,7 @@ from .cases.routes import cases
 from .config import ConfigurationError, load_config
 from .health import database_ready, email_ready, identity_ready
 from .health import health as health_blueprint
+from .staff.routes import staff
 
 
 class SupportFlask(Flask):
@@ -31,7 +32,10 @@ def create_app(config=None):
     @app.before_request
     def correlate_request():
         g.request_id = str(uuid4())
-        if request.endpoint == "cases.new_request" and request.method == "POST":
+        if (
+            request.endpoint in {"cases.new_request", "cases.message", "staff.communicate"}
+            and request.method == "POST"
+        ):
             # URL-encoded 10,000-character Unicode can require ~120 KB.
             request.max_content_length = 128 * 1024
 
@@ -40,6 +44,7 @@ def create_app(config=None):
     app.register_blueprint(identity)
     app.register_blueprint(access)
     app.register_blueprint(cases)
+    app.register_blueprint(staff)
     try:
         app.extensions["mongo"] = MongoClient(
             app.config["MONGODB_URI"],
