@@ -126,6 +126,13 @@ def detail(case_id):
         case=case,
         messages=messages,
         notes=notes,
+        referral_teams=list(
+            database()
+            .teams.find(
+                {"active": True, "_id": {"$ne": case["team_id"]}}, {"name": 1, "category_scope": 1}
+            )
+            .limit(100)
+        ),
         older=encode_cursor(case_id, "messages", more),
         older_notes=encode_cursor(case_id, "notes", nmore),
     )
@@ -200,3 +207,100 @@ def communicate(case_id):
         assignee=data.get("assignee") or None,
     )
     return redirect(url_for("staff.detail", case_id=case_id), code=303)
+
+
+@staff.route("/staff/referrals", methods=["GET", "POST"])
+@authenticated
+def referrals():
+    from app.services.referrals import Referrals
+
+    service = Referrals(database())
+    if request.method == "POST":
+        data = form_fields({"decision", "referral", "reason"})
+        service.decide(
+            g.user["_id"],
+            session.get("context"),
+            data.get("referral"),
+            data.get("decision"),
+            data.get("reason"),
+        )
+        return redirect(url_for("staff.referrals"), code=303)
+    return render_template(
+        "staff/referrals.html",
+        title="Controlled referrals",
+        context="staff",
+        rows=service.list(g.user["_id"], session.get("context")),
+    )
+
+
+@staff.post("/staff/cases/<case_id>/refer")
+@authenticated
+def refer(case_id):
+    from app.services.referrals import Referrals
+
+    data = form_fields({"target", "category", "purpose", "summary"})
+    Referrals(database()).propose(
+        g.user["_id"],
+        session.get("context"),
+        case_id,
+        data.get("target"),
+        data.get("category"),
+        data.get("purpose"),
+        data.get("summary"),
+    )
+    return redirect(url_for("staff.referrals"), code=303)
+
+
+@staff.get("/staff/reassignment")
+@authenticated
+def reassignment():
+    from app.services.lifecycle import Lifecycle
+
+    return render_template(
+        "staff/reassignment.html",
+        title="Reassignment review",
+        context="staff",
+        rows=Lifecycle(database()).reassignment(g.user["_id"], session.get("context")),
+    )
+
+
+@staff.post("/staff/cases/<case_id>/archive")
+@authenticated
+def archive(case_id):
+    from app.services.lifecycle import Lifecycle
+
+    data = form_fields({"version"})
+    Lifecycle(database()).archive(
+        g.user["_id"], session.get("context"), case_id, int(data.get("version", "0"))
+    )
+    return redirect(url_for("staff.archived"), code=303)
+
+
+@staff.route("/staff/archive", methods=["GET", "POST"])
+@authenticated
+def archived():
+    from app.services.lifecycle import Lifecycle
+    from app.services.policy import Policy
+
+    case = None
+    if request.method == "POST":
+        data = form_fields({"case", "purpose"})
+        case = Lifecycle(database()).archive_read(
+            g.user["_id"], session.get("context"), data.get("case"), data.get("purpose")
+        )
+    policy = Policy(database(), g.user["_id"], session.get("context"))
+    teams = [
+        m["team_id"]
+        for m in database().memberships.find(
+            {"user_id": g.user["_id"], "active": True, "role": "manager"}
+        )
+        if policy.membership(m["team_id"], {"manager"})
+    ]
+    rows = list(
+        database()
+        .cases.find({"team_id": {"$in": teams}, "archive_state": "archived"}, {"reference": 1})
+        .limit(100)
+    )
+    return render_template(
+        "staff/archive.html", title="Archived requests", context="staff", rows=rows, case=case
+    )

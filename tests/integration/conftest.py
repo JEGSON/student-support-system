@@ -51,6 +51,8 @@ def bundle():
         "triage_claims",
     ]:
         db[name].delete_many({"case_id": {"$in": case_ids}})
+    db.referrals.delete_many({"source_case_id": {"$in": case_ids}})
+    db.disposal_records.delete_many({"requested_by": {"$in": list(ids.values())}})
     db.cases.delete_many({"_id": {"$in": case_ids}})
     db.submission_keys.delete_many({"user_id": {"$in": list(ids.values())}})
     db.sessions.delete_many({"user_id": {"$in": list(ids.values())}})

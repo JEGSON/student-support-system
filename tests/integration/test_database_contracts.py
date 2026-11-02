@@ -30,8 +30,8 @@ def database():
     schema_client = local_client(values, "schema")
     client = local_client(values, "testing")
     db = client.student_support_test
-    assert install_schema(schema_client.student_support_test) == 16
-    assert install_schema(schema_client.student_support_test) == 16
+    assert install_schema(schema_client.student_support_test) == len(SCHEMAS)
+    assert install_schema(schema_client.student_support_test) == len(SCHEMAS)
     seed_fixtures(db, values["OIDC_ISSUER"])
     yield db
     client.close()
@@ -49,6 +49,14 @@ def sample_documents():
     }
     docs.update(
         {
+            "disposal_records": dict(
+                case_id=cid,
+                requested_by=uid,
+                policy="synthetic-demo-1day",
+                reason="Synthetic disposal review",
+                state="pending",
+                created_at=stamp,
+            ),
             "case_events": dict(
                 case_id=cid, actor_id=uid, event_type="submitted", created_at=stamp
             ),

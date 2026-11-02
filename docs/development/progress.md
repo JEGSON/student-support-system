@@ -189,3 +189,7 @@ complete locally; next authorised stage would be 09 on a new user instruction.
 ## Stages 09/10
 
 User authorised all remaining local stages. Implemented scoped staff/triage workspace and the full core communication/lifecycle flow. Actual stage gates: 42 staff/policy tests; 221 complete unit/integration tests. Corrected a test fixture label; no application bypass added. Evidence: stage-09 and stage-10. Next: restricted local capture worker.
+
+## Stages 11–13
+
+Local generic SMTP capture, current-scope minimal referrals and synthetic retention/holds/dual-approved offline disposal implemented. Stage gates saved in stage-11, stage-12, stage-13 evidence. Full 234-test unit/integration gate passes. Added durable disposal ledger after informing user; web cannot erase history, execution requires offline maintenance. Next: rendered accessibility and operational hardening.

@@ -39,6 +39,7 @@ function ensureRole(database,name,privileges) {
 for(const database of ['student_support_dev','student_support_test']) {
  ensureRole(database,'support_web',[
   ...collections.map(collection=>({resource:{db:database,collection},actions:['find','insert','update','remove']})),
+  {resource:{db:database,collection:'disposal_records'},actions:['find','insert','update']},
   {resource:{db:database,collection:'case_events'},actions:['find','insert']},
   {resource:{db:database,collection:'audit_events'},actions:['insert']},
   {resource:{db:database,collection:'notification_outbox'},actions:['find','insert']}

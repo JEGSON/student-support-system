@@ -11,6 +11,16 @@ from app.services.policy import Policy
 from app.services.transactions import transaction
 
 ACTIONS = {
+    "reassignment_review",
+    "case_archived",
+    "archive_read",
+    "retention_review",
+    "hold_changed",
+    "disposal_requested",
+    "disposal_approved",
+    "case_disposed",
+    "referrals_read",
+    "referral_changed",
     "messages_read",
     "notes_read",
     "communication_changed",
@@ -32,6 +42,7 @@ ACTIONS = {
 }
 TARGETS = {"user", "case", "privileged_grant"}
 FIELDS = {
+    "legal_hold",
     "body",
     "active",
     "role",

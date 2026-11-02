@@ -183,6 +183,9 @@ SCHEMAS = {
             "created_at",
         ],
         source_case_id=ID,
+        source_team_id=ID,
+        target_category=enum(CATEGORIES),
+        decision_reason=text(1000),
         target_team_id=ID,
         requested_by=ID,
         purpose=text(1000),
@@ -332,6 +335,17 @@ SCHEMAS = {
         authorization_revision=INTEGER,
     ),
 }
+SCHEMAS["disposal_records"] = schema(
+    ["case_id", "requested_by", "policy", "reason", "state", "created_at"],
+    case_id=ID,
+    requested_by=ID,
+    approved_by=ID,
+    policy=enum(["synthetic-demo-1day"]),
+    reason=text(1000),
+    state=enum(["pending", "approved", "completed"]),
+    created_at=DATE,
+    completed_at=DATE,
+)
 SCHEMAS["audit_events"]["$jsonSchema"]["oneOf"] = [
     {"required": ["actor_id"]},
     {"required": ["service_id"]},
@@ -393,6 +407,10 @@ INDEXES = {
     "service_principals": [([("name", 1)], {"unique": True})],
 }
 
+INDEXES["disposal_records"] = [
+    ([("case_id", 1)], {"unique": True}),
+    ([("state", 1), ("created_at", 1)], {}),
+]
 # Session revocation and bounded access-administration lookup paths.
 INDEXES["sessions"].append(([("user_id", 1), ("revoked_at", 1)], {}))
 INDEXES["users"].append(([("display_name", 1), ("_id", 1)], {}))

@@ -88,3 +88,50 @@ def manage():
     except PyMongoError:
         current_app.logger.error("access_operation_unavailable")
         return "Access service unavailable. No change has been confirmed.", 503
+
+
+@access.route("/retention", methods=["GET", "POST"])
+@authenticated
+def retention():
+    from app.services.lifecycle import POLICY, Lifecycle
+
+    db = current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]]
+    try:
+        service = Lifecycle(db)
+        if request.method == "POST":
+            if set(request.form) - {"csrf_token", "operation", "case", "record", "reason"} or any(
+                len(request.form.getlist(k)) != 1 for k in request.form
+            ):
+                raise InvalidInput("Invalid form.")
+            data = request.form
+            actor = g.user["_id"]
+            context = session.get("context")
+            if data.get("operation") == "request":
+                service.request(actor, context, data.get("case"), POLICY, data.get("reason"))
+            elif data.get("operation") == "approve":
+                service.approve(actor, context, data.get("record"))
+            elif data.get("operation") in {"hold", "release_hold"}:
+                service.hold(
+                    actor,
+                    context,
+                    data.get("case"),
+                    data.get("operation") == "hold",
+                    data.get("reason"),
+                )
+            else:
+                raise InvalidInput("Invalid action.")
+            return redirect(url_for("access.retention"), code=303)
+        rows, ledger = service.review(g.user["_id"], session.get("context"))
+        return render_template(
+            "auth/retention.html",
+            title="Synthetic retention review",
+            context="admin",
+            rows=rows,
+            ledger=ledger,
+        )
+    except AccessDenied:
+        return "Access denied.", 403
+    except (InvalidInput, ValueError, TypeError):
+        return "Invalid retention action.", 400
+    except PyMongoError:
+        return "Retention action not confirmed. Review before retrying.", 503

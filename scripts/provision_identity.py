@@ -117,7 +117,12 @@ def provision():
                 ]
                 result = db.users.update_one(
                     {"_id": doc["_id"], "fixture_version": "synthetic-v1"},
-                    {"$set": {"identity_subject": users[0]["id"]}},
+                    {
+                        "$set": {
+                            "identity_subject": users[0]["id"],
+                            "verified_contact": username + "@example.invalid",
+                        }
+                    },
                 )
                 if not result.matched_count:
                     raise ValueError("Seed isolated fixtures before provisioning.")
