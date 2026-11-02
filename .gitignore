@@ -1,0 +1,30 @@
+# Local credentials and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Python environments, caches and packaging
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+# Local runtime and sensitive output
+instance/
+runtime/
+data/
+backups/
+*.log
+*.sqlite*
+*.dump
+# Editor / operating system
+.DS_Store
+.idea/

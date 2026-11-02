@@ -1,0 +1,42 @@
+requirement_id,summary,provenance,source,status,primary_stage,decision_or_owner
+FR-01,Authentication,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,05,OD-03
+FR-02,Support request submission,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,08,OD-03
+FR-03,Own-case viewing,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,08,OD-03
+FR-04,Undefined in supplied baseline,unresolved baseline definition,docs/architecture/student-support-secure-design.html#verification,unresolved,01,OD-01
+FR-05,Authorised staff viewing,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,09,OD-03
+FR-06,Undefined in supplied baseline,unresolved baseline definition,docs/architecture/student-support-secure-design.html#verification,unresolved,01,OD-01
+FR-07,Status management,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,10,OD-03
+FR-08,Internal notes,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,10,OD-03
+FR-09,Student-visible communication,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,10,OD-03
+FR-10,Closure with resolution,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,10,OD-03
+FR-11,Access administration,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,06,OD-03
+FR-12,Accountability,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,07,OD-03
+FR-13,Record lifecycle,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,13,OD-03
+SR-01,Authentication,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,05,engineering owner
+SR-02,Resource authorisation,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,06,engineering owner
+SR-03,Privilege administration,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,06,engineering owner
+SR-04,Credential and secret protection,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,15,engineering owner
+SR-05,Sessions and CSRF,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,05,engineering owner
+SR-06,Input/output safety,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,08,engineering owner
+SR-07,Encryption,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,15,engineering owner
+SR-08,Audit integrity,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,07,engineering owner
+SR-09,Disclosure prevention,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,10,engineering owner
+SR-10,Abuse resistance,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,15,engineering owner
+SR-11,Recovery,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,15,engineering owner
+BR-01,Server-owned student ownership,proposed baseline requirement; grouped reference-key wording interpreted; OD-01 confirmation pending,docs/architecture/student-support-secure-design.html#verification,planned,08,OD-01
+BR-02,Server-owned assignment and timestamps,proposed baseline requirement; grouped reference-key wording interpreted; OD-01 confirmation pending,docs/architecture/student-support-secure-design.html#verification,planned,09,OD-01
+BR-03,Accountable team ownership,proposed baseline requirement; grouped reference-key wording interpreted; OD-01 confirmation pending,docs/architecture/student-support-secure-design.html#verification,planned,09,OD-01
+BR-04,Eligible active assignment,proposed baseline requirement; grouped reference-key wording interpreted; OD-01 confirmation pending,docs/architecture/student-support-secure-design.html#verification,planned,09,OD-01
+BR-05,Distinct student/staff visibility,proposed baseline requirement; grouped reference-key wording interpreted; OD-01 confirmation pending,docs/architecture/student-support-secure-design.html#verification,planned,10,OD-01
+BR-06,Correction history,proposed baseline requirement; grouped reference-key wording interpreted; OD-01 confirmation pending,docs/architecture/student-support-secure-design.html#verification,planned,10,OD-01
+BR-07,Archiving separate from status,proposed baseline requirement; grouped reference-key wording interpreted; OD-01 confirmation pending,docs/architecture/student-support-secure-design.html#verification,planned,13,OD-01
+BR-08,Restricted disposal,proposed baseline requirement; grouped reference-key wording interpreted; OD-01 confirmation pending,docs/architecture/student-support-secure-design.html#verification,planned,13,OD-01
+BR-09,Concurrency and repeat-safe writes,proposed baseline requirement; summary from reference key; grouped wording requires OD-01 confirmation,docs/architecture/student-support-secure-design.html#verification,planned,07,OD-01
+BR-10,Urgent escalation under approved procedure,proposed baseline requirement; summary from reference key; grouped wording requires OD-01 confirmation,docs/architecture/student-support-secure-design.html#verification,planned,14,OD-01
+C-01,Python and Flask,confirmed user project contract; full assessment pack pending,docs/development/student-support-development-prompts.txt,planning recorded,01,OD-01
+C-02,MongoDB selected within assessment database choice,confirmed user project contract; full assessment pack pending,docs/development/student-support-development-prompts.txt,planning recorded,01,OD-01
+C-03,SSDLC incremental delivery,confirmed user project contract; full assessment pack pending,docs/development/student-support-development-prompts.txt,planning recorded,01,OD-01
+C-04,GitHub version-control evidence,confirmed user project contract; full assessment pack pending,docs/development/student-support-development-prompts.txt,planning recorded,01,OD-01
+C-05,Security testing and documentation,confirmed user project contract; full assessment pack pending,docs/development/student-support-development-prompts.txt,planning recorded,01,OD-01
+C-06,Accurate AI-use statement,confirmed user project contract; full assessment pack pending,docs/development/student-support-development-prompts.txt,planning recorded,01,OD-01
+C-07,Synthetic data only; staged authorisation; no push deployment or third-party contact,confirmed user project contract; full assessment pack pending,docs/development/student-support-development-prompts.txt,planning recorded,01,OD-01

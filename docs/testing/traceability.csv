@@ -1,0 +1,81 @@
+requirement_id,workflow_id,threat_id,test_id,primary_stage,implementation_reference,evidence_reference,status
+FR-01,WF-01,T01 T09,V01 V06 V08,05,,,planned
+FR-02,WF-01,T02 T03 T07 T09 T10,V01 V07 V08 V10,08,,,planned
+FR-03,WF-01,T05 T06,V01 V02 V05,08,,,planned
+FR-04,,,,01,,,unresolved
+FR-05,WF-02 WF-03,T05 T08,V01 V03 V04,09,,,planned
+FR-06,,,,01,,,unresolved
+FR-07,WF-03 WF-04 WF-05 WF-07 WF-08,T02 T03,V01 V09 V10,10,,,planned
+FR-08,WF-06,T04 T06 T10,V05 V07 V11,10,,,planned
+FR-09,WF-04 WF-05,T06 T09 T10,V01 V05 V07 V08,10,,,planned
+FR-10,WF-07 WF-08,T02 T03,V01 V09 V10,10,,,planned
+FR-11,WF-10,T01 T08,V03 V06 V11,06,,,planned
+FR-12,WF-01 WF-02 WF-06 WF-10,T03 T04,V10 V11,07,,,planned
+FR-13,WF-10 WF-11,T11,V15,13,,,planned
+SR-01,,T01,V06,05,,,planned
+SR-02,WF-01 WF-02 WF-09,T02 T05 T08,V02 V03 V04 V07,06,,,planned
+SR-03,WF-10,T08,V03 V11,06,,,planned
+SR-04,,T11,V16,15,,,planned
+SR-05,,T01 T09,V06 V08,05,,,planned
+SR-06,WF-01 WF-04 WF-06,T02 T09 T10,V07 V08,08,,,planned
+SR-07,,T11,V15 V16,15,,,planned
+SR-08,WF-01 WF-06 WF-10,T04 T08,V10 V11,07,,,planned
+SR-09,WF-06 WF-09,T05 T06,V04 V05 V16,10,,,planned
+SR-10,,T07,V13,15,,,planned
+SR-11,WF-11,T11,V15,15,,,planned
+BR-01,WF-01,T02 T05,V02 V07 V09,08,,,planned
+BR-02,WF-01 WF-02,T02,V07 V09,09,,,planned
+BR-03,WF-01 WF-02,T02,V01 V09,09,,,planned
+BR-04,WF-02 WF-03,T05 T08,V03 V09,09,,,planned
+BR-05,WF-06,T05 T06,V03 V05,10,,,planned
+BR-06,WF-06,T04,V09 V11,10,,,planned
+BR-07,WF-11,T11,V09 V15,13,,,planned
+BR-08,WF-11,T08 T11,V11 V15,13,,,planned
+BR-09,WF-01 WF-02 WF-07 WF-09,T03,V10,07,,,planned
+BR-10,WF-03,T06,V09 V14,14,,,planned
+,WF-01,T02 T03 T05,V01 V07 V08 V10,08,,,planned
+,WF-02,T03 T05 T08,V03 V04 V09 V10,09,,,planned
+,WF-03,T02 T05,V01 V03 V09,09,,,planned
+,WF-04,T03 T06 T09,V01 V05 V08 V09 V10,10,,,planned
+,WF-05,T03 T05 T09,V01 V02 V08 V09 V10,10,,,planned
+,WF-06,T04 T06 T10,V03 V05 V07 V11,10,,,planned
+,WF-07,T03 T04,V01 V09 V10,10,,,planned
+,WF-08,T04 T08,V03 V09 V11,10,,,planned
+,WF-09,T03 T05 T06,V04 V05 V10,12,,,planned
+,WF-10,T01 T05 T08,V03 V06 V11,13,,,planned
+,WF-11,T08 T11,V09 V11 V15,13,,,planned
+,,T01,V06,16,,,planned
+,,T02,V07,16,,,planned
+,,T03,V10,16,,,planned
+,,T04,V11,16,,,planned
+,,T05,V02 V03,16,,,planned
+,,T06,V04 V05,16,,,planned
+,,T07,V13,16,,,planned
+,,T08,V03 V11,16,,,planned
+,,T09,V08,16,,,planned
+,,T10,V07,16,,,planned
+,,T11,V15,16,,,planned
+,,T12,V12,16,,,planned
+,,,V01,16,,,planned
+,,,V02,16,,,planned
+,,,V03,16,,,planned
+,,,V04,16,,,planned
+,,,V05,16,,,planned
+,,,V06,16,,,planned
+,,,V07,16,,,planned
+,,,V08,16,,,planned
+,,,V09,16,,,planned
+,,,V10,16,,,planned
+,,,V11,16,,,planned
+,,,V12,16,,,planned
+,,,V13,16,,,planned
+,,,V14,16,,,planned
+,,,V15,16,,,planned
+,,,V16,16,,,planned
+C-01,,,,01,docs/development/delivery.md,docs/evidence/stage-01.md,planning recorded
+C-02,,,,01,docs/development/delivery.md,docs/evidence/stage-01.md,planning recorded
+C-03,,,,01,docs/development/delivery.md,docs/evidence/stage-01.md,planning recorded
+C-04,,,,01,docs/development/delivery.md,docs/evidence/stage-01.md,planning recorded
+C-05,,,,01,docs/development/delivery.md,docs/evidence/stage-01.md,planning recorded
+C-06,,,,01,docs/development/delivery.md,docs/evidence/stage-01.md,planning recorded
+C-07,,,,01,docs/development/delivery.md,docs/evidence/stage-01.md,planning recorded
