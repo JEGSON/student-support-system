@@ -184,3 +184,8 @@ the earlier no-push restriction for source publication only. Remote fetch succee
 file versions against 30 actual private secret values with zero matches. Generated
 credentials, environments, database files and backups remain ignored. No production
 deployment or external student-information processing is authorised by this change.
+
+GitHub publication succeeded: origin/main advanced from ddcfca1 to 91d1df9, preserving
+the existing incremental commits and the explanatory editor-configuration commit.
+The README publication status was then reconciled. The earlier stage records remain
+historical evidence of their original no-push scope, rather than current restrictions.

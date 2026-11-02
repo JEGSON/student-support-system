@@ -40,9 +40,10 @@ replica-set integration and isolated Chromium/WebKit journeys. Run documentation
 checks with `.venv/bin/python scripts/check_foundation.py` and
 `.venv/bin/python scripts/check_design.py`. Full runtime commands are in setup.
 
-Local Git history records incremental development. An origin is configured; remote
-publication/history has not been verified. The assessment ZIP excludes Git metadata;
-review history in this repository. Package and extraction checks are documented in
+Source and incremental development history are published to
+[GitHub](https://github.com/JEGSON/student-support-system) following the user's separate
+authorisation. The assessment ZIP excludes Git metadata; review history in the
+repository. Production deployment remains outside this authorisation. Package and extraction checks are documented in
 [the release checklist](docs/handbook/release-checklist.md).
 
 Student registration and editable profiles were added after the initial handover.
