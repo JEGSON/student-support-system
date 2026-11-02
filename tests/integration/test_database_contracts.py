@@ -49,6 +49,7 @@ def sample_documents():
     }
     docs.update(
         {
+            "rate_limits": dict(count=1, expires_at=stamp),
             "disposal_records": dict(
                 case_id=cid,
                 requested_by=uid,

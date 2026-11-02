@@ -14,6 +14,7 @@ services:
       SUPPORT_AUDIT_PASSWORD: ${MONGO_AUDIT_PASSWORD:?Run scripts/prepare_schema_secret.py}
       SUPPORT_WORKER_PASSWORD: ${MONGO_WORKER_PASSWORD:?Run scripts/prepare_schema_secret.py}
       SUPPORT_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Run scripts/setup_local.py}
+      SUPPORT_RESTORE_PASSWORD: ${MONGO_RESTORE_PASSWORD:?Run scripts/prepare_schema_secret.py}
       SUPPORT_SCHEMA_PASSWORD: ${MONGO_SCHEMA_PASSWORD:?Run scripts/prepare_schema_secret.py}
       SUPPORT_TEST_PASSWORD: ${MONGO_TEST_PASSWORD:?Run scripts/setup_local.py}
     ports: ["127.0.0.1:27017:27017"]

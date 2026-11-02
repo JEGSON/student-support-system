@@ -39,6 +39,7 @@ function ensureRole(database,name,privileges) {
 for(const database of ['student_support_dev','student_support_test']) {
  ensureRole(database,'support_web',[
   ...collections.map(collection=>({resource:{db:database,collection},actions:['find','insert','update','remove']})),
+  {resource:{db:database,collection:'rate_limits'},actions:['find','insert','update']},
   {resource:{db:database,collection:'disposal_records'},actions:['find','insert','update']},
   {resource:{db:database,collection:'case_events'},actions:['find','insert']},
   {resource:{db:database,collection:'audit_events'},actions:['insert']},
@@ -62,3 +63,6 @@ for(const [user,password,roles] of [
 ]) {
  if(admin.getUser(user)) admin.updateUser(user,{roles}); else admin.createUser({user,pwd:password,roles});
 }
+
+if(!admin.getUser('support_restore')) admin.createUser({user:'support_restore',pwd:process.env.SUPPORT_RESTORE_PASSWORD,roles:[{role:'readWrite',db:'student_support_restore_test'}]});
+admin.updateUser('support_schema',{roles:['student_support_dev','student_support_test','student_support_restore_test'].map(db=>({role:'dbAdmin',db}))});

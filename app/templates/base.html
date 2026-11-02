@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en-GB">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ title }} · Student Support</title><link rel="stylesheet" href="{{ url_for('static', filename='css/design.css') }}"></head>
-<body><a class="skip" href="#main">Skip to content</a>
+<body><a class="skip" href="#main" tabindex="0">Skip to content</a>
 {% if development_preview %}<div class="preview"><strong>Development gallery · synthetic data</strong><a href="{{ url_for('gallery.components') }}">Components</a><a href="{{ url_for('gallery.shell', context='student') }}">Student shell</a><a href="{{ url_for('gallery.shell', context='staff') }}">Staff shell</a></div>{% endif %}
 <header class="header"><div class="wrap header-inner"><a class="brand" href="{{ url_for('index') }}"><span class="mark" aria-hidden="true">s</span><span>Student Support<small>University demonstration</small></span></a>
 {% if g.user and not development_preview %}<nav class="nav" aria-label="Account navigation">{% if context == 'staff' %}<a href="{{ url_for('staff.queue') }}">Staff workspace</a>{% endif %}{% if context == 'student' %}<a href="{{ url_for('cases.overview') }}">Your requests</a>{% endif %}<a href="{{ url_for('identity.account') }}">Your account</a></nav>{% endif %}
 {% if development_preview %}<nav class="nav" aria-label="Preview context"><span class="hint">{{ context|capitalize }} context · synthetic preview</span></nav>{% endif %}
-</div></header><main class="wrap" id="main">{% block content %}{% endblock %}</main><footer><div class="wrap footer-inner"><span>Student Support · A fictional university service</span><span>Synthetic demonstration · service policies pending approval</span></div></footer></body></html>
+</div></header><main class="wrap" id="main" tabindex="-1">{% block content %}{% endblock %}</main><footer><div class="wrap footer-inner"><span>Student Support · A fictional university service</span><span>Synthetic demonstration · service policies pending approval</span></div></footer></body></html>

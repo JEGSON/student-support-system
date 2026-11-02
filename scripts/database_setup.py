@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def local_client(values, kind):
     user, key = {
+        "restore": ("support_restore", "MONGO_RESTORE_PASSWORD"),
         "schema": ("support_schema", "MONGO_SCHEMA_PASSWORD"),
         "development": ("support_fixture", "MONGO_FIXTURE_PASSWORD"),
         "web_development": ("support_app", "MONGO_APP_PASSWORD"),

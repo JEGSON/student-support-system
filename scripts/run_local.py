@@ -34,6 +34,13 @@ def local_web_settings():
         "OIDC_REQUIRED_ACR",
         "EMAIL_HEALTH_URL",
         "CASE_ROUTING_JSON",
+        "TRUST_PROXY",
+        "PROXY_HOPS",
+        "PROXY_TRUSTED_IP",
+        "RATE_LIMIT_ENABLED",
+        "RATE_LIMIT_READ",
+        "RATE_LIMIT_WRITE",
+        "RATE_LIMIT_IDENTITY",
     }
     return {
         key: value

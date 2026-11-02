@@ -17,6 +17,7 @@ def prepare():
         key
         for key in (
             "MONGO_SCHEMA_PASSWORD",
+            "MONGO_RESTORE_PASSWORD",
             "MONGO_FIXTURE_PASSWORD",
             "MONGO_WEB_TEST_PASSWORD",
             "MONGO_AUDIT_PASSWORD",

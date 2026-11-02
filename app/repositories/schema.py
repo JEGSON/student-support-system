@@ -335,6 +335,7 @@ SCHEMAS = {
         authorization_revision=INTEGER,
     ),
 }
+SCHEMAS["rate_limits"] = schema(["count", "expires_at"], count=INTEGER, expires_at=DATE)
 SCHEMAS["disposal_records"] = schema(
     ["case_id", "requested_by", "policy", "reason", "state", "created_at"],
     case_id=ID,
@@ -407,6 +408,7 @@ INDEXES = {
     "service_principals": [([("name", 1)], {"unique": True})],
 }
 
+INDEXES["rate_limits"] = [([("expires_at", 1)], {"expireAfterSeconds": 0})]
 INDEXES["disposal_records"] = [
     ([("case_id", 1)], {"unique": True}),
     ([("state", 1), ("created_at", 1)], {}),
@@ -430,7 +432,11 @@ INDEXES["cases"].append(
 
 def install_schema(database):
     """Explicit privileged setup, never called from public application startup."""
-    if database.name not in {"student_support_dev", "student_support_test"}:
+    if database.name not in {
+        "student_support_dev",
+        "student_support_test",
+        "student_support_restore_test",
+    }:
         raise ValueError("Schema setup is limited to isolated local databases.")
     existing = set(database.list_collection_names())
     for name, validator in SCHEMAS.items():

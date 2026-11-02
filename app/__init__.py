@@ -2,7 +2,7 @@
 
 from uuid import uuid4
 
-from flask import Flask, g, render_template, request
+from flask import Flask, abort, g, render_template, request
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from pymongo import MongoClient
 
@@ -14,6 +14,7 @@ from .cases.routes import cases
 from .config import ConfigurationError, load_config
 from .health import database_ready, email_ready, identity_ready
 from .health import health as health_blueprint
+from .operations.security import TrustedProxy, enforce_rate_limit
 from .staff.routes import staff
 
 
@@ -28,10 +29,14 @@ def create_app(config=None):
     app = SupportFlask(__name__)
     app.config.update(load_config(config))
     app.session_interface = MongoSessionInterface()
+    app.wsgi_app = TrustedProxy(app.wsgi_app, app.config)
 
     @app.before_request
     def correlate_request():
         g.request_id = str(uuid4())
+        if request.environ.get("support.proxy_invalid"):
+            abort(400)
+        enforce_rate_limit()
         if (
             request.endpoint in {"cases.new_request", "cases.message", "staff.communicate"}
             and request.method == "POST"
@@ -84,7 +89,23 @@ def create_app(config=None):
                 "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
             }
         )
+        if app.config["APP_ENV"] == "production":
+            response.headers["Strict-Transport-Security"] = "max-age=31536000"
+        if response.status_code == 429:
+            response.headers["Retry-After"] = "60"
+        if response.status_code in {403, 404, 429}:
+            app.logger.info("request_denied status=%s", response.status_code)
         return response
+
+    @app.errorhandler(429)
+    @app.errorhandler(503)
+    def bounded_service_error(error):
+        return render_template(
+            "error.html",
+            title="Please try again shortly",
+            message="The service is busy or temporarily unavailable. No change has been confirmed.",
+            context="public",
+        ), error.code
 
     @app.errorhandler(CSRFError)
     def expired_form(error):

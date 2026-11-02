@@ -9,7 +9,15 @@ from app.services.policy import AccessDenied, Policy
 from app.services.references import validate_references
 from app.services.transactions import VersionConflict, transaction
 
-META = {"_id": 1, "reference": 1, "category": 1, "created_at": 1, "status": 1, "team_id": 1}
+META = {
+    "_id": 1,
+    "reference": 1,
+    "category": 1,
+    "created_at": 1,
+    "status": 1,
+    "team_id": 1,
+    "assignee_id": 1,
+}
 
 
 class StaffCases:
@@ -59,6 +67,10 @@ class StaffCases:
             )
             for row in rows:
                 member_roles = {m["role"] for m in scope if m["team_id"] == row["team_id"]}
+                row["can_open"] = "manager" in member_roles or (
+                    "officer" in member_roles and row.get("assignee_id") == actor
+                )
+                row.pop("assignee_id", None)
                 row["can_claim"] = row["status"] == "New" and bool(
                     member_roles & {"triage", "manager"}
                 )

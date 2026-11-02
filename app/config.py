@@ -1,5 +1,6 @@
 """Explicit environment contract; no development defaults in production."""
 
+import ipaddress
 import json
 import os
 import re
@@ -141,7 +142,34 @@ def load_config(overrides=None):
         raise ConfigurationError(
             "CASE_ROUTING_JSON must map approved categories to canonical team UUIDs."
         ) from None
+    trust_proxy = str(source.get("TRUST_PROXY", "0"))
+    if trust_proxy not in {"0", "1"}:
+        raise ConfigurationError("TRUST_PROXY must be 0 or 1.")
+    trusted_ip = source.get("PROXY_TRUSTED_IP", "127.0.0.1")
+    if trust_proxy == "1":
+        if str(source.get("PROXY_HOPS", "")) != "1":
+            raise ConfigurationError("Exactly one trusted proxy hop is required.")
+        try:
+            ipaddress.ip_address(trusted_ip)
+        except ValueError:
+            raise ConfigurationError("Invalid trusted proxy address.") from None
+    enabled = str(source.get("RATE_LIMIT_ENABLED", "1" if not local else "0"))
+    if enabled not in {"0", "1"} or (not local and enabled != "1"):
+        raise ConfigurationError("Production requires shared rate limiting.")
+    rates = {}
+    for name, default in [("READ", 600), ("WRITE", 120), ("IDENTITY", 30)]:
+        try:
+            value = int(str(source.get("RATE_LIMIT_" + name, default)))
+        except ValueError:
+            raise ConfigurationError("Invalid rate limit.") from None
+        if not 1 <= value <= 10000:
+            raise ConfigurationError("Rate limit must be 1–10000.")
+        rates["RATE_LIMIT_" + name] = value
     return {
+        "TRUST_PROXY": trust_proxy == "1",
+        "PROXY_TRUSTED_IP": trusted_ip,
+        "RATE_LIMIT_ENABLED": enabled == "1",
+        **rates,
         "CASE_ROUTING": routing,
         "OIDC_TOKEN_AUTH_METHOD": method,
         "OIDC_CLIENT_SECRET": source.get("OIDC_CLIENT_SECRET"),
