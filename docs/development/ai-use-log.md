@@ -84,3 +84,16 @@ MongoDB reserved `_id` fields, and recorded 79 passing tests with six browser sk
 Reviewed/updated data-model, evidence and progress documentation. No independent
 review, complete security assurance or usable OIDC fixture accounts are claimed.
 No real student data, remote push or production deployment. Full AI policy pending.
+
+## 2 November 2026 — Stage 01–04 audit and cleanup
+
+Codex audited the existing Stages 01–04 implementation and documentation at the
+user's request. Checked official PyMongo/Ruff/pip-audit documentation, installed
+and locked current quality tools, standardised Python source and made targeted
+UTC/reference/config/query/startup fixes. Added meaningful regressions, verified
+an index execution plan on fixtures, installed all current packages in a clean
+environment and reran actual database/isolated browser tests (103 passed). Downloaded
+required pinned service images/browsers; audited 46 Python packages with zero known
+advisories returned. Recorded exact scope, machine-readable inventory and reports.
+No independent review, workload capacity or production readiness is invented.
+Stage 05 was not implemented. Complete institutional AI policy remains pending.

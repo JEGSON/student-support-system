@@ -83,3 +83,4 @@ SR-09,WF-06,T05 T06,V05 V14,02,docs/design/README.md,docs/evidence/stage-02.md,d
 SR-04 SR-06 SR-09 SR-11,,T07 T10 T11,V16,03,docs/architecture/runtime-status.md,docs/evidence/stage-03.md,partial; responsive verification pending
 SR-04 SR-06 SR-09 SR-11,,T07 T10 T11,V14 V16,03,app/__init__.py,docs/evidence/stage-03-recheck/README.md,stage 03 verified; full V14/V16 partial
 SR-02 SR-06 BR-01 BR-02 BR-03 BR-04 BR-09,WF-01 WF-02,T02 T03 T05,V07 V10,04,docs/architecture/persistence-contract.md,docs/evidence/stage-04.md,stage 04 verified; policy/workflow verification pending
+SR-02 SR-04 SR-06 SR-10 BR-09,WF-01 WF-02,T02 T03 T07 T11,V07 V10 V14 V16,04,docs/architecture/scalability-review.md,docs/evidence/stages-01-04-audit/README.md,stages 01–04 audit verified; full future verification pending

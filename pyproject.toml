@@ -7,8 +7,10 @@ dependencies = ["Flask==3.1.3", "pymongo==4.19.0", "python-dotenv>=1.2,<2"]
 
 [dependency-groups]
 dev = [
+    "pip-audit>=2.9,<3",
     "playwright>=1.58,<2",
     "pytest>=8.4,<10",
+    "ruff>=0.14,<1",
 ]
 
 [tool.uv]
@@ -17,4 +19,21 @@ package = false
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-markers = ["runtime: requires the isolated local dependency stack", "browser: opt-in isolated browser rendering checks"]
+markers = [
+    "runtime: requires the isolated local dependency stack",
+    "browser: opt-in isolated browser rendering checks",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+exclude = ["runtime", ".venv"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# Direct script entry points add the repository root before importing the app.
+"scripts/run_local.py" = ["E402"]
+"scripts/start_dependencies.py" = ["E402"]
+"scripts/database_setup.py" = ["E402"]

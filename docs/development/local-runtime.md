@@ -16,6 +16,10 @@ uv sync --frozen --cache-dir runtime/uv-cache
 .venv/bin/python scripts/run_local.py
 ```
 
+The current audit also verified all 46 runtime/dev packages in a clean environment.
+Run `uv sync --frozen` after dependency changes. Ruff and pip-audit are locked dev
+quality tools; no Stage 05 identity client or later production tools are required yet.
+
 Start Docker first. The setup generator is for first use: it writes a private
 ignored `.env`, replica-set keyfile and synthetic OIDC realm import; it never prints
 passwords and refuses to overwrite an existing setup. A later run's nonzero exit
@@ -115,5 +119,20 @@ RUN_BROWSER=1 RUN_RUNTIME=1 PLAYWRIGHT_BROWSERS_PATH=runtime/playwright-browsers
 
 Playwright is a locked dev dependency; browser downloads stay ignored. Browser tests
 start and stop their own loopback fixture server, use no personal browser profile,
-block external requests and save synthetic evidence. Native Safari is not required.
+block external requests and save synthetic evidence. Routine screenshots default to
+ignored `runtime/browser-evidence`. To record a deliberate review without overwriting
+historical evidence, set `BROWSER_EVIDENCE_DIR=docs/evidence/<new-record>/browser`. Native Safari is not required.
 The 29-test result verifies Stage 03 scope, not future authenticated journeys.
+
+## Current quality checks
+
+```sh
+.venv/bin/ruff check app scripts tests wsgi.py
+.venv/bin/ruff format --check app scripts tests wsgi.py
+.venv/bin/python -m pip check
+```
+
+Pool size is initially 20 per application process (`MONGO_MAX_POOL_SIZE`, range
+1–100) with a 1.5s connection checkout wait. Case-list queries have a 1.5s server
+execution bound. Tune these only using measured workloads; these initial values
+are not a production capacity claim. See `../architecture/scalability-review.md`.

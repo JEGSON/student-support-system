@@ -19,3 +19,10 @@ query inputs, uniqueness, transaction-backed fixture operations and reference
 checks. It does not implement caller authorisation or audit-before-read. Database
 setup uses a separate local schema role; collection-level audit/worker restrictions
 remain pending. Initial/residual risk estimates are unchanged and unaccepted.
+
+Stage 01–04 audit adds a dated 46-package advisory check (zero known findings), safe
+URL/pool/reference regressions, bounded query waits and metadata-only integrity
+lookups. Full clean-environment regression: 103 passed. Source secrets/runtime state
+remain excluded. This does not establish container vulnerability clearance, future
+case authorisation, load capacity or production security. Existing risk targets and
+institutional acceptance remain unchanged. See `../evidence/stages-01-04-audit/`.

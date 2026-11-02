@@ -1,0 +1,16 @@
+{
+  "browser": "webkit",
+  "version": "27.2",
+  "width": 390,
+  "screens": [
+    "entry",
+    "components",
+    "student",
+    "staff"
+  ],
+  "reduced_motion": "reduce",
+  "horizontal_overflow": false,
+  "keyboard_focus": "checked",
+  "external_requests": 0,
+  "page_errors": 0
+}

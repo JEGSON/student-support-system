@@ -4,11 +4,11 @@ A proposed secure UK university support service using Python, Flask and MongoDB.
 
 ## Current state
 
-Stages 01–04 are complete. Stage 03 provides
-has a local Flask runtime, shared Jinja components and isolated MongoDB/OIDC/email
+Stages 01–04 are complete and have passed a cleanup/dependency audit. Stage 03 provides
+a local Flask runtime, shared Jinja components and isolated MongoDB/OIDC/email
 capture. Stage 03 has 29 passing tests, including responsive browser checks at 390/768/1440px.
-Stage 04 adds tested database contracts and synthetic fixtures; its suite has 79
-passes and six unchanged browser skips. No case management or sign-in is implemented.
+The latest audit passes all 103 unit, actual-database and browser checks from a
+clean locked environment. Stage 04 includes tested contracts and synthetic fixtures. No case management or sign-in is implemented.
 Use synthetic data only. No remote push or deployment has occurred.
 
 See [local setup and verification](docs/development/local-runtime.md) and
@@ -27,6 +27,10 @@ See [local setup and verification](docs/development/local-runtime.md) and
 5. Follow the sequential backlog. Stages 03/04 are verified; Stage 05 OIDC
    and server-side sessions come next. The user authorised sequential
    local stages; remote actions and real-data processing remain excluded.
+
+See the [Stage 01–04 audit](docs/evidence/stages-01-04-audit/README.md) for cleanup,
+dependency inventory, checks and scalability limits. Work is held before Stage 05
+at the user's requested review checkpoint.
 
 ## Planning and evidence
 
@@ -61,9 +65,11 @@ HTTP exceptions. Never commit the generated `.env` or runtime files.
 ## Layout
 
 - `app/`: Flask factory, configuration, health, templates and development gallery;
-  business policies/services/repositories remain future work.
+  typed repositories and reference integrity are implemented; identity, caller
+  policies and business journeys remain future work.
 - `worker/`: future restricted notification worker.
-- `tests/`: runtime unit and opt-in actual dependency tests; feature/browser tests pending.
+- `tests/`: unit, actual-database and browser regression tests; authenticated
+  feature journeys remain future work.
 - `docs/`: design, requirements, decisions, risks, evidence and development log.
 - `scripts/`: document checks and local setup/start commands.
 - `infrastructure/`: digest-pinned local Compose dependencies and trusted bootstrap.

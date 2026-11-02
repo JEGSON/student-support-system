@@ -67,3 +67,12 @@ without repeated per-stage permission questions, superseding the earlier need fo
 a separately numbered user instruction each time. All stage completion/security
 gates and excluded remote/real-data actions remain in force. Stage 03 currently
 requires responsive browser verification before Stage 04 may begin.
+
+## Current hold — Stage 01–04 review checkpoint
+
+The user requested checking/cleaning Stages 01–04 and installing only their required
+dependencies before continuing. That audit is complete, with scoped evidence under
+`../evidence/stages-01-04-audit/`. Stop before Stage 05; wait for the user's continuation.
+No prior sequential instruction overrides this newer scope restriction. Remote
+push, production deployment, real student processing and third-party messages
+remain unauthorised.

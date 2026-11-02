@@ -1,0 +1,8 @@
+{
+  "scope": "synthetic fixture only; not a load/capacity test",
+  "index": "cases_v1_6",
+  "returned": 2,
+  "keys_examined": 2,
+  "documents_examined": 2,
+  "note": "Hinted execution checks index support; not a claim of optimiser choice for all workloads."
+}

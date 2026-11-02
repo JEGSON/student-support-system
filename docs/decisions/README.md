@@ -52,3 +52,11 @@ engineering additions, not university policy. `../architecture/persistence-contr
 records fields, indexes, service integrity boundaries and non-atomic migration limits.
 Fixture reset rejects dependencies outside its version. No case-content web access
 or Stage 06 approval/authorisation behaviour is implemented by this contract alone.
+
+Stage 01–04 audit: retain the modular monolith. Use an initial configurable 20-entry
+per-process pool and 1.5s pool/query bounds, aware UTC decoding, metadata-only reused
+reference lookups and an additive archive-aware case index. These are development
+bounds, not measured production sizing. Preserve baseline indexes until workload
+analysis justifies removal. Locked Ruff/pip-audit support current cleanup and package
+checks. `../architecture/scalability-review.md` records trade-offs and remaining
+load/production work. No authentication, crypto or institutional-policy substitution.

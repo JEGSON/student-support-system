@@ -79,3 +79,12 @@ Primary documentation checked: [MongoDB schema validation](https://www.mongodb.c
 [PyMongo indexes](https://www.mongodb.com/docs/languages/python/pymongo-driver/current/indexes/),
 [transactions](https://www.mongodb.com/docs/languages/python/pymongo-driver/current/crud/transactions/),
 [built-in roles](https://www.mongodb.com/docs/manual/reference/built-in-roles/).
+
+## Stage 01–04 cleanup audit
+
+The application MongoClient now decodes aware dates consistently with CLI clients.
+Reference guards reject missing/non-nullable references before database writes and
+read only reusable integrity metadata, excluding note/message bodies and contact
+fields. An additive cases_v1_6 index includes archive_state for the actual active
+keyset query; baseline indexes were preserved. Case queries now have a 1.5s server
+execution bound. See `scalability-review.md` for evidence and limits.

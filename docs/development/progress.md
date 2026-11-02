@@ -87,3 +87,23 @@ six unchanged browser configurations skipped; prior Stage 03 browser evidence re
 Documented schema additions, migration limits, fixture setup/reset and actual failed/
 corrected test expectation. See `../evidence/stage-04.md`. No case-management routes.
 Next: Stage 05 OIDC and opaque server-side sessions; no local-password substitute.
+
+## 2 November 2026 — Stage 01–04 audit checkpoint complete
+
+User requested review/cleanup/dependency installation for Stages 01–04 only before
+continuing. Reviewed requirements, design/runtime and persistence; standardised all
+22 Python files with locked Ruff; fixed UTC-aware application reads, required/null
+reference checks, safe service URL ports, pool/query/startup wait bounds and script
+import side effects. Reference checks reuse metadata without narratives/contact
+fields; added an archive-aware active-case index while preserving old indexes.
+
+Installed/verified all 46 current runtime/dev packages in a clean hash-checked
+environment; pinned service images and required browser binaries are downloaded.
+Dependency audit: zero known advisories in 46 Python packages. Full regression from
+clean environment: 103 passed in 111.20s, no skips. All 30 current browser screenshots
+match the reviewed images byte-for-byte. Lint/format/compile/docs/static-design/lock
+checks pass. Query-plan support checked on fixtures; no capacity/load claim.
+
+Evidence: `../evidence/stages-01-04-audit/README.md`; scalability assessment:
+`../architecture/scalability-review.md`. Stage 05 and later held until the user
+resumes. No remote push, deployment, real student data or third-party message.
