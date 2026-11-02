@@ -25,3 +25,13 @@ implemented in Stage 01. Exact commands and results belong in the stage evidence
 The student must review and understand the work and reconcile disclosure format
 with the full policy when supplied. No model version or unavailable policy clause
 is invented. No third-party messages, remote push or deployment are authorised.
+
+## 2 November 2026 — Stage 02
+
+Codex reread the stage sequence and workflow/access baseline; produced the visual
+specification, original CSS, seven annotated synthetic layouts and a state gallery;
+calculated contrast; checked static structure and document links; and attempted
+browser review. Browser host was unavailable and native Chrome timed out twice.
+No rendered screenshots or accessibility conformance are claimed. W3C primary
+WCAG guidance informed the specification. Full institutional AI policy remains
+pending. The user authorised sequential local stages, with progress updates.

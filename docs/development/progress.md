@@ -17,3 +17,19 @@ Missing rubric, attachment, deadline, AI policy and institutional approvals rema
 open; they do not block synthetic planning/design. FR-04/06 definitions are unknown.
 
 Next: Prompt 02 visual design and UX specification, on separate user instruction.
+
+## 2 November 2026 — sequential delivery authorisation and Prompt 02
+
+The user instructed following the prompt file one by one to build the website,
+with progress updates. This authorises continuing local stages sequentially without
+repeating stage permission questions. Remote push, production deployment, real
+student information and contacting third parties remain excluded. Required stage
+gates still apply; do not advance over unresolved required verification.
+
+Stage 02: documented tokens, information architecture, seven annotated layouts,
+responsive rules, component/state inventory and eight isolated static prototype
+pages. Static checks pass. Browser host unavailable/native Chrome timed out;
+rendered visual review limitation recorded in `../evidence/stage-02.md`. No actual
+application permissions/authentication are implemented in the design prototype.
+
+Next: Stage 03 runtime, including its stricter verification requirements.
