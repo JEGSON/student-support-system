@@ -8,7 +8,7 @@ from uuid import uuid4
 
 import pytest
 from dotenv import dotenv_values
-from flask import session
+from flask import g, session
 
 from app import create_app
 from app.auth.sessions import COOKIE, token_hash
@@ -36,8 +36,18 @@ def identity_app(config):
         session["context"] = "student"
         return "rotated"
 
-    yield application
-    client.close()
+    request_ids = []
+
+    @application.after_request
+    def track_test_request(response):
+        request_ids.append(g.request_id)
+        return response
+
+    try:
+        yield application
+    finally:
+        client.student_support_test.audit_events.delete_many({"request_id": {"$in": request_ids}})
+        client.close()
 
 
 def test_opaque_rotation_csrf_logout_and_replay(identity_app):

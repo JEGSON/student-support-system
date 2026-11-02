@@ -77,7 +77,7 @@ class Referrals:
                             {"source_case_id": {"$in": source_ids}},
                             {
                                 "target_team_id": {"$in": manager_teams},
-                                "status": {"$ne": "proposed"},
+                                "status": {"$in": ["source_approved", "accepted", "rejected"]},
                             },
                         ]
                     },
@@ -91,10 +91,22 @@ class Referrals:
             for row in rows:
                 case = self.db.cases.find_one(
                     {"_id": row["source_case_id"]},
-                    {"student_id": 1, "team_id": 1, "archive_state": 1},
+                    {
+                        "student_id": 1,
+                        "team_id": 1,
+                        "archive_state": 1,
+                        "assignee_id": 1,
+                        "status": 1,
+                    },
                     session=sid,
                 )
                 if not case:
+                    continue
+                can_source = policy.allows("read_case", case)
+                can_target = policy.membership(row["target_team_id"], {"manager"}) and row[
+                    "status"
+                ] in {"source_approved", "accepted", "rejected"}
+                if not can_source and not can_target:
                     continue
                 student = self.db.users.find_one(
                     {"_id": case["student_id"]}, {"display_name": 1}, session=sid
@@ -107,7 +119,7 @@ class Referrals:
                         "status": row["status"],
                         "student": student["display_name"],
                         "source": case["team_id"] in manager_teams,
-                        "target": row["target_team_id"] in manager_teams,
+                        "target": can_target,
                         "target_case_id": row.get("target_case_id"),
                     }
                 )
@@ -130,7 +142,13 @@ class Referrals:
                 raise AccessDenied("Referral unavailable.")
             source = self.db.cases.find_one(
                 {"_id": referral["source_case_id"]},
-                {"student_id": 1, "team_id": 1, "archive_state": 1, "assignee_id": 1, "status": 1},
+                {
+                    "student_id": 1,
+                    "team_id": 1,
+                    "archive_state": 1,
+                    "assignee_id": 1,
+                    "status": 1,
+                },
                 session=sid,
             )
             if not source or source["archive_state"] != "active":

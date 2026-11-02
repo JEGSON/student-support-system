@@ -11,6 +11,7 @@ from app.services.policy import Policy
 from app.services.transactions import transaction
 
 ACTIONS = {
+    "access_denied",
     "reassignment_review",
     "case_archived",
     "archive_read",
@@ -66,7 +67,19 @@ class AuditWriter:
     def __init__(self, database):
         self.db = database
 
-    def append(self, actor, action, target_type, target_id, fields, sid=None, request_id=None):
+    def append(
+        self,
+        actor,
+        action,
+        target_type,
+        target_id,
+        fields,
+        sid=None,
+        request_id=None,
+        outcome="allowed",
+    ):
+        if outcome not in {"allowed", "denied", "failed"}:
+            raise ValueError("Invalid audit outcome.")
         if action not in ACTIONS or target_type not in TARGETS or not set(fields) <= FIELDS:
             raise ValueError("Invalid audit metadata.")
         request_id = request_id or (
@@ -80,7 +93,7 @@ class AuditWriter:
             "action": action,
             "target_type": target_type,
             "target_id": identifier(target_id),
-            "outcome": "allowed",
+            "outcome": outcome,
             "occurred_at": utc_now(),
             "request_id": request_id,
             "changed_field_names": sorted(set(fields)),

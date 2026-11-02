@@ -219,7 +219,7 @@ def test_fixture_idempotency_and_indexes(database):
     assert before == {
         name: database[name].count_documents({"fixture_version": VERSION}) for name in SCHEMAS
     }
-    assert before["users"] == 12 and before["teams"] == 5 and before["cases"] == 4
+    assert before["users"] == 17 and before["teams"] == 5 and before["cases"] == 4
     for name, indexes in INDEXES.items():
         installed = database[name].index_information()
         for i, (_, options) in enumerate(indexes, 1):

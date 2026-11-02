@@ -17,6 +17,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pillow>=13,<14",
     "pip-audit>=2.9,<3",
     "playwright>=1.58,<2",
     "pytest>=8.4,<10",
@@ -55,3 +56,4 @@ select = ["E4", "E7", "E9", "F", "I", "B"]
 "scripts/dispose_synthetic.py" = ["E402"]
 "scripts/recovery.py" = ["E402"]
 "scripts/evaluate_workload.py" = ["E402"]
+"scripts/security_probe.py" = ["E402"]

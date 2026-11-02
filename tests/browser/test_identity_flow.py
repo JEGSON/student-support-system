@@ -49,6 +49,7 @@ def test_real_provider_login(width, engine, actor, expected_context):
     if not any(folder.is_relative_to(ROOT / base) for base in ["runtime", "docs/evidence"]):
         raise ValueError("Invalid evidence destination.")
     folder.mkdir(parents=True, exist_ok=True)
+    denial_ids = []
     try:
         with sync_playwright() as pw:
             browser = getattr(pw, engine).launch()
@@ -99,7 +100,9 @@ def test_real_provider_login(width, engine, actor, expected_context):
                 page.screenshot(path=str(folder / f"access-{engine}-{width}.png"), full_page=True)
                 page.get_by_role("link", name="Return to your account").click()
             else:
-                assert page.request.get("http://127.0.0.1:5051/access").status == 403
+                denied = page.request.get("http://127.0.0.1:5051/access")
+                assert denied.status == 403
+                denial_ids.append(denied.headers["x-request-id"])
             page.get_by_role("button", name="Sign out of Student Support").click()
             assert page.get_by_role("heading", name="You have signed out").is_visible()
             assert not any(
@@ -112,3 +115,7 @@ def test_real_provider_login(width, engine, actor, expected_context):
         thread.join(timeout=5)
         server.server_close()
         client.close()
+        with local_client(values, "testing") as maintenance:
+            maintenance.student_support_test.audit_events.delete_many(
+                {"request_id": {"$in": denial_ids}}
+            )

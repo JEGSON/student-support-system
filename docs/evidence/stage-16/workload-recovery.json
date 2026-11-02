@@ -1,0 +1,13 @@
+{
+  "backup_and_ledger_seconds": 5.399,
+  "restore_seconds": 7.651,
+  "snapshot_age_at_restore_seconds": 15.865,
+  "captured_at": "2026-11-02T19:59:22.298251+00:00",
+  "plaintext_bytes": 138548212,
+  "encrypted_bytes": 24104012,
+  "disposed_records_replayed": 0,
+  "sessions": 0,
+  "pending_notifications": 0,
+  "restored_cases": 20004,
+  "restored_messages": 126458
+}

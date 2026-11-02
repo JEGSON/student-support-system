@@ -23,6 +23,11 @@ def fixture_documents(issuer):
         "officer_other",
         "manager_finance",
         "manager_disability",
+        "manager_academic",
+        "manager_accommodation",
+        "manager_wellbeing",
+        "officer_accommodation",
+        "officer_wellbeing",
         "triage",
         "administrator",
         "approver",
@@ -67,6 +72,11 @@ def fixture_documents(issuer):
         ("officer_other", "disability", "officer"),
         ("manager_finance", "finance", "manager"),
         ("manager_disability", "disability", "manager"),
+        ("manager_academic", "academic", "manager"),
+        ("manager_accommodation", "accommodation", "manager"),
+        ("manager_wellbeing", "wellbeing", "manager"),
+        ("officer_accommodation", "accommodation", "officer"),
+        ("officer_wellbeing", "wellbeing", "officer"),
         ("triage", "finance", "triage"),
     ]:
         memberships.append(
@@ -149,6 +159,10 @@ def seed_fixtures(database, issuer):
             for collection, records in documents.items():
                 for record in records:
                     record = {**record, "fixture_version": VERSION}
+                    if database[collection].find_one(
+                        {"_id": record["_id"]}, {"_id": 1}, session=session
+                    ):
+                        continue
                     if collection in {"memberships", "cases", "messages", "internal_notes"}:
                         validate_references(database, collection, record, session=session)
                     database[collection].update_one(

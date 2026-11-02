@@ -1,4 +1,4 @@
-"""Modular Flask runtime foundation; no authenticated business routes yet."""
+"""Modular Flask case-management runtime with current policy and safe responses."""
 
 from uuid import uuid4
 
@@ -93,8 +93,33 @@ def create_app(config=None):
             response.headers["Strict-Transport-Security"] = "max-age=31536000"
         if response.status_code == 429:
             response.headers["Retry-After"] = "60"
-        if response.status_code in {403, 404, 429}:
-            app.logger.info("request_denied status=%s", response.status_code)
+        if response.status_code in {400, 403, 404, 409, 429}:
+            app.logger.info(
+                "request_denied status=%s request_id=%s",
+                response.status_code,
+                response.headers["X-Request-ID"],
+            )
+            if getattr(g, "user", None):
+                from .repositories.core import identifier
+                from .services.audit import AuditWriter
+
+                target_type = "user"
+                target = g.user["_id"]
+                try:
+                    candidate = (request.view_args or {}).get("case_id")
+                    if candidate:
+                        target = identifier(candidate)
+                        target_type = "case"
+                except ValueError:
+                    pass
+                try:
+                    AuditWriter(app.extensions["mongo"][app.config["MONGODB_DATABASE"]]).append(
+                        g.user["_id"], "access_denied", target_type, target, [], outcome="denied"
+                    )
+                except Exception:
+                    app.logger.warning(
+                        "denial_audit_unavailable request_id=%s", response.headers["X-Request-ID"]
+                    )
         return response
 
     @app.errorhandler(429)

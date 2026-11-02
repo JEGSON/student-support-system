@@ -1,0 +1,140 @@
+{
+  "dataset": {
+    "cases": 20000,
+    "starting_messages": 100000,
+    "users": 50,
+    "request_description_characters": 168,
+    "seed_message_characters": 168
+  },
+  "configuration": {
+    "server": "Gunicorn 26.2.0",
+    "workers": 2,
+    "threads_per_worker": 8,
+    "mongo_pool_per_worker": 20,
+    "think_time_seconds": 0.5,
+    "read_limit_per_minute": 600,
+    "write_limit_per_minute": 120,
+    "oidc_and_smtp_excluded": true,
+    "payload": "synthetic text only"
+  },
+  "duration_seconds": 900.498,
+  "requests": 88407,
+  "counts": {
+    "read": 61950,
+    "write": 26457
+  },
+  "read_percent": 70.07,
+  "p50_ms": 57.19,
+  "p95_ms": 163.31,
+  "read_p95_ms": 171.37,
+  "write_p95_ms": 132.02,
+  "throughput_rps": 98.18,
+  "errors": {
+    "503": 1
+  },
+  "unexpected_error_percent": 0.0011,
+  "targets": {
+    "p95_below_2000ms": true,
+    "unexpected_errors_below_1pct": true
+  },
+  "plans": {
+    "cases": {
+      "nReturned": 21,
+      "totalDocsExamined": 21,
+      "totalKeysExamined": 21,
+      "winningPlan": {
+        "isCached": false,
+        "stage": "LIMIT",
+        "limitAmount": 21,
+        "inputStage": {
+          "stage": "FETCH",
+          "inputStage": {
+            "stage": "IXSCAN",
+            "keyPattern": {
+              "student_id": 1,
+              "archive_state": 1,
+              "updated_at": -1,
+              "_id": -1
+            },
+            "indexName": "cases_v1_6",
+            "isMultiKey": false,
+            "multiKeyPaths": {
+              "student_id": [],
+              "archive_state": [],
+              "updated_at": [],
+              "_id": []
+            },
+            "isUnique": false,
+            "isSparse": false,
+            "isPartial": false,
+            "indexVersion": 2,
+            "direction": "forward",
+            "indexBounds": {
+              "student_id": [
+                "[\"d701105b-2f59-4c06-880f-457697210038\", \"d701105b-2f59-4c06-880f-457697210038\"]"
+              ],
+              "archive_state": [
+                "[\"active\", \"active\"]"
+              ],
+              "updated_at": [
+                "[MaxKey, MinKey]"
+              ],
+              "_id": [
+                "[MaxKey, MinKey]"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "messages": {
+      "nReturned": 50,
+      "totalDocsExamined": 50,
+      "totalKeysExamined": 50,
+      "winningPlan": {
+        "isCached": false,
+        "stage": "LIMIT",
+        "limitAmount": 50,
+        "inputStage": {
+          "stage": "FETCH",
+          "inputStage": {
+            "stage": "IXSCAN",
+            "keyPattern": {
+              "case_id": 1,
+              "created_at": 1,
+              "_id": 1
+            },
+            "indexName": "messages_v1_1",
+            "isMultiKey": false,
+            "multiKeyPaths": {
+              "case_id": [],
+              "created_at": [],
+              "_id": []
+            },
+            "isUnique": false,
+            "isSparse": false,
+            "isPartial": false,
+            "indexVersion": 2,
+            "direction": "backward",
+            "indexBounds": {
+              "case_id": [
+                "[\"5c20a3bd-5d82-48b4-938e-6bf3567b9327\", \"5c20a3bd-5d82-48b4-938e-6bf3567b9327\"]"
+              ],
+              "created_at": [
+                "[MaxKey, MinKey]"
+              ],
+              "_id": [
+                "[MaxKey, MinKey]"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "hardware": [
+    "Apple M4",
+    "17179869184",
+    "10"
+  ]
+}

@@ -1,4 +1,4 @@
-"""Identity/session routes only; case pages remain unregistered."""
+"""OIDC identity, current context and opaque server-session routes."""
 
 from functools import wraps
 from urllib.parse import unquote, urlsplit

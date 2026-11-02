@@ -94,3 +94,66 @@ def test_referral_reject_withdraw_and_wrong_scope(bundle):
     )
     r.decide(uid("manager_finance"), "staff", rid, "withdraw", "Withdrawn before sharing")
     assert db.referrals.find_one({"_id": rid})["status"] == "withdrawn"
+    assert all(row["_id"] != rid for row in r.list(uid("manager_disability"), "staff"))
+
+
+@pytest.mark.parametrize(
+    "source_team,target_team,officer,source_manager,target_manager",
+    [
+        (
+            "accommodation",
+            "wellbeing",
+            "officer_accommodation",
+            "manager_accommodation",
+            "manager_wellbeing",
+        ),
+        ("disability", "academic", "officer_other", "manager_disability", "manager_academic"),
+    ],
+)
+def test_required_cross_team_scenarios(
+    bundle, source_team, target_team, officer, source_manager, target_manager
+):
+    db, uid = bundle
+    db.cases.update_one(
+        {"_id": uid("case_a")},
+        {
+            "$set": {
+                "team_id": uid("team_" + source_team),
+                "category": source_team,
+                "assignee_id": uid(officer),
+            }
+        },
+    )
+    service = Referrals(db)
+    proposal = service.propose(
+        uid(officer),
+        "staff",
+        uid("case_a"),
+        uid("team_" + target_team),
+        target_team,
+        "Synthetic " + source_team + " to " + target_team,
+        "Minimal selected synthetic summary",
+    )
+    service.decide(uid(source_manager), "staff", proposal, "approve", "Scoped source approval")
+    created = service.decide(
+        uid(target_manager), "staff", proposal, "accept", "Scoped target acceptance"
+    )
+    assert db.cases.find_one({"_id": created})["category"] == target_team
+
+
+def test_reassigned_proposer_loses_outgoing_summary_access(bundle):
+    db, uid = bundle
+    service = Referrals(db)
+    proposal = service.propose(
+        uid("officer_assigned"),
+        "staff",
+        uid("case_a"),
+        uid("team_disability"),
+        "disability",
+        "Purpose",
+        "Minimal summary",
+    )
+    db.cases.update_one(
+        {"_id": uid("case_a")}, {"$set": {"assignee_id": uid("officer_unassigned")}}
+    )
+    assert all(row["_id"] != proposal for row in service.list(uid("officer_assigned"), "staff"))

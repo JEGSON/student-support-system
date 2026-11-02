@@ -1,0 +1,146 @@
+{
+  "scope": "http://127.0.0.1:5052 application only; no provider/SMTP scanning",
+  "tool": "project-owned explicit HTTP negative probe v1; not a comprehensive pentest",
+  "checks": [
+    {
+      "probe": "authorised own case",
+      "expected": 200,
+      "observed": 200,
+      "passed": true
+    },
+    {
+      "probe": "foreign ownership",
+      "expected": 404,
+      "observed": 404,
+      "passed": true
+    },
+    {
+      "probe": "missing case indistinguishable",
+      "expected": 404,
+      "observed": 404,
+      "passed": true
+    },
+    {
+      "probe": "uniform denied response body",
+      "passed": true
+    },
+    {
+      "probe": "malformed identifier",
+      "expected": 404,
+      "observed": 404,
+      "passed": true
+    },
+    {
+      "probe": "operator cursor",
+      "expected": 400,
+      "observed": 400,
+      "passed": true
+    },
+    {
+      "probe": "forged host",
+      "expected": 400,
+      "observed": 400,
+      "passed": true
+    },
+    {
+      "probe": "forwarded host injection",
+      "expected": 400,
+      "observed": 400,
+      "passed": true
+    },
+    {
+      "probe": "forwarded proto injection",
+      "expected": 400,
+      "observed": 400,
+      "passed": true
+    },
+    {
+      "probe": "student staff workspace denied",
+      "expected": 403,
+      "observed": 403,
+      "passed": true
+    },
+    {
+      "probe": "student admin denied",
+      "expected": 403,
+      "observed": 403,
+      "passed": true
+    },
+    {
+      "probe": "student retention denied",
+      "expected": 403,
+      "observed": 403,
+      "passed": true
+    },
+    {
+      "probe": "notes in student URL rejected",
+      "expected": 403,
+      "observed": 403,
+      "passed": true
+    },
+    {
+      "probe": "missing CSRF",
+      "expected": 400,
+      "observed": 400,
+      "passed": true
+    },
+    {
+      "probe": "operator JSON body",
+      "expected": 400,
+      "observed": 400,
+      "passed": true
+    },
+    {
+      "probe": "forged ownership",
+      "expected": 400,
+      "observed": 400,
+      "passed": true
+    },
+    {
+      "probe": "forged status",
+      "expected": 400,
+      "observed": 400,
+      "passed": true
+    },
+    {
+      "probe": "oversized body",
+      "expected": 413,
+      "observed": 413,
+      "passed": true
+    },
+    {
+      "probe": "unsafe method",
+      "expected": 405,
+      "observed": 405,
+      "passed": true
+    },
+    {
+      "probe": "stored script accepted as plain text",
+      "expected": 303,
+      "observed": 303,
+      "passed": true
+    },
+    {
+      "probe": "stored script escaped and CSP blocks script execution",
+      "passed": true
+    },
+    {
+      "probe": "security header Cache-Control",
+      "passed": true
+    },
+    {
+      "probe": "security header X-Content-Type-Options",
+      "passed": true
+    },
+    {
+      "probe": "security header X-Frame-Options",
+      "passed": true
+    },
+    {
+      "probe": "security header Referrer-Policy",
+      "passed": true
+    }
+  ],
+  "passed": 25,
+  "failed": 0
+}
