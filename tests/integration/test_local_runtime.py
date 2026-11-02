@@ -39,7 +39,7 @@ def test_real_dependencies_and_database_credential_isolation():
                 client.student_support_dev.isolation_probe.find_one({})
             assert error.value.code == 13
             with pytest.raises(OperationFailure) as error:
-                development.extensions["mongo"].student_support_test.isolation_probe.find_one({})
+                development.extensions["mongo"].student_support_test.cases.find_one({})
             assert error.value.code == 13
             # Actual replica-set transaction, synthetic probe, explicitly aborted.
             probe = secrets.token_hex(12)

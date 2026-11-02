@@ -117,3 +117,13 @@ install and an advisory/secret check. Observed counts and limitations are in
 `../evidence/stages-05-06/README.md`; this is not independent human security review
 or production/WCAG certification. Full institutional AI-use policy remains pending.
 No remote push, deployment or third-party messages were performed.
+
+## 2 November 2026 — Stage 07
+
+Codex implemented shared PyMongo transactions, versioned atomic case effects,
+append-only audit writer/scoped reader, submission-key replay checks and generic
+outbox lease states. Consulted current primary MongoDB/PyMongo documentation and
+installed driver retry code. Wrote collection roles and generated private separate
+worker/audit/maintenance secrets without printing/committing them. Real rollback,
+conflict, retry, audit and permission tests passed (183 gate checks). No external
+email/SMTP implementation, production deployment, remote push or real data.

@@ -3,12 +3,12 @@
 from datetime import timedelta
 from uuid import uuid4
 
-from pymongo import ReturnDocument, timeout
-from pymongo.read_concern import ReadConcern
-from pymongo.write_concern import WriteConcern
+from pymongo import ReturnDocument
 
 from app.repositories.core import identifier, plain_text, utc_now
+from app.services.audit import AuditWriter
 from app.services.policy import AccessDenied, Policy
+from app.services.transactions import transaction
 
 PRIVILEGED = {"manager", "administrator", "access_approver", "audit_reviewer"}
 
@@ -18,14 +18,7 @@ class AccessService:
         self.db = database
 
     def transaction(self, operation):
-        # Retry labelled transient failures and unknown commits within a five-second
-        # client operation deadline. Callbacks contain DB work only.
-        with timeout(5), self.db.client.start_session() as sid:
-            return sid.with_transaction(
-                operation,
-                read_concern=ReadConcern("snapshot"),
-                write_concern=WriteConcern("majority"),
-            )
+        return transaction(self.db, operation)
 
     def guard(self, user_id, context, action, case_id, mutation):
         def operation(sid):
@@ -52,20 +45,7 @@ class AccessService:
         )
 
     def audit(self, actor, action, target_type, target_id, fields, sid):
-        self.db.audit_events.insert_one(
-            {
-                "_id": str(uuid4()),
-                "actor_id": actor,
-                "action": action,
-                "target_type": target_type,
-                "target_id": target_id,
-                "outcome": "allowed",
-                "occurred_at": utc_now(),
-                "request_id": str(uuid4()),
-                "changed_field_names": fields,
-            },
-            session=sid,
-        )
+        AuditWriter(self.db).append(actor, action, target_type, target_id, fields, sid)
 
     def invalidate(self, user_id, sid):
         self.db.users.update_one(

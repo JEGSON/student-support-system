@@ -12,9 +12,24 @@ def prepare():
     path = ROOT / ".env"
     if not path.exists():
         raise SystemExit("Generate local .env first.")
-    if not dotenv_values(path).get("MONGO_SCHEMA_PASSWORD"):
+    existing = dotenv_values(path)
+    missing = [
+        key
+        for key in (
+            "MONGO_SCHEMA_PASSWORD",
+            "MONGO_FIXTURE_PASSWORD",
+            "MONGO_WEB_TEST_PASSWORD",
+            "MONGO_AUDIT_PASSWORD",
+            "MONGO_AUDIT_TEST_PASSWORD",
+            "MONGO_WORKER_PASSWORD",
+            "MONGO_WORKER_TEST_PASSWORD",
+        )
+        if not existing.get(key)
+    ]
+    if missing:
         with path.open("a") as handle:
-            handle.write("\nMONGO_SCHEMA_PASSWORD=" + secrets.token_urlsafe(48) + "\n")
+            for key in missing:
+                handle.write("\n" + key + "=" + secrets.token_urlsafe(48) + "\n")
         path.chmod(0o600)
     print("Local schema secret is prepared; existing credentials preserved.")
 

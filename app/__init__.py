@@ -1,6 +1,8 @@
 """Modular Flask runtime foundation; no authenticated business routes yet."""
 
-from flask import Flask, render_template
+from uuid import uuid4
+
+from flask import Flask, g, render_template
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from pymongo import MongoClient
 
@@ -24,6 +26,11 @@ def create_app(config=None):
     app = SupportFlask(__name__)
     app.config.update(load_config(config))
     app.session_interface = MongoSessionInterface()
+
+    @app.before_request
+    def correlate_request():
+        g.request_id = str(uuid4())
+
     CSRFProtect(app)
     configure_oidc(app)
     app.register_blueprint(identity)
@@ -56,6 +63,7 @@ def create_app(config=None):
 
     @app.after_request
     def security_headers(response):
+        response.headers["X-Request-ID"] = getattr(g, "request_id", str(uuid4()))
         response.headers.update(
             {
                 "Cache-Control": "no-store",

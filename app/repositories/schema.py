@@ -233,6 +233,7 @@ SCHEMAS = {
         state=enum(["pending", "leased", "sent", "dead"]),
         attempts=INTEGER,
         next_attempt_at=DATE,
+        lease_hash=HASH,
         lease_until=nullable(DATE),
         created_at=DATE,
         expires_at=DATE,
@@ -284,6 +285,7 @@ SCHEMAS = {
         operation=enum(["create_case", "send_message"]),
         key_hash=HASH,
         result_id=ID,
+        payload_hash=HASH,
         expires_at=DATE,
     ),
     "triage_claims": schema(

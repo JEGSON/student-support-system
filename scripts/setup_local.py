@@ -31,6 +31,12 @@ def main():
             "MONGO_APP_PASSWORD",
             "MONGO_TEST_PASSWORD",
             "MONGO_SCHEMA_PASSWORD",
+            "MONGO_FIXTURE_PASSWORD",
+            "MONGO_WEB_TEST_PASSWORD",
+            "MONGO_AUDIT_PASSWORD",
+            "MONGO_AUDIT_TEST_PASSWORD",
+            "MONGO_WORKER_PASSWORD",
+            "MONGO_WORKER_TEST_PASSWORD",
             "OIDC_ADMIN_PASSWORD",
         ]
     }

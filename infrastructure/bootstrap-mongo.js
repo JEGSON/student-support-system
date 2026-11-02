@@ -26,3 +26,38 @@ if (!admin.getUser('support_schema')) {
   admin.createUser({user:'support_schema',pwd:process.env.SUPPORT_SCHEMA_PASSWORD,
     roles:[{role:'dbAdmin',db:'student_support_dev'},{role:'dbAdmin',db:'student_support_test'}]});
 }
+
+// Stage 07 collection privileges replace broad readWrite on the public identity.
+const collections=['users','teams','memberships','cases','messages','internal_notes',
+ 'referrals','sessions','auth_attempts','submission_keys','triage_claims',
+ 'privileged_grants','service_principals'];
+function ensureRole(database,name,privileges) {
+ const target=admin.getSiblingDB(database);
+ const definition={privileges:privileges,roles:[]};
+ if(target.getRole(name)) target.updateRole(name,definition); else target.createRole({...definition,role:name});
+}
+for(const database of ['student_support_dev','student_support_test']) {
+ ensureRole(database,'support_web',[
+  ...collections.map(collection=>({resource:{db:database,collection},actions:['find','insert','update','remove']})),
+  {resource:{db:database,collection:'case_events'},actions:['find','insert']},
+  {resource:{db:database,collection:'audit_events'},actions:['insert']},
+  {resource:{db:database,collection:'notification_outbox'},actions:['find','insert']}
+ ]);
+ ensureRole(database,'support_audit_reader',[{resource:{db:database,collection:'audit_events'},actions:['find']}]);
+ ensureRole(database,'support_notification_worker',[
+  {resource:{db:database,collection:'notification_outbox'},actions:['find','update']},
+  {resource:{db:database,collection:'users'},actions:['find']},
+  {resource:{db:database,collection:'service_principals'},actions:['find']}
+ ]);
+}
+for(const [user,password,roles] of [
+ ['support_app',process.env.SUPPORT_APP_PASSWORD,[{role:'support_web',db:'student_support_dev'}]],
+ ['support_web_test',process.env.SUPPORT_WEB_TEST_PASSWORD,[{role:'support_web',db:'student_support_test'}]],
+ ['support_fixture',process.env.SUPPORT_FIXTURE_PASSWORD,[{role:'readWrite',db:'student_support_dev'}]],
+ ['support_audit',process.env.SUPPORT_AUDIT_PASSWORD,[{role:'support_audit_reader',db:'student_support_dev'}]],
+ ['support_audit_test',process.env.SUPPORT_AUDIT_TEST_PASSWORD,[{role:'support_audit_reader',db:'student_support_test'}]],
+ ['support_worker',process.env.SUPPORT_WORKER_PASSWORD,[{role:'support_notification_worker',db:'student_support_dev'}]],
+ ['support_worker_test',process.env.SUPPORT_WORKER_TEST_PASSWORD,[{role:'support_notification_worker',db:'student_support_test'}]]
+]) {
+ if(admin.getUser(user)) admin.updateUser(user,{roles}); else admin.createUser({user,pwd:password,roles});
+}

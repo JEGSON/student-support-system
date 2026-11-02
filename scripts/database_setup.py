@@ -18,7 +18,13 @@ ROOT = Path(__file__).resolve().parents[1]
 def local_client(values, kind):
     user, key = {
         "schema": ("support_schema", "MONGO_SCHEMA_PASSWORD"),
-        "development": ("support_app", "MONGO_APP_PASSWORD"),
+        "development": ("support_fixture", "MONGO_FIXTURE_PASSWORD"),
+        "web_development": ("support_app", "MONGO_APP_PASSWORD"),
+        "web_testing": ("support_web_test", "MONGO_WEB_TEST_PASSWORD"),
+        "audit": ("support_audit_test", "MONGO_AUDIT_TEST_PASSWORD"),
+        "audit_development": ("support_audit", "MONGO_AUDIT_PASSWORD"),
+        "worker": ("support_worker_test", "MONGO_WORKER_TEST_PASSWORD"),
+        "worker_development": ("support_worker", "MONGO_WORKER_PASSWORD"),
         "testing": ("support_test", "MONGO_TEST_PASSWORD"),
     }[kind]
     secret = values.get(key)

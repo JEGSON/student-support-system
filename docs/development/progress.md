@@ -142,3 +142,12 @@ clean environment. Focused account/access browser rerun after the WebKit control
 height fix: **12 passed in 18.51 seconds**. Results XML, 48 screenshots and dependency
 report are in `../evidence/stages-05-06/`. The existing Flask listener may need a
 manual restart to load these changes; no unrelated process was terminated.
+
+## 2 November 2026 — Stage 07 complete
+
+User authorised Stages 07/08. Read prompts and baseline, explained role restriction,
+maintenance separation and planned explicit synthetic routing before implementation.
+Shared bounded transaction/audit/idempotency/outbox foundation implemented and tested
+before exposing case pages. Restricted web, audit-reader and worker DB grants with
+separate dev/test credentials; maintenance remains offline. Real gate: 183 passed
+in 5.98s. See `../evidence/stage-07/README.md` and transaction-audit contract.
