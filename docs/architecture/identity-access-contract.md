@@ -1,5 +1,8 @@
 # Identity and access implementation — Stages 05/06
 
+Historical stage checkpoint. For the completed local runtime and current additions,
+see [as-built status](runtime-status.md) and [inventory](implementation-inventory.md).
+
 2 November 2026. Read alongside the preserved v1.0 design HTML and eight-page
 editable draw.io baseline. This implements ADR-04/05 and the existing relationship
 rules. No trust boundary or product scope change is introduced. The user was

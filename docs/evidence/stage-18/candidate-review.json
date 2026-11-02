@@ -1,0 +1,118 @@
+{
+  "source_commit": "cbdc3d6e405d1c47f7e4003ac7a8b1381ce81f4d",
+  "archive_sha256": "f6d1b9d5ab35aaec7a87ba7641988a3650e1812c84636df96be3a25a9b6bbe48",
+  "files_verified": 585,
+  "secret_files_present_on_extract": false,
+  "checks": [
+    {
+      "command": [
+        "uv",
+        "export",
+        "--quiet",
+        "--frozen",
+        "--all-groups",
+        "--no-emit-project",
+        "--output-file",
+        "requirements.txt",
+        "--cache-dir",
+        "/Users/wealth/Documents/Codex/2026-11-02/go/student-support-system/runtime/uv-cache"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "uv",
+        "venv",
+        ".venv",
+        "--python",
+        "/Users/wealth/Documents/Codex/2026-11-02/go/student-support-system/.venv/bin/python",
+        "--cache-dir",
+        "/Users/wealth/Documents/Codex/2026-11-02/go/student-support-system/runtime/uv-cache"
+      ],
+      "exit_code": 0,
+      "output": "Using CPython 3.14.7 interpreter at: /Users/wealth/Documents/Codex/2026-11-02/go/student-support-system/.venv/bin/python\nCreating virtual environment at: .venv\nActivate with: source .venv/bin/activate\n"
+    },
+    {
+      "command": [
+        "uv",
+        "pip",
+        "install",
+        "--python",
+        ".venv/bin/python",
+        "--require-hashes",
+        "-r",
+        "requirements.txt",
+        "--cache-dir",
+        "/Users/wealth/Documents/Codex/2026-11-02/go/student-support-system/runtime/uv-cache"
+      ],
+      "exit_code": 0,
+      "output": "Resolved 55 packages in 67ms\nInstalled 55 packages in 67ms\n + authlib==1.9.2\n + blinker==1.9.0\n + boolean-py==5.0\n + cachecontrol==0.14.4\n + certifi==2026.10.23\n + cffi==2.1.1\n + charset-normalizer==3.5.2\n + click==8.5.0\n + cryptography==50.0.2\n + cyclonedx-python-lib==11.12.0\n + defusedxml==0.7.1\n + dnspython==2.9.1\n + filelock==4.2.7\n + flask==3.1.3\n + flask-wtf==1.3.0\n + greenlet==3.5.6\n + gunicorn==26.2.0\n + idna==3.20\n + iniconfig==2.3.1\n + itsdangerous==2.2.0\n + jinja2==3.1.6\n + joserfc==1.7.7\n + license-expression==30.4.4\n + markdown-it-py==4.2.0\n + markupsafe==3.0.4\n + mdurl==0.1.2\n + msgpack==1.2.4\n + packageurl-python==0.17.6\n + packaging==26.3\n + pillow==13.0.0\n + pip==26.2.2\n + pip-api==0.0.35\n + pip-audit==2.10.1\n + pip-requirements-parser==32.0.1\n + platformdirs==4.14.3\n + playwright==1.64.1\n + pluggy==1.7.0\n + py-serializable==2.1.0\n + pycparser==3.12\n + pyee==14.0.0\n + pygments==2.21.0\n + pymongo==4.19.0\n + pyparsing==3.3.3\n + pytest==9.2.0\n + python-dotenv==1.2.4\n + requests==2.34.2\n + rich==15.0.0\n + ruff==0.17.3\n + sortedcontainers==2.4.0\n + tomli==2.5.0\n + tomli-w==1.2.0\n + typing-extensions==4.16.0\n + urllib3==2.8.0\n + werkzeug==3.1.9\n + wtforms==3.3.2\n"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/setup_local.py"
+      ],
+      "exit_code": 0,
+      "output": "Generated ignored local configuration and keyfile. Secret values were not printed.\n"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/unit",
+        "-q",
+        "--junitxml=/Users/wealth/Documents/Codex/2026-11-02/go/student-support-system/runtime/package-review/cbdc3d6e405d/unit-results.xml"
+      ],
+      "exit_code": 0,
+      "output": ".......................................................................  [100%]\n71 passed in 0.59s\n"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/check_foundation.py"
+      ],
+      "exit_code": 0,
+      "output": "PASS: 41 requirements/constraints; 11 workflows; 12 threats; 16 verification records; 9 ADRs; 8 ODs; 18 backlog stages\nPASS: 85 traceability rows; 264 document links; 8 diagram graphs and PNG assets\nPASS: planning integrity only; see verification register for actual runtime coverage.\n"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/check_design.py"
+      ],
+      "exit_code": 0,
+      "output": "PASS: eight synthetic static pages; one h1 and labelled fields; no remote requests/scripts/forms\nPASS: student pages omit staff-note fixture and composer; contrast pairs: {\"ink/canvas\": 13.03, \"muted/surface\": 6.1, \"white/teal\": 6.71, \"teal/tint\": 5.92, \"amber/panel\": 6.64, \"error/panel\": 6.37, \"field border/white\": 3.59, \"focus/canvas\": 5.88}\nRendered layout, keyboard and accessibility checks are not covered.\n"
+    },
+    {
+      "command": [
+        ".venv/bin/ruff",
+        "check",
+        "."
+      ],
+      "exit_code": 0,
+      "output": "All checks passed!\n"
+    },
+    {
+      "command": [
+        ".venv/bin/ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "exit_code": 0,
+      "output": "124 files already formatted\n"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-c",
+        "from app import create_app; from scripts.run_local import local_web_settings; a=create_app(local_web_settings()); c=a.test_client(); r=c.get('/'); assert r.status_code==200; assert c.get('/_dev/components').status_code==200; assert c.get('/health/live').json=={'status':'alive'}; a.extensions['mongo'].close(); print('Extracted app: landing, components and liveness passed; no database/provider connection attempted')"
+      ],
+      "exit_code": 0,
+      "output": "Extracted app: landing, components and liveness passed; no database/provider connection attempted\n"
+    }
+  ],
+  "scope": "Fresh hash-checked dependencies, private setup, 71 unit tests, docs/design/lint and public factory smoke. No second Docker stack, full OIDC/browser acceptance retained-checkout only."
+}

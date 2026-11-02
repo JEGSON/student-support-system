@@ -39,10 +39,10 @@ metadata may change). Health and authentication routes have their specific publi
 ## Business state machine
 
 Submission → New (server-owned identity/team/reference/time). Eligible assignment leaves New unchanged.
-Assigned start: New → InProgress. Question: InProgress → AwaitingStudent plus message atomically.
-Owner reply: AwaitingStudent → InProgress; other active-state messages preserve status.
-Assigned resume with reason: AwaitingStudent → InProgress. Outcome-required closure: InProgress → Closed.
-Scoped manager reopen: Closed → InProgress with reason and eligible assignee. No silent timeout closure.
+Assigned start: New → In Progress. Question: In Progress → Awaiting Student plus message atomically.
+Owner reply: Awaiting Student → In Progress; other active-state messages preserve status.
+Assigned resume with reason: Awaiting Student → In Progress. Outcome-required closure: In Progress → Closed.
+Scoped manager reopen: Closed → In Progress with reason and eligible assignee. No silent timeout closure.
 Messages/notes on Closed reject; archive is separate from status. Corrections append to same-case own entry.
 
 Referral: proposed → source_approved → accepted or rejected; source withdrawal is terminal before acceptance.

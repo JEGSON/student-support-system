@@ -1,5 +1,8 @@
 # Stage 01–04 scalability review
 
+Historical stage checkpoint. For the completed local runtime and current additions,
+see [as-built status](runtime-status.md) and [inventory](implementation-inventory.md).
+
 2 November 2026. Scope: implemented foundation, not production capacity certification.
 The modular Flask/Jinja monolith remains appropriate for this demonstration. It
 keeps deployment/simple request processing together while separating persistence,

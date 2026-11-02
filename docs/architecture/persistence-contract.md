@@ -1,5 +1,8 @@
 # Persistence contract v1 — Stage 04
 
+Historical stage checkpoint. For the completed local runtime and current additions,
+see [as-built status](runtime-status.md) and [inventory](implementation-inventory.md).
+
 This extends the proposed v1.0 design baseline for the synthetic demonstration.
 Canonical executable contracts: `app/repositories/schema.py`. No public case
 feature or access-policy implementation is introduced in Stage 04.

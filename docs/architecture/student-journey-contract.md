@@ -1,5 +1,8 @@
 # Stage 08 student journey and persistence contract
 
+Historical stage checkpoint. For the completed local runtime and current additions,
+see [as-built status](runtime-status.md) and [inventory](implementation-inventory.md).
+
 2 November 2026. Implements WF-01 and the student portions of FR-02/03 using the
 existing Flask → service/policy → repository → MongoDB architecture. Draw.io views
 03/05/06/08 remain the reference topology and successful submission sequence.

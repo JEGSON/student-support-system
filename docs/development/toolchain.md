@@ -1,5 +1,8 @@
 # Proposed package layout and toolchain
 
+Historical planning baseline. Current tested versions and run commands are in
+[setup](../handbook/setup.md); exact versions/hashes are in uv.lock.
+
 Planning only, reviewed 2 November 2026. No packages have been installed, resolved,
 locked or security-tested in this stage. Host `python3` reports 3.14.7; that is not
 proof that the eventual application stack is compatible. Preserve the existing

@@ -60,3 +60,7 @@ bounds, not measured production sizing. Preserve baseline indexes until workload
 analysis justifies removal. Locked Ruff/pip-audit support current cleanup and package
 checks. `../architecture/scalability-review.md` records trade-offs and remaining
 load/production work. No authentication, crypto or institutional-policy substitution.
+
+The current ADR status reflects local implementation through Stage 19; production
+parts remain conditional. The as-built runtime/inventory records the disposal
+ledger, shared counters and restore quarantine added to implement existing controls.

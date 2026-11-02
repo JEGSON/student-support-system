@@ -1,5 +1,8 @@
 # Stage 07 transaction, audit and outbox contract
 
+Historical stage checkpoint. For the completed local runtime and current additions,
+see [as-built status](runtime-status.md) and [inventory](implementation-inventory.md).
+
 2 November 2026. Implements ADR-03/06/09 without changing trust boundaries. Read
 alongside the preserved eight-page draw.io baseline and identity/access contract.
 
