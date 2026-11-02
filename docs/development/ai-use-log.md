@@ -35,3 +35,20 @@ browser review. Browser host was unavailable and native Chrome timed out twice.
 No rendered screenshots or accessibility conformance are claimed. W3C primary
 WCAG guidance informed the specification. Full institutional AI policy remains
 pending. The user authorised sequential local stages, with progress updates.
+
+## 2 November 2026 — Stage 03 checkpoint
+
+Codex implemented the local runtime factory/configuration/health, safe responses,
+Jinja/CSS components and synthetic development gallery; generated setup/bootstrap
+scripts, dependency lock, tests and runtime documentation. Consulted official Flask,
+PyMongo, Keycloak, Mailpit, uv and PyPI maintainer documentation before dependencies
+and APIs. Reused the empty existing .venv. Local secrets were generated without
+printing or committing them. Codex diagnosed failed tests, port collisions and
+provider/replica-set bootstrap defects; recorded failures and reran the final suite
+(17 passed). Review was self-review, not an invented independent review.
+
+Browser access remained intermittent: one rendered landing screenshot/AX tree was
+seen in chat, but width-specific evidence was not captured. Stage 03 remains
+incomplete for that reason; no visual/accessibility success is claimed. No login,
+case-management or production readiness is claimed. Full institutional AI policy
+and assessment evidence remain pending.

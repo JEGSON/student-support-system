@@ -4,9 +4,14 @@ A proposed secure UK university support service using Python, Flask and MongoDB.
 
 ## Current state
 
-Stage 01: repository and planning foundation complete. The application, dependencies, identity provider,
-database runtime and automated tests have not been implemented. No server can
-be started yet. Use synthetic data throughout development.
+Stage 01 foundation and Stage 02 visual specification are committed. Stage 03 now
+has a local Flask runtime, shared Jinja components and isolated MongoDB/OIDC/email
+capture. All 17 runtime tests pass. Stage 03 remains incomplete pending rendered
+responsive browser verification; no case management or sign-in is implemented.
+Use synthetic data only. No remote push or deployment has occurred.
+
+See [local setup and verification](docs/development/local-runtime.md) and
+[the runtime evidence/remaining gate](docs/evidence/stage-03.md).
 
 ## Start here
 
@@ -18,7 +23,9 @@ be started yet. Use synthetic data throughout development.
    [open decisions](docs/decisions/open-decisions.csv),
    [prioritised backlog](docs/development/backlog.csv) and
    [delivery contract](docs/development/delivery.md).
-5. Next: Prompt 02 visual design. Each stage needs separate authorisation.
+5. Follow the sequential backlog. Stage 03 responsive verification is the current
+   gate; do not start Stage 04 before it is resolved. The user authorised sequential
+   local stages; remote actions and real-data processing remain excluded.
 
 ## Planning and evidence
 
@@ -36,27 +43,30 @@ Local Git history starts with the foundation commit; no GitHub remote is configu
 
 ## Local Python environment
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
+```sh
+uv sync --frozen --cache-dir runtime/uv-cache
+.venv/bin/python scripts/setup_local.py
+.venv/bin/python scripts/start_dependencies.py
+.venv/bin/python scripts/run_local.py
 ```
 
-Dependency versions and installation commands will be established during the
-runtime stage. `.env.example` contains proposed configuration names; copy it
-to `.env` only when configuring the implemented runtime and replace every
-placeholder. Keep `.env` private.
+Start Docker first. The first-use generator preserves existing configuration.
+Open `http://127.0.0.1:5050/`. The development-only component gallery is at
+`/_dev/components`. See the setup guide for ports, stops, tests and explicit local
+HTTP exceptions. Never commit the generated `.env` or runtime files.
 
 ## Layout
 
-- `app/`: future Flask modules, policies, services, repositories and UI.
+- `app/`: Flask factory, configuration, health, templates and development gallery;
+  business policies/services/repositories remain future work.
 - `worker/`: future restricted notification worker.
-- `tests/`: future unit, integration, browser and security tests.
+- `tests/`: runtime unit and opt-in actual dependency tests; feature/browser tests pending.
 - `docs/`: design, requirements, decisions, risks, evidence and development log.
-- `scripts/`: future setup and maintenance commands.
-- `infrastructure/`: future isolated local and deployment configuration.
+- `scripts/`: document checks and local setup/start commands.
+- `infrastructure/`: digest-pinned local Compose dependencies and trusted bootstrap.
 
 ## Delivery discipline
 
 Add security controls and meaningful tests with each feature. Keep design and
 evidence aligned with actual behaviour. Never commit credentials, real student
-data or database backups. Do not describe this scaffold as production-ready.
+data or database backups. Production readiness remains unverified and unauthorised.

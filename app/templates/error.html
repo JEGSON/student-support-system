@@ -1,0 +1,2 @@
+{% extends 'base.html' %}{% from 'components/ui.html' import button %}
+{% block content %}<div class="form-layout"><p class="eyebrow">Student Support</p><h1>{{ title }}</h1><p class="lead">{{ message }}</p>{{ button('Return to Student Support', url_for('index')) }}</div>{% endblock %}

@@ -74,7 +74,8 @@ def main():
                             ('threat_id', numbered('T', 12)), ('test_id', numbered('V', 16))]:
         found = {item for row in trace for item in row[field].split()}
         assert found == expected, f'Traceability mismatch: {field}'
-    assert all(r['status'] == 'not run' and not r['evidence_reference'] for r in tests)
+    assert all(r['status'] in {'not run', 'partial', 'passed', 'failed'} for r in tests)
+    assert all(r['evidence_reference'] for r in tests if r['status'] != 'not run')
     assert all(r['residual_status'] == 'unverified; not accepted' for r in risks)
     assert all(r['status'] == 'unresolved' for r in req if r['requirement_id'] in {'FR-04', 'FR-06'})
     for row in trace:
@@ -115,10 +116,10 @@ def main():
     assert len(previews) == 8
     assert all(p.read_bytes().startswith(b'\x89PNG\r\n\x1a\n') for p in previews)
     print(f'PASS: {len(req)} requirements/constraints; {len(workflows)} workflows; '
-          f'{len(risks)} threats; {len(tests)} planned verifications; 9 ADRs; 8 ODs; 18 backlog stages')
+          f'{len(risks)} threats; {len(tests)} verification records; 9 ADRs; 8 ODs; 18 backlog stages')
     print(f'PASS: {len(trace)} traceability rows; {link_count} document links; '
           '8 diagram graphs and PNG assets')
-    print('Application/security tests remain unrun; no runtime exists.')
+    print('PASS: planning integrity only; see verification register for actual runtime coverage.')
 
 
 if __name__ == '__main__':

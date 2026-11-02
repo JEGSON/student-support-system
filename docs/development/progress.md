@@ -33,3 +33,21 @@ rendered visual review limitation recorded in `../evidence/stage-02.md`. No actu
 application permissions/authentication are implemented in the design prototype.
 
 Next: Stage 03 runtime, including its stricter verification requirements.
+
+## 2 November 2026 — Prompt 03 runtime checkpoint
+
+Flask factory/configuration/health, Jinja design system and development-only
+component/student/staff shells implemented. Generated ignored local secrets;
+started authenticated MongoDB replica set, isolated Keycloak realm and Mailpit
+with digest-pinned Compose images. Separate development/test database credentials
+verified. Locked dependencies installed in the preserved existing environment.
+Final runtime suite: 17 passed, including a real aborted transaction and mutual
+cross-database read denial. Setup/readiness failures and fixes are recorded in
+`../evidence/stage-03.md`, including occupied ports and identity/bootstrap issues.
+
+Stage 03 is INCOMPLETE: native browser access was intermittent; required responsive
+render/focus/reduced-motion review at 390/768/1440 has not completed. The user is
+working on browser access; latest browser-host inventory still reports unavailable.
+Do not claim Stage 03 complete or start Stage 04 until that gate is resolved.
+Local preview runs on 127.0.0.1:5050. No case management, login/session features,
+real student information, remote push or deployment have been introduced.

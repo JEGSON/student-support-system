@@ -58,3 +58,12 @@ fake activity. A future separately authorised GitHub setup/push can publish the
 existing history. Verify its URL and remote commit before claiming GitHub evidence;
 capture relevant commit/CI evidence using synthetic content. Until then C-04 is
 planned and no GitHub submission history is claimed.
+
+## Updated authorisation — 2 November 2026
+
+After Stage 01, the user instructed following the saved prompt file one by one to
+build the website, with progress updates. This authorises sequential local stages
+without repeated per-stage permission questions, superseding the earlier need for
+a separately numbered user instruction each time. All stage completion/security
+gates and excluded remote/real-data actions remain in force. Stage 03 currently
+requires responsive browser verification before Stage 04 may begin.

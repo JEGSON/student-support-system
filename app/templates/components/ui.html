@@ -1,0 +1,12 @@
+{% macro button(label, href, secondary=false) -%}
+<a class="button{% if secondary %} secondary{% endif %}" href="{{ href }}">{{ label }}</a>
+{%- endmacro %}
+{% macro badge(label, variant='') -%}
+<span class="badge{% if variant in ['amber', 'neutral'] %} {{ variant }}{% endif %}">{{ label }}</span>
+{%- endmacro %}
+{% macro alert(title, message, error=false) -%}
+<div class="alert{% if error %} error{% endif %}" role="{{ 'alert' if error else 'status' }}"><h2>{{ title }}</h2><p>{{ message }}</p></div>
+{%- endmacro %}
+{% macro textarea(id, label, hint='', invalid=false, error='') -%}
+<div class="field"><label for="{{ id }}">{{ label }}</label>{% if hint %}<p class="hint" id="{{ id }}-hint">{{ hint }}</p>{% endif %}<textarea id="{{ id }}" maxlength="10000"{% if hint %} aria-describedby="{{ id }}-hint{% if invalid %} {{ id }}-error{% endif %}"{% elif invalid %} aria-describedby="{{ id }}-error"{% endif %}{% if invalid %} aria-invalid="true"{% endif %}></textarea>{% if invalid %}<p class="error-text" id="{{ id }}-error">{{ error }}</p>{% endif %}</div>
+{%- endmacro %}

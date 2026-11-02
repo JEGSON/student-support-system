@@ -1,0 +1,32 @@
+# LOCAL SYNTHETIC DEVELOPMENT ONLY. Not a production deployment manifest.
+name: student-support-local
+services:
+  mongo:
+    image: mongo:8.0@sha256:b9924c330a8bbc5800fe9c69f04a84e221eca7b28fd049a0354147d9908fa142
+    entrypoint: ["bash", "-c", "cp /run/secrets/mongo-keyfile /tmp/replica-key && chmod 400 /tmp/replica-key && chown mongodb:mongodb /tmp/replica-key && exec docker-entrypoint.sh mongod --replSet rs0 --bind_ip_all --keyFile /tmp/replica-key"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: support_bootstrap
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?Run scripts/setup_local.py}
+      SUPPORT_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Run scripts/setup_local.py}
+      SUPPORT_TEST_PASSWORD: ${MONGO_TEST_PASSWORD:?Run scripts/setup_local.py}
+    ports: ["127.0.0.1:27017:27017"]
+    volumes:
+      - mongo_data:/data/db
+      - ../runtime/mongo-keyfile:/run/secrets/mongo-keyfile:ro
+  identity:
+    image: quay.io/keycloak/keycloak:26.8.1@sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332
+    command: ["start-dev", "--import-realm", "--hostname=http://127.0.0.1:8180"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: synthetic_bootstrap
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${OIDC_ADMIN_PASSWORD:?Run scripts/setup_local.py}
+    ports: ["127.0.0.1:8180:8080"]
+    volumes:
+      - identity_data:/opt/keycloak/data
+      - ../runtime/keycloak-import:/opt/keycloak/data/import:ro
+  mail:
+    image: axllent/mailpit@sha256:9b3a463be15354c0f0eba91697d80e3e0d8a5623ef0e627cacc836bc17fd5231
+    ports: ["127.0.0.1:8025:8025", "127.0.0.1:1025:1025"]
+    # No SMTP relay configured: messages stay in this ephemeral capture service.
+volumes:
+  mongo_data:
+  identity_data:
