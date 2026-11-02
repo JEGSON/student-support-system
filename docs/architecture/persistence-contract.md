@@ -99,3 +99,14 @@ and pending/scoped-grant indexes support the implemented lookup paths. All prior
 strict validation/reference rules remain. Details and expiry/concurrency semantics:
 `identity-access-contract.md`. Schema changes are explicit local setup migrations;
 no public request performs schema installation.
+
+## Stage 07/08 additions
+
+Still 16 strict collection contracts. Submission keys add payload_hash for
+same-key/different-content detection. Outbox adds lease_hash to prevent stale
+completion. Web audit permissions are insert-only, case history find/insert;
+maintenance, scoped reader and worker identities are separate by environment.
+Five configured synthetic teams now cover all approved categories (30 fixture
+records, same 12 users). Student read repositories use explicit ownership/archive
+filters and safe projections. See `transaction-audit-contract.md` and
+`student-journey-contract.md` for current atomicity/replay/read-audit rules.

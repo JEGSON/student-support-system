@@ -31,7 +31,7 @@ field names. No narrative/free metadata bag. Existing access changes now use it.
 Public DB identities can insert audits but cannot read/update/delete them; case
 history is find/insert only. `AuditReader` requires current reviewer context,
 approved team/case scope and a nonempty bounded purpose, commits a read audit, then
-uses a separate read-only credential. That credential is never loaded by Flask.
+uses a separate read-only credential. That credential is not retained in Flask config/environment or registered as a Flask client.
 Read audit failure returns no content. Detailed case read services arrive in 08.
 
 Local roles are explicit collection grants, with separate development/test secrets:
@@ -47,7 +47,9 @@ Local roles are explicit collection grants, with separate development/test secre
 Worker user-collection access is collection-level, not field-level MongoDB masking;
 a compromised worker credential can see identity/profile fields in that collection.
 Future worker code must project only contact data. Root/maintenance/schema operators
-remain privileged infrastructure risks. External immutable audit copies, operational
+remain privileged infrastructure risks. The developer process runs as the same local
+account that owns the private setup file, so file access can bypass this separation;
+production must inject only the web secret into an isolated web identity. External immutable audit copies, operational
 monitoring, production separation/encryption and disposal are later stages. Local
 roles are not a production deployment or tamper-proof evidence certification.
 

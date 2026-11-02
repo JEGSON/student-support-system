@@ -38,6 +38,8 @@ class Policy:
         )
 
     def allows(self, action, case=None, purpose=None):
+        if action == "submit_case":
+            return self.context == "student" and "student" in self.user["global_roles"]
         if action in {"manage_accounts", "request_grant"}:
             return self.global_role("administrator")
         if action == "approve_grant":

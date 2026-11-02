@@ -37,13 +37,17 @@ def test_real_provider_login(width, engine, actor, expected_context):
     )
     app = create_app(values)
     app.extensions["mongo"].close()
-    client = local_client(values, "testing")
+    client = local_client(values, "web_testing")
     app.extensions["mongo"] = client
     credentials = json.loads((ROOT / "runtime/synthetic-logins.json").read_text())[actor]
     server = make_server("127.0.0.1", 5051, app, request_handler=SafeRequestHandler, threaded=True)
     thread = Thread(target=server.serve_forever, daemon=True)
     thread.start()
-    folder = ROOT / "docs/evidence/stages-05-06/browser"
+    folder = (
+        ROOT / os.getenv("IDENTITY_EVIDENCE_DIR", "runtime/identity-browser-evidence")
+    ).resolve()
+    if not any(folder.is_relative_to(ROOT / base) for base in ["runtime", "docs/evidence"]):
+        raise ValueError("Invalid evidence destination.")
     folder.mkdir(parents=True, exist_ok=True)
     try:
         with sync_playwright() as pw:

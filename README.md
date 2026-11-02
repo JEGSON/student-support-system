@@ -4,16 +4,17 @@ A proposed secure UK university support service using Python, Flask and MongoDB.
 
 ## Current state
 
-Stages 01–06 are implemented locally: the Flask/Jinja runtime, MongoDB contracts,
-real Keycloak OIDC/PKCE sign-in, opaque server sessions, context selection, central
-relationship policies and metadata-only access administration. Case submission and
-case-management pages begin after the Stage 07 transaction/audit foundation.
-The full clean-environment suite passes 190 checks, including real provider login
-and browser review. Use synthetic data only. No remote push or deployment has occurred.
+Stages 01–08 are implemented locally. Students can sign in, submit a request,
+receive a reference and track their own cases. Shared transactions commit case,
+history, audit and notification intent together; restricted DB roles protect audit
+history. Staff case work and messaging remain later stages. Use synthetic data only.
+No remote push, public deployment or external email has occurred. The final clean
+environment suite passes **236 tests**, with current browser review at 390/768/1440.
 
-See [identity/access setup](docs/development/identity-access-setup.md),
-[implementation contract](docs/architecture/identity-access-contract.md) and
-[verification evidence](docs/evidence/stages-05-06/README.md).
+See [current setup](docs/development/student-journey-setup.md),
+[student journey contract](docs/architecture/student-journey-contract.md),
+[Stage 07 evidence](docs/evidence/stage-07/README.md) and
+[Stage 08 evidence](docs/evidence/stage-08/README.md).
 
 ## Start here
 
@@ -25,7 +26,7 @@ See [identity/access setup](docs/development/identity-access-setup.md),
    [open decisions](docs/decisions/open-decisions.csv),
    [prioritised backlog](docs/development/backlog.csv) and
    [delivery contract](docs/development/delivery.md).
-5. Follow the sequential backlog. The user authorised Stages 05/06; Stage 07
+5. Follow the sequential backlog. The user authorised Stages 07/08; Stage 09
    requires the next instruction. Production, real-data and remote actions remain excluded.
 
 The [Stage 01–04 audit](docs/evidence/stages-01-04-audit/README.md) preserves the
@@ -54,6 +55,7 @@ uv sync --frozen --cache-dir runtime/uv-cache
 .venv/bin/python scripts/start_dependencies.py
 .venv/bin/python scripts/database_setup.py --environment development --seed
 .venv/bin/python scripts/database_setup.py --environment testing --seed
+.venv/bin/python scripts/configure_routing.py
 .venv/bin/python scripts/provision_identity.py
 .venv/bin/python scripts/run_local.py
 ```
@@ -67,10 +69,10 @@ HTTP exceptions. Never commit the generated `.env` or runtime files.
 ## Layout
 
 - `app/`: Flask factory, configuration, health, templates and development gallery;
-  typed repositories, OIDC/sessions and central policies; case journeys remain later work.
+  typed repositories, OIDC/sessions, central policies and the complete student case journey.
 - `worker/`: future restricted notification worker.
 - `tests/`: unit, actual-database and browser regression tests; authenticated
-  student/admin sign-in journeys are verified; case journeys remain future work.
+  student/admin sign-in and student submission/tracking journeys are verified.
 - `docs/`: design, requirements, decisions, risks, evidence and development log.
 - `scripts/`: document checks and local setup/start commands.
 - `infrastructure/`: digest-pinned local Compose dependencies and trusted bootstrap.

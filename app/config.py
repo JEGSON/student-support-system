@@ -1,8 +1,10 @@
 """Explicit environment contract; no development defaults in production."""
 
+import json
 import os
 import re
 from urllib.parse import parse_qsl, urlsplit
+from uuid import UUID
 
 
 class ConfigurationError(ValueError):
@@ -115,7 +117,32 @@ def load_config(overrides=None):
         raise ConfigurationError(
             "Production requires an institution-approved authentication class."
         )
+
+    def unique_pairs(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("Duplicate routing key.")
+            result[key] = value
+        return result
+
+    try:
+        routing = json.loads(source.get("CASE_ROUTING_JSON", "{}"), object_pairs_hook=unique_pairs)
+        if not isinstance(routing, dict):
+            raise ValueError
+        for category, team in routing.items():
+            if (
+                category not in {"academic", "finance", "wellbeing", "disability", "accommodation"}
+                or not isinstance(team, str)
+                or str(UUID(team)) != team
+            ):
+                raise ValueError
+    except (ValueError, TypeError, AttributeError):
+        raise ConfigurationError(
+            "CASE_ROUTING_JSON must map approved categories to canonical team UUIDs."
+        ) from None
     return {
+        "CASE_ROUTING": routing,
         "OIDC_TOKEN_AUTH_METHOD": method,
         "OIDC_CLIENT_SECRET": source.get("OIDC_CLIENT_SECRET"),
         "OIDC_REQUIRED_ACR": source.get("OIDC_REQUIRED_ACR"),

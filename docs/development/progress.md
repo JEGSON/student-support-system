@@ -151,3 +151,37 @@ Shared bounded transaction/audit/idempotency/outbox foundation implemented and t
 before exposing case pages. Restricted web, audit-reader and worker DB grants with
 separate dev/test credentials; maintenance remains offline. Real gate: 183 passed
 in 5.98s. See `../evidence/stage-07/README.md` and transaction-audit contract.
+
+## 2 November 2026 — Stage 08 student journey
+
+Implemented own-case overview, empty state, support form, validation/confirmation
+and detail using the existing tokens/Jinja and policy/repository boundaries. Five
+explicit synthetic routes cover all allowed categories; missing/inactive routes
+fail without partial persistence. Student case/event/audit/outbox/key effects are
+atomic; identical retries return one result and changed content conflicts.
+Explicit projections omit messages, notes, staff events and foreign student data.
+Sensitive reads require successful audit commit. No staff mutation or email endpoint.
+
+Browser testing caught CRLF/LF differences in retry fingerprints; normalized line
+endings now agree and a regression verifies it. Shortened random references after
+mobile visual review. Kept schema, .drawio topology and existing checkout; no
+architecture boundary change. Separate contract documents track actual behaviour.
+Ruff, frozen lock, compile, design/docs and advisory checks pass; exact final test
+counts are recorded in `../evidence/stage-08/README.md`.
+
+Before finalizing, informed the user and fixed development-runner credential
+retention: only allowlisted web settings are retained/exported, with a regression.
+The shared developer account still owns the private file; production isolation is
+not claimed. Also informed the user before a bounded request-form-only 128 KiB
+body allowance so 10,000 four-byte Unicode characters fit browser URL encoding;
+other endpoints retain 64 KiB and over-limit forms still reject.
+
+Stage 09 onward remains outside this turn. No remote push, deployment, external
+email or real student information. Existing listener must be restarted by its
+owner to load code/routing; no unrelated process was terminated.
+
+Final Stage 08 checkpoint: **236 passed in 144.49s**, no skips, from the clean
+locked environment; 84 current synthetic screenshots. Dependency advisory report:
+53 packages, zero known findings. Secret comparison and lint/format/compile/lock/
+document/design checks pass. See `../evidence/stage-08/README.md`. Stages 07/08
+complete locally; next authorised stage would be 09 on a new user instruction.

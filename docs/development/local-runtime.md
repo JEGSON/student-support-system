@@ -144,3 +144,8 @@ are not a production capacity claim. See `../architecture/scalability-review.md`
 Current identity/access evidence and production limitations are recorded in
 `../evidence/stages-05-06/README.md`. The older 29-test result above remains historical
 Stage 03 evidence; it is not the latest whole-project count.
+
+Stages 07/08 now provide restricted DB roles and the student submit/list/detail
+journey. Follow [current setup](student-journey-setup.md) for explicit five-category
+routing and the required restart; earlier stage-only absence statements above are
+historical. Current case/transaction controls and evidence are linked there.

@@ -15,16 +15,16 @@ setup it may recreate only this project's MongoDB container to inject the additi
 bootstrap variable; named data is preserved. First-use `setup_local.py` now generates
 that secret too. Never display/share `.env` or run Compose `config` output containing
 expanded environment secrets in routine evidence. Application/worker production
-credential separation is still later work; this full bootstrap `.env` is local only.
+database-role separation is implemented in Stage 07; this full bootstrap `.env` is local only.
 
-Schema setup accepts only development/testing environments, installs 15 contracts
+Schema setup accepts only development/testing environments, installs 16 contracts
 and named indexes, and exits with a generic failure on errors. Read the schema
 upgrade procedure in `../architecture/persistence-contract.md` before any change.
 No application routes, identity callbacks or case services are exposed by setup.
 
 ## Fixture version synthetic-v1
 
-27 idempotent documents: 12 user records, two teams, six memberships, four cases,
+30 idempotent documents: 12 user records, five teams, six memberships, four cases,
 one student-visible message, one distinct internal note and one worker principal.
 Covers students A/B; finance/disability; assigned, unassigned same-team and unrelated
 team officers; scoped managers; triage; administrator; approver; reviewer; disabled
@@ -35,8 +35,8 @@ User issuer/subjects are **synthetic placeholder mappings**, not verified identi
 or usable OIDC login accounts. Stage 05 must explicitly provision provider accounts
 and map verified subjects; do not accept arbitrary role claims or silently enable a
 password fallback. The separate inline design gallery is not a view of this database.
-Student/staff OIDC mapping and login are implemented in Stage 05; see
-`identity-access-setup.md` for explicit provider provisioning. Case journeys remain later work.
+OIDC login and the student journey are implemented; see `student-journey-setup.md`
+for provisioning and explicit five-category routing. Staff case work remains later.
 
 Seeding uses deterministic IDs and transactional setOnInsert: repeat execution
 preserves existing fixture records rather than silently resetting role/content
@@ -62,3 +62,8 @@ This is not a general retention/disposal feature. Real policy durations stay uns
 Session/submission TTL cleanup is not an expiry-access check. Cases and claims have
 no automatic TTL disposal. Stage 05/06/09 enforce their access/expiry rules; Stage 13
 implements reviewed lifecycle controls. Test results are in `../evidence/stage-04.md`.
+
+Stage 07 setup uses support_fixture for offline development writes and support_test
+for isolated test maintenance. Public web identities cannot read/update/delete
+audits or delete history. See `../architecture/transaction-audit-contract.md` for
+restricted environment-separated audit/worker roles and privileged operator risks.

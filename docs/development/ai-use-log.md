@@ -127,3 +127,21 @@ installed driver retry code. Wrote collection roles and generated private separa
 worker/audit/maintenance secrets without printing/committing them. Real rollback,
 conflict, retry, audit and permission tests passed (183 gate checks). No external
 email/SMTP implementation, production deployment, remote push or real data.
+
+## 2 November 2026 — Stage 08
+
+Codex built student-only submit/list/detail services, fixed Mongo projections,
+signed user-bound submission keys/cursors, configured synthetic routes and Jinja
+forms/views. Wrote and ran actual HTTP/Mongo ownership, input/CSRF, audit-failure,
+rollback/concurrent-retry and real Keycloak Chromium/WebKit journeys. Browser
+review found/corrected newline normalization and reference readability. Preserved
+failed checks in the evidence narrative; no failed run is counted as passing.
+
+Codex also identified and tested development-runner secret filtering and a bounded
+Unicode form-body allowance, informed the user before these refinements, updated
+setup/architecture status/traceability/AI records and compared prospective tracked
+files to private generated secrets. Itsdangerous was already installed/locked and
+is now declared as a direct dependency. Advisory results/test counts and full
+limitations are in `../evidence/stage-08/README.md`. No independent security review,
+full WCAG conformance, capacity certification or production readiness is claimed.
+Full institutional AI policy remains unresolved. No external email or deployment.

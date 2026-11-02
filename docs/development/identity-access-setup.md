@@ -63,3 +63,8 @@ subject mappings when reseeding. Do not run the fixture suite against developmen
 
 See [identity/access contract](../architecture/identity-access-contract.md) for
 expiry, provider logout, concurrency and production limitations.
+
+Stages 07/08 now provide restricted DB roles and the student submit/list/detail
+journey. Follow [current setup](student-journey-setup.md) for explicit five-category
+routing and the required restart; earlier stage-only absence statements above are
+historical. Current case/transaction controls and evidence are linked there.

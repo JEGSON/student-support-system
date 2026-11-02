@@ -50,7 +50,7 @@ def test_debugger_is_forbidden(config):
 
 def test_public_and_errors_do_not_expose_config(app):
     client = app.test_client()
-    for path, status in [("/", 200), ("/sign-in", 503), ("/cases/demo", 404), ("/admin", 404)]:
+    for path, status in [("/", 200), ("/sign-in", 503), ("/cases/demo", 302), ("/admin", 404)]:
         response = client.get(path)
         assert response.status_code == status
         assert app.config["SECRET_KEY"].encode() not in response.data
@@ -112,7 +112,7 @@ def test_gallery_is_development_only_synthetic_and_escaped(config):
         )
         html = template.render(value="<script>alert(1)</script>")
         assert "<script>" not in html and "&lt;script&gt;" in html
-    assert client.get("/cases/SS-DEMO-001").status_code == 404
+    assert client.get("/cases/SS-DEMO-001").status_code == 302
     application.extensions["mongo"].close()
 
 
@@ -241,3 +241,47 @@ def test_production_requires_reviewed_authentication_class(config):
     values.pop("OIDC_REQUIRED_ACR")
     with pytest.raises(ConfigurationError):
         load_config(values)
+
+
+@pytest.mark.parametrize(
+    "routing",
+    [
+        "[]",
+        '{"other":"x"}',
+        '{"finance":"bad"}',
+        '{"finance":{},"academic":true}',
+        '{"finance":"00000000-0000-0000-0000-000000000001","finance":"00000000-0000-0000-0000-000000000002"}',
+    ],
+)
+def test_invalid_routing_configuration_rejected(config, routing):
+    with pytest.raises(ConfigurationError, match="CASE_ROUTING_JSON"):
+        create_app({**config, "CASE_ROUTING_JSON": routing})
+
+
+def test_local_runner_retains_only_web_settings_without_exporting_operator_secrets(monkeypatch):
+    import os
+
+    from scripts import run_local
+
+    private = "synthetic-operator-secret-never-retained"
+    monkeypatch.setattr(
+        run_local,
+        "dotenv_values",
+        lambda path: {
+            "APP_ENV": "development",
+            "SECRET_KEY": "synthetic-web-key",
+            "CASE_ROUTING_JSON": "{}",
+            "MONGO_ROOT_PASSWORD": private,
+            "MONGO_AUDIT_PASSWORD": private,
+            "MONGO_WORKER_PASSWORD": private,
+            "MONGO_FIXTURE_PASSWORD": private,
+        },
+    )
+    before = dict(os.environ)
+    settings = run_local.local_web_settings()
+    assert settings == {
+        "APP_ENV": "development",
+        "SECRET_KEY": "synthetic-web-key",
+        "CASE_ROUTING_JSON": "{}",
+    }
+    assert dict(os.environ) == before and private not in str(settings)

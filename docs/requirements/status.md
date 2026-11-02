@@ -2,7 +2,8 @@
 
 The design baseline is in `../architecture/student-support-secure-design.html`.
 Stage 01 extracted the requirements into `register.csv` and mapped coverage in
-`../testing/traceability.csv`. All application controls remain unimplemented.
+`../testing/traceability.csv`. The registers now include scoped implementation evidence through Stage 08.
+Later features and institutional production controls remain pending.
 
 Open institutional decisions include identity integration, access owners,
 privacy grounds, retention, safeguarding and hosting. Review the full rubric,

@@ -58,7 +58,7 @@ def fixture_documents(issuer):
             "active": True,
             "authorization_revision": 0,
         }
-        for name in ["finance", "disability"]
+        for name in ["academic", "finance", "wellbeing", "disability", "accommodation"]
     ]
     memberships = []
     for user, team, role in [

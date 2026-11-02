@@ -2,7 +2,7 @@
 
 from uuid import uuid4
 
-from flask import Flask, g, render_template
+from flask import Flask, g, render_template, request
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from pymongo import MongoClient
 
@@ -10,6 +10,7 @@ from .auth.access_routes import access
 from .auth.oidc import configure_oidc
 from .auth.routes import identity
 from .auth.sessions import MongoSessionInterface
+from .cases.routes import cases
 from .config import ConfigurationError, load_config
 from .health import database_ready, email_ready, identity_ready
 from .health import health as health_blueprint
@@ -30,11 +31,15 @@ def create_app(config=None):
     @app.before_request
     def correlate_request():
         g.request_id = str(uuid4())
+        if request.endpoint == "cases.new_request" and request.method == "POST":
+            # URL-encoded 10,000-character Unicode can require ~120 KB.
+            request.max_content_length = 128 * 1024
 
     CSRFProtect(app)
     configure_oidc(app)
     app.register_blueprint(identity)
     app.register_blueprint(access)
+    app.register_blueprint(cases)
     try:
         app.extensions["mongo"] = MongoClient(
             app.config["MONGODB_URI"],

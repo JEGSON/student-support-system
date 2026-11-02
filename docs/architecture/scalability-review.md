@@ -43,3 +43,12 @@ implemented; administration lists are bounded to 100 and need pagination for lar
 institutions. The five-second transaction guard intentionally serialises team writes
 for correctness. Team contention, shared rate limiting, production WSGI and workload
 capacity remain unmeasured; see `identity-access-contract.md`.
+
+## Stage 07/08 update
+
+Student queries fetch at most 21 projected rows per 20-row page and use the existing
+ownership/archive/update/id index. Detail queries include owner/archive predicates.
+Signed user-bound keyset cursors avoid unscoped counts/offset scans. Audited reads
+write an actor guard and commit majority audit before returning content. Team write
+contention, per-user serialization, shared throttling and workload targets still
+need Stage 16 measurement; passing tests do not prove the proposed capacity.
