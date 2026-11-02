@@ -24,6 +24,8 @@ def production_config(config):
     return {
         **config,
         "APP_ENV": "production",
+        "OIDC_CLIENT_SECRET": secrets.token_urlsafe(48),
+        "OIDC_REQUIRED_ACR": "synthetic-test-only",
         "APP_BASE_URL": "https://support.example.invalid",
         "MONGODB_URI": "mongodb://localhost:27017/?tls=true",
         "MONGODB_DATABASE": "student_support_production",
@@ -153,6 +155,7 @@ def test_body_limit_and_absent_client_session_fallback(config):
     application.config["PROPAGATE_EXCEPTIONS"] = False
 
     @application.post("/body-probe")
+    @application.extensions["csrf"].exempt
     def body_probe():
         return str(len(request.get_data()))
 
@@ -229,3 +232,12 @@ def test_app_database_pool_and_dates_are_bounded_and_aware(app):
     assert client.codec_options.tz_aware
     assert client.options.pool_options.max_pool_size == 20
     assert client.options.pool_options.wait_queue_timeout == 1.5
+
+
+def test_production_requires_reviewed_authentication_class(config):
+    from app.config import ConfigurationError, load_config
+
+    values = production_config(config)
+    values.pop("OIDC_REQUIRED_ACR")
+    with pytest.raises(ConfigurationError):
+        load_config(values)

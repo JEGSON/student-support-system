@@ -30,8 +30,8 @@ def database():
     schema_client = local_client(values, "schema")
     client = local_client(values, "testing")
     db = client.student_support_test
-    assert install_schema(schema_client.student_support_test) == 15
-    assert install_schema(schema_client.student_support_test) == 15
+    assert install_schema(schema_client.student_support_test) == 16
+    assert install_schema(schema_client.student_support_test) == 16
     seed_fixtures(db, values["OIDC_ISSUER"])
     yield db
     client.close()
@@ -90,6 +90,15 @@ def sample_documents():
                 idle_expires_at=stamp + timedelta(minutes=30),
                 absolute_expires_at=stamp + timedelta(hours=8),
                 authentication_time=stamp,
+            ),
+            "auth_attempts": dict(
+                token_hash="2" * 64,
+                data={},
+                version=0,
+                created_at=stamp,
+                last_seen_at=stamp,
+                idle_expires_at=stamp + timedelta(minutes=10),
+                absolute_expires_at=stamp + timedelta(minutes=10),
             ),
             "submission_keys": dict(
                 user_id=uid,
@@ -292,6 +301,7 @@ def test_originating_referral_uniqueness(database):
 def test_safe_fixture_reset_preserves_unlabelled_data_and_rejects_dependencies(database):
     from app.repositories.fixtures import reset_fixtures
 
+    mappings = list(database.users.find({"fixture_version": VERSION}, {"identity_subject": 1}))
     standalone = sample_documents()["users"]
     standalone["identity_subject"] = "synthetic-reset:" + standalone["_id"]
     standalone.pop("student_reference", None)
@@ -310,6 +320,10 @@ def test_safe_fixture_reset_preserves_unlabelled_data_and_rejects_dependencies(d
         database.messages.delete_one({"_id": dependency["_id"]})
         database.users.delete_one({"_id": standalone["_id"]})
         seed_fixtures(database, "http://127.0.0.1:8180/realms/student-support")
+        for user in mappings:
+            database.users.update_one(
+                {"_id": user["_id"]}, {"$set": {"identity_subject": user["identity_subject"]}}
+            )
 
 
 def test_schema_setup_privileges_are_separate(database):

@@ -107,3 +107,38 @@ checks pass. Query-plan support checked on fixtures; no capacity/load claim.
 Evidence: `../evidence/stages-01-04-audit/README.md`; scalability assessment:
 `../architecture/scalability-review.md`. Stage 05 and later held until the user
 resumes. No remote push, deployment, real student data or third-party message.
+
+## 2 November 2026 — Stages 05/06 implementation
+
+The user explicitly resumed development for Stages 05/06 and requested advance
+notice of architecture/function changes. Reread the master prompt, numbered stages,
+architecture and relationship contracts. Before coding, explained the maintained
+Authlib/Flask-WTF integration, additive ten-minute OIDC-state collection and opaque
+Mongo sessions, followed by central policies/revision guards. No trust boundary,
+framework or product scope deviation was needed.
+
+Implemented real local Keycloak code/S256 sign-in and issuer/subject mapping,
+explicit generated synthetic credentials, server sessions, context switching,
+CSRF/logout/expiry and safe metadata logs. Implemented central deny-by-default
+policies, metadata-only access UI, independent approval, scoped audit grants,
+ordinary/privileged revocation, deactivation, offline synthetic bootstrap and
+thirty-minute triage claims. Case pages remain absent pending Stage 07.
+
+Initial full regression: 182 passed. A clean hash-checked 53-package install then
+passed 189 checks; final HTTP approval and WebKit control-size regressions are
+recorded with the final observed result in `../evidence/stages-05-06/README.md`.
+Dependency audit: zero known advisories among 53 packages. Local secrets compared
+against all prospective tracked files: none found; private credential file is 0600.
+Ruff, frozen lock, dependency consistency, compile, design and documentation checks
+pass. Forty-eight current synthetic screenshots document account/access/layout
+review across Chromium/WebKit at 390/768/1440. Known failures/fixes and scoped V02/
+V03/V04/V06/V08/V11 coverage are documented, with later coverage visibly pending.
+
+Stage 07 onward requires the next instruction. No remote push, public deployment,
+real student data, external messaging or institution-approved production readiness.
+
+Final Stage 05/06 checkpoint: **190 passed in 128.61 seconds**, no skips, from the
+clean environment. Focused account/access browser rerun after the WebKit control
+height fix: **12 passed in 18.51 seconds**. Results XML, 48 screenshots and dependency
+report are in `../evidence/stages-05-06/`. The existing Flask listener may need a
+manual restart to load these changes; no unrelated process was terminated.

@@ -42,6 +42,7 @@ def synthetic_server():
             APP_BASE_URL="http://127.0.0.1:5050",
             MONGODB_URI="mongodb://localhost:27017/?replicaSet=rs0",
             MONGODB_DATABASE="student_support_dev",
+            OIDC_CLIENT_ID="support-local",
             OIDC_ISSUER="http://127.0.0.1:8180/realms/student-support",
             EMAIL_HEALTH_URL="http://127.0.0.1:8025/readyz",
         )

@@ -6,8 +6,14 @@ from urllib.parse import urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from dotenv import load_dotenv
+from werkzeug.serving import WSGIRequestHandler
 
 from app import create_app
+
+
+class SafeRequestHandler(WSGIRequestHandler):
+    def log_request(self, code="-", size="-"):
+        self.log("info", "request method=%s status=%s", self.command, code)
 
 
 def main():
@@ -20,6 +26,7 @@ def main():
         port=urlsplit(app.config["APP_BASE_URL"]).port or 5050,
         debug=False,
         use_reloader=False,
+        request_handler=SafeRequestHandler,
     )
 
 

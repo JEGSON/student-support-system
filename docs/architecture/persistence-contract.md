@@ -88,3 +88,14 @@ read only reusable integrity metadata, excluding note/message bodies and contact
 fields. An additive cases_v1_6 index includes archive_state for the actual active
 keyset query; baseline indexes were preserved. Case queries now have a 1.5s server
 execution bound. See `scalability-review.md` for evidence and limits.
+
+## Stage 05/06 additive contracts
+
+The collection total is now 16. `auth_attempts` holds ten-minute anonymous OIDC
+state/nonce/PKCE metadata behind opaque hashed tokens and TTL cleanup. Sessions
+add bounded server `data` and CAS `version`; users add `guard_version`.
+Privileged grants add the `revoked` state. Session user/revoked, user display-name,
+and pending/scoped-grant indexes support the implemented lookup paths. All prior
+strict validation/reference rules remain. Details and expiry/concurrency semantics:
+`identity-access-contract.md`. Schema changes are explicit local setup migrations;
+no public request performs schema installation.

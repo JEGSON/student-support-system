@@ -97,3 +97,23 @@ required pinned service images/browsers; audited 46 Python packages with zero kn
 advisories returned. Recorded exact scope, machine-readable inventory and reports.
 No independent review, workload capacity or production readiness is invented.
 Stage 05 was not implemented. Complete institutional AI policy remains pending.
+
+## 2 November 2026 — Stages 05/06
+
+Codex implemented and reviewed Authlib OIDC/PKCE, server-side Mongo sessions,
+Flask-WTF CSRF, issuer/subject provisioning, context/account/access pages, central
+relationship policy, controlled/independently approved grants, synthetic offline
+bootstrap and revision-serialized revocation guards. Consulted current primary
+Authlib, Flask-WTF, Keycloak and PyMongo documentation and inspected installed
+validation/client source. Generated only labelled synthetic account data and unique
+private development credentials; no real student records were used.
+
+Codex wrote and ran real signed-JWT, MongoDB transaction/session/role/concurrency,
+HTTP access workflow and isolated Chromium/WebKit tests. Visual review corrected
+form controls, and negative tests found/fixed absolute-expiry rotation, fixture
+isolation and provider-profile setup issues. Codex updated traceability, setup,
+architecture status, evidence and the dependency lock; verified a clean hash-checked
+install and an advisory/secret check. Observed counts and limitations are in
+`../evidence/stages-05-06/README.md`; this is not independent human security review
+or production/WCAG certification. Full institutional AI-use policy remains pending.
+No remote push, deployment or third-party messages were performed.

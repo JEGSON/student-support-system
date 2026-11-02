@@ -71,6 +71,7 @@ SCHEMAS = {
         account_status=enum(["active", "disabled"]),
         global_roles=array(enum(GLOBAL_ROLES)),
         authorization_revision=INTEGER,
+        guard_version=INTEGER,
         created_at=DATE,
     ),
     "teams": schema(
@@ -247,6 +248,8 @@ SCHEMAS = {
             "authentication_time",
         ],
         token_hash=HASH,
+        data={"bsonType": "object", "maxProperties": 8},
+        version=INTEGER,
         user_id=ID,
         created_at=DATE,
         last_seen_at=DATE,
@@ -255,6 +258,25 @@ SCHEMAS = {
         revoked_at=nullable(DATE),
         authentication_time=DATE,
         context=enum(["student", "staff", "admin", "audit"]),
+    ),
+    "auth_attempts": schema(
+        [
+            "token_hash",
+            "data",
+            "version",
+            "created_at",
+            "last_seen_at",
+            "idle_expires_at",
+            "absolute_expires_at",
+        ],
+        token_hash=HASH,
+        data={"bsonType": "object", "maxProperties": 8},
+        version=INTEGER,
+        created_at=DATE,
+        last_seen_at=DATE,
+        idle_expires_at=DATE,
+        absolute_expires_at=DATE,
+        revoked_at=nullable(DATE),
     ),
     "submission_keys": schema(
         ["user_id", "operation", "key_hash", "expires_at"],
@@ -291,7 +313,7 @@ SCHEMAS = {
         role=enum(["manager", "administrator", "access_approver", "audit_reviewer"]),
         requested_by=ID,
         reason=text(1000),
-        state=enum(["pending", "approved", "rejected"]),
+        state=enum(["pending", "approved", "rejected", "revoked"]),
         approved_by=nullable(ID),
         decided_at=nullable(DATE),
         decision_reason=text(1000),
@@ -353,6 +375,10 @@ INDEXES = {
         ([("token_hash", 1)], {"unique": True}),
         ([("absolute_expires_at", 1)], {"expireAfterSeconds": 0}),
     ],
+    "auth_attempts": [
+        ([("token_hash", 1)], {"unique": True}),
+        ([("absolute_expires_at", 1)], {"expireAfterSeconds": 0}),
+    ],
     "submission_keys": [
         ([("user_id", 1), ("operation", 1), ("key_hash", 1)], {"unique": True}),
         ([("expires_at", 1)], {"expireAfterSeconds": 0}),
@@ -361,6 +387,16 @@ INDEXES = {
     "privileged_grants": [([("user_id", 1), ("state", 1), ("created_at", 1)], {})],
     "service_principals": [([("name", 1)], {"unique": True})],
 }
+
+# Session revocation and bounded access-administration lookup paths.
+INDEXES["sessions"].append(([("user_id", 1), ("revoked_at", 1)], {}))
+INDEXES["users"].append(([("display_name", 1), ("_id", 1)], {}))
+INDEXES["privileged_grants"].extend(
+    [
+        ([("state", 1), ("created_at", 1)], {}),
+        ([("user_id", 1), ("role", 1), ("team_id", 1), ("state", 1)], {}),
+    ]
+)
 
 # Additive index for the actual active-case keyset query. Preserve baseline indexes
 # until workload evidence justifies removing any redundant one.

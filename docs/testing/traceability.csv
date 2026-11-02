@@ -1,5 +1,5 @@
 requirement_id,workflow_id,threat_id,test_id,primary_stage,implementation_reference,evidence_reference,status
-FR-01,WF-01,T01 T09,V01 V06 V08,05,,,planned
+FR-01,WF-01,T01 T09,V01 V06 V08,05,app,docs/evidence/stages-05-06/README.md,verified for Stage 05/06 scope; later integration pending
 FR-02,WF-01,T02 T03 T07 T09 T10,V01 V07 V08 V10,08,,,planned
 FR-03,WF-01,T05 T06,V01 V02 V05,08,,,planned
 FR-04,,,,01,,,unresolved
@@ -9,14 +9,14 @@ FR-07,WF-03 WF-04 WF-05 WF-07 WF-08,T02 T03,V01 V09 V10,10,,,planned
 FR-08,WF-06,T04 T06 T10,V05 V07 V11,10,,,planned
 FR-09,WF-04 WF-05,T06 T09 T10,V01 V05 V07 V08,10,,,planned
 FR-10,WF-07 WF-08,T02 T03,V01 V09 V10,10,,,planned
-FR-11,WF-10,T01 T08,V03 V06 V11,06,,,planned
+FR-11,WF-10,T01 T08,V03 V06 V11,06,app,docs/evidence/stages-05-06/README.md,verified for Stage 05/06 scope; later integration pending
 FR-12,WF-01 WF-02 WF-06 WF-10,T03 T04,V10 V11,07,,,planned
 FR-13,WF-10 WF-11,T11,V15,13,,,planned
-SR-01,,T01,V06,05,,,planned
-SR-02,WF-01 WF-02 WF-09,T02 T05 T08,V02 V03 V04 V07,06,,,planned
-SR-03,WF-10,T08,V03 V11,06,,,planned
+SR-01,,T01,V06,05,app,docs/evidence/stages-05-06/README.md,verified for Stage 05/06 scope; later integration pending
+SR-02,WF-01 WF-02 WF-09,T02 T05 T08,V02 V03 V04 V07,06,app,docs/evidence/stages-05-06/README.md,verified for Stage 05/06 scope; later integration pending
+SR-03,WF-10,T08,V03 V11,06,app,docs/evidence/stages-05-06/README.md,verified for Stage 05/06 scope; later integration pending
 SR-04,,T11,V16,15,,,planned
-SR-05,,T01 T09,V06 V08,05,,,planned
+SR-05,,T01 T09,V06 V08,05,app,docs/evidence/stages-05-06/README.md,verified for Stage 05/06 scope; later integration pending
 SR-06,WF-01 WF-04 WF-06,T02 T09 T10,V07 V08,08,,,planned
 SR-07,,T11,V15 V16,15,,,planned
 SR-08,WF-01 WF-06 WF-10,T04 T08,V10 V11,07,,,planned

@@ -22,6 +22,5 @@ requirements are satisfied). Future implementation can use `partial`, `verified`
 Split rows when different tests have different outcomes; do not promote an entire
 requirement based on one happy path. Preserve prior failures in evidence records.
 
-`verification-plan.csv` lists V01–V16 and their expected methods. All are currently
-`not run`. Stage 01's documentation integrity check is not one of those runtime
+`verification-plan.csv` lists V01–V16 and their expected methods. Statuses are updated only with observed, scoped stage evidence. Stage 01's documentation integrity check is not one of those runtime
 verifications. No placeholders under `tests/` count as executable tests.

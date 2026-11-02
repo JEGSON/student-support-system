@@ -1,5 +1,5 @@
 requirement_id,summary,provenance,source,status,primary_stage,decision_or_owner
-FR-01,Authentication,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,05,OD-03
+FR-01,Authentication,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,verified for Stage 05/06 synthetic scope; production/later integration pending,05,OD-03
 FR-02,Support request submission,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,08,OD-03
 FR-03,Own-case viewing,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,08,OD-03
 FR-04,Undefined in supplied baseline,unresolved baseline definition,docs/architecture/student-support-secure-design.html#verification,unresolved,01,OD-01
@@ -9,14 +9,14 @@ FR-07,Status management,proposed baseline requirement; summary from reference ke
 FR-08,Internal notes,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,10,OD-03
 FR-09,Student-visible communication,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,10,OD-03
 FR-10,Closure with resolution,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,10,OD-03
-FR-11,Access administration,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,06,OD-03
+FR-11,Access administration,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,verified for Stage 05/06 synthetic scope; production/later integration pending,06,OD-03
 FR-12,Accountability,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,07,OD-03
 FR-13,Record lifecycle,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,13,OD-03
-SR-01,Authentication,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,05,engineering owner
-SR-02,Resource authorisation,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,06,engineering owner
-SR-03,Privilege administration,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,06,engineering owner
+SR-01,Authentication,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,verified for Stage 05/06 synthetic scope; production/later integration pending,05,engineering owner
+SR-02,Resource authorisation,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,verified for Stage 05/06 synthetic scope; production/later integration pending,06,engineering owner
+SR-03,Privilege administration,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,verified for Stage 05/06 synthetic scope; production/later integration pending,06,engineering owner
 SR-04,Credential and secret protection,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,15,engineering owner
-SR-05,Sessions and CSRF,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,05,engineering owner
+SR-05,Sessions and CSRF,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,verified for Stage 05/06 synthetic scope; production/later integration pending,05,engineering owner
 SR-06,Input/output safety,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,08,engineering owner
 SR-07,Encryption,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,15,engineering owner
 SR-08,Audit integrity,proposed baseline requirement; summary from reference key,docs/architecture/student-support-secure-design.html#verification,planned,07,engineering owner

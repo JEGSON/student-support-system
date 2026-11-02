@@ -48,3 +48,6 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0;color:var(--muted);font
 
 /* Allow tablet page actions to keep their label and wrap below the heading. */
 .page-head{flex-wrap:wrap}.page-head>div{flex:1;min-width:min(100%,28rem)}.page-head>.button{flex-shrink:0}
+
+.auth-form {margin:1.5rem 0;max-width:760px}.auth-form label{display:block;font-size:.95rem;font-weight:650;margin:1.25rem 0 .5rem}.auth-form select,.auth-form textarea{display:block;width:100%;border:1px solid var(--input-border);border-radius:var(--radius-sm);background:white;color:var(--ink);padding:.75rem;min-height:46px}.auth-form textarea{resize:vertical}.auth-form .button{margin-top:1rem}
+.auth-form select{height:48px}

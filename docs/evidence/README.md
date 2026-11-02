@@ -1,10 +1,14 @@
 # Verification evidence
 
-No application tests have run. Record actual commands, commit, environment,
-expected and observed results, and defects as implementation progresses.
-Only synthetic-data screenshots and redacted logs belong here.
+Evidence is scoped by stage; a passing local check never implies production readiness.
+Only synthetic screenshots and reports belong here. Credentials and live session
+values stay in ignored runtime storage.
 
-Use [template.md](template.md) for future executions. [stage-01.md](stage-01.md)
-records documentation checks only. Planned verification IDs V01–V16 are in
-`../testing/verification-plan.csv`; none has run. A blank evidence field means
-no evidence, not success. See the delivery contract for commit-reference practice.
+- [Stage 01 planning](stage-01.md)
+- [Stage 03 runtime review](stage-03-recheck/README.md)
+- [Stage 04 persistence](stage-04.md)
+- [Stage 01–04 audit](stages-01-04-audit/README.md)
+- [Stage 05–06 identity/access](stages-05-06/README.md)
+
+See `../testing/verification-plan.csv` for actual partial/complete coverage. Blank
+fields mean no evidence. Use [template.md](template.md) for later checks.

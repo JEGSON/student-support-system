@@ -34,6 +34,7 @@ def load_config(overrides=None):
         "MONGODB_URI",
         "MONGODB_DATABASE",
         "OIDC_ISSUER",
+        "OIDC_CLIENT_ID",
         "APP_BASE_URL",
         "EMAIL_HEALTH_URL",
     ]
@@ -105,7 +106,19 @@ def load_config(overrides=None):
         raise ConfigurationError("MONGO_MAX_POOL_SIZE must be an integer from 1 to 100.") from None
     if not 1 <= pool_size <= 100:
         raise ConfigurationError("MONGO_MAX_POOL_SIZE must be an integer from 1 to 100.")
+    method = source.get("OIDC_TOKEN_AUTH_METHOD", "none" if local else "client_secret_basic")
+    if method not in {"none", "client_secret_basic"}:
+        raise ConfigurationError("Unsupported identity client authentication method.")
+    if method != "none" and not source.get("OIDC_CLIENT_SECRET"):
+        raise ConfigurationError("A confidential identity client requires its secret.")
+    if not local and not source.get("OIDC_REQUIRED_ACR"):
+        raise ConfigurationError(
+            "Production requires an institution-approved authentication class."
+        )
     return {
+        "OIDC_TOKEN_AUTH_METHOD": method,
+        "OIDC_CLIENT_SECRET": source.get("OIDC_CLIENT_SECRET"),
+        "OIDC_REQUIRED_ACR": source.get("OIDC_REQUIRED_ACR"),
         **{key: source[key] for key in required},
         "APP_ENV": env,
         "TESTING": env == "testing",

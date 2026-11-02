@@ -1,4 +1,4 @@
-# Local synthetic runtime — Stage 03
+# Local synthetic runtime — Stages 03–06
 
 Requires Docker Desktop/Engine with Compose v2, Python 3.14 and uv. Tested on
 macOS with Python 3.14.7, uv 0.11.3 and Docker Engine 29.0.1. The existing empty
@@ -13,12 +13,15 @@ From this repository root:
 uv sync --frozen --cache-dir runtime/uv-cache
 .venv/bin/python scripts/setup_local.py
 .venv/bin/python scripts/start_dependencies.py
+.venv/bin/python scripts/database_setup.py --environment development --seed
+.venv/bin/python scripts/database_setup.py --environment testing --seed
+.venv/bin/python scripts/provision_identity.py
 .venv/bin/python scripts/run_local.py
 ```
 
-The current audit also verified all 46 runtime/dev packages in a clean environment.
+The Stage 05/06 audit verifies all 53 runtime/dev packages in a clean environment.
 Run `uv sync --frozen` after dependency changes. Ruff and pip-audit are locked dev
-quality tools; no Stage 05 identity client or later production tools are required yet.
+quality tools; Authlib, Flask-WTF and Requests are locked identity dependencies.
 
 Start Docker first. The setup generator is for first use: it writes a private
 ignored `.env`, replica-set keyfile and synthetic OIDC realm import; it never prints
@@ -50,9 +53,10 @@ Keycloak's temporary synthetic bootstrap administrator credential is generated i
 private `.env` under `OIDC_ADMIN_PASSWORD`. No working credentials are in source
 control. Never paste that file into chat/logs. The local public OIDC client requires
 S256 PKCE and the exact `http://127.0.0.1:5050/auth/callback` redirect. Its application
-callback is not implemented until Stage 05. No local-password alternative exists.
-No student/staff OIDC accounts have been provisioned yet; Stage 04 supplies labelled
-persistence fixtures with placeholder identity subjects. See `database-setup.md`. Public sign-in currently returns a safe 503 explanation.
+callback is implemented with verified issuer/subject mapping. No local-password
+alternative exists. Synthetic accounts are provisioned explicitly using the setup
+steps above; generated private credentials remain in ignored runtime storage.
+See [identity/access setup](identity-access-setup.md) for the current workflow.
 
 ## Verification
 
@@ -104,7 +108,7 @@ requires explicit HTTPS origins, database TLS, generated non-development secret
 and a separate database name; insecure TLS overrides/debug mode fail startup.
 No production secrets are loaded from `.env` by the WSGI module. These initial
 checks are not complete Stage 15 hardening. Gunicorn/proxy, shared rate limiting,
-server-side identity/sessions, detailed least-privilege collection roles, backup
+detailed least-privilege collection roles, backup
 recovery and institutional approvals are still pending. Local `readWrite` database
 roles are scoped separately by database; Stage 07 must restrict audit/worker roles
 before business features. A single node demonstrates transactions, not failover.
@@ -119,7 +123,7 @@ RUN_BROWSER=1 RUN_RUNTIME=1 PLAYWRIGHT_BROWSERS_PATH=runtime/playwright-browsers
 
 Playwright is a locked dev dependency; browser downloads stay ignored. Browser tests
 start and stop their own loopback fixture server, use no personal browser profile,
-block external requests and save synthetic evidence. Routine screenshots default to
+use local dependencies and save synthetic evidence. Gallery checks block external requests. Routine screenshots default to
 ignored `runtime/browser-evidence`. To record a deliberate review without overwriting
 historical evidence, set `BROWSER_EVIDENCE_DIR=docs/evidence/<new-record>/browser`. Native Safari is not required.
 The 29-test result verifies Stage 03 scope, not future authenticated journeys.
@@ -136,3 +140,7 @@ Pool size is initially 20 per application process (`MONGO_MAX_POOL_SIZE`, range
 1–100) with a 1.5s connection checkout wait. Case-list queries have a 1.5s server
 execution bound. Tune these only using measured workloads; these initial values
 are not a production capacity claim. See `../architecture/scalability-review.md`.
+
+Current identity/access evidence and production limitations are recorded in
+`../evidence/stages-05-06/README.md`. The older 29-test result above remains historical
+Stage 03 evidence; it is not the latest whole-project count.

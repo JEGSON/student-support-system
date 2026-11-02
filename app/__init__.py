@@ -1,22 +1,16 @@
 """Modular Flask runtime foundation; no authenticated business routes yet."""
 
 from flask import Flask, render_template
-from flask.sessions import SessionInterface
+from flask_wtf.csrf import CSRFError, CSRFProtect
 from pymongo import MongoClient
 
+from .auth.access_routes import access
+from .auth.oidc import configure_oidc
+from .auth.routes import identity
+from .auth.sessions import MongoSessionInterface
 from .config import ConfigurationError, load_config
 from .health import database_ready, email_ready, identity_ready
 from .health import health as health_blueprint
-
-
-class NoSessionInterface(SessionInterface):
-    """No client-side Flask session fallback while server-side sessions are pending."""
-
-    def open_session(self, app, request):
-        return None
-
-    def save_session(self, app, session, response):
-        return None
 
 
 class SupportFlask(Flask):
@@ -29,7 +23,11 @@ class SupportFlask(Flask):
 def create_app(config=None):
     app = SupportFlask(__name__)
     app.config.update(load_config(config))
-    app.session_interface = NoSessionInterface()
+    app.session_interface = MongoSessionInterface()
+    CSRFProtect(app)
+    configure_oidc(app)
+    app.register_blueprint(identity)
+    app.register_blueprint(access)
     try:
         app.extensions["mongo"] = MongoClient(
             app.config["MONGODB_URI"],
@@ -51,15 +49,6 @@ def create_app(config=None):
     def index():
         return render_template("entry.html", title="Student Support", context="public")
 
-    @app.get("/sign-in")
-    def sign_in_pending():
-        return render_template(
-            "error.html",
-            title="Sign-in is not available yet",
-            message="University sign-in will be connected in the identity stage.",
-            context="public",
-        ), 503
-
     if app.config["APP_ENV"] == "development":
         from .gallery import gallery
 
@@ -78,6 +67,15 @@ def create_app(config=None):
             }
         )
         return response
+
+    @app.errorhandler(CSRFError)
+    def expired_form(error):
+        return render_template(
+            "error.html",
+            title="Your form has expired",
+            message="Return to your account, sign in if needed and open the form again. No change has been made.",
+            context="public",
+        ), 400
 
     @app.errorhandler(400)
     @app.errorhandler(403)
@@ -105,5 +103,5 @@ def create_app(config=None):
             context="public",
         ), 500
 
-    # No cases/admin/auth endpoints are registered. No placeholder access bypass.
+    # Case routes remain absent until the transaction and policy foundations are verified.
     return app

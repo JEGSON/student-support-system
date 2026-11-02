@@ -35,7 +35,8 @@ User issuer/subjects are **synthetic placeholder mappings**, not verified identi
 or usable OIDC login accounts. Stage 05 must explicitly provision provider accounts
 and map verified subjects; do not accept arbitrary role claims or silently enable a
 password fallback. The separate inline design gallery is not a view of this database.
-No student/staff login or case-management journey is implemented yet.
+Student/staff OIDC mapping and login are implemented in Stage 05; see
+`identity-access-setup.md` for explicit provider provisioning. Case journeys remain later work.
 
 Seeding uses deterministic IDs and transactional setOnInsert: repeat execution
 preserves existing fixture records rather than silently resetting role/content

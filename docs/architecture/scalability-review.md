@@ -34,3 +34,12 @@ Primary references reviewed during changes:
 [PyMongo connection pools](https://www.mongodb.com/docs/languages/python/pymongo-driver/current/connect/connection-options/connection-pools/),
 [aware dates](https://www.mongodb.com/docs/languages/python/pymongo-driver/current/data-formats/dates-and-times/).
 Actual observations: `../evidence/stages-01-04-audit/README.md`.
+
+## Stage 05/06 update
+
+Shared hashed Mongo sessions now support multiple app instances without in-process
+identity state. Indexed revocation by user and pending/scoped grant queries are
+implemented; administration lists are bounded to 100 and need pagination for larger
+institutions. The five-second transaction guard intentionally serialises team writes
+for correctness. Team contention, shared rate limiting, production WSGI and workload
+capacity remain unmeasured; see `identity-access-contract.md`.
