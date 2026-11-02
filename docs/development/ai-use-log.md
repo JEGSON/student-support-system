@@ -4,7 +4,7 @@
 
 Codex assisted with scenario analysis, proposed requirements, architecture,
 draw.io diagrams, development prompts and initial directory/file scaffolding.
-The application has not been implemented or tested.
+This describes the initial planning checkpoint; subsequent sections record implementation and tests.
 
 The complete institutional AI-use policy has not yet been supplied. Review it
 and keep this record accurate; this log does not establish policy compliance.
@@ -145,3 +145,19 @@ is now declared as a direct dependency. Advisory results/test counts and full
 limitations are in `../evidence/stage-08/README.md`. No independent security review,
 full WCAG conformance, capacity certification or production readiness is claimed.
 Full institutional AI policy remains unresolved. No external email or deployment.
+
+## 2 November 2026 — Stages 09–19
+
+Following the user's explicit remaining-stage instruction, Codex implemented staff
+triage/assignment, communication/lifecycle, local outbox delivery, controlled
+referrals, synthetic retention/disposal, accessibility refinements, proxy/rate
+controls and encrypted isolated recovery. Codex wrote and ran unit/integration/
+Chromium/WebKit/axe tests, a 15-minute synthetic workload, bounded local HTTP probes,
+dependency and secret checks, and fixed findings with regression checks. It updated
+the editable diagrams from the preserved model, reconciled registers/runbooks and
+prepared the local ZIP and handover. Generated synthetic accounts/passwords and
+backups remain private and excluded. No remote push, live deployment, real records
+or third-party messages occurred. See stage evidence for actual observed limits,
+including one workload GET503 and incomplete human accessibility/policy review.
+The separate AI-USE-STATEMENT.md records substantial assistance; no independent
+human review or missing institutional AI-policy compliance is asserted.

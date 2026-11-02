@@ -2,8 +2,8 @@
 
 The design baseline is in `../architecture/student-support-secure-design.html`.
 Stage 01 extracted the requirements into `register.csv` and mapped coverage in
-`../testing/traceability.csv`. The registers now include scoped implementation evidence through Stage 08.
-Later features and institutional production controls remain pending.
+`../testing/traceability.csv`. The registers now include scoped implementation evidence through Stages 09–19. Implemented synthetic features have integrated evidence;
+institutional production controls remain pending.
 
 Open institutional decisions include identity integration, access owners,
 privacy grounds, retention, safeguarding and hosting. Review the full rubric,
@@ -24,7 +24,7 @@ wording and institutional policy remain subject to OD-01/03 review.
 
 WF-01–11, ADR-01–09, T01–T12, V01–V16, relationship rules, limits, expiry periods,
 retention framework, performance/recovery targets and WCAG goal are proposed
-engineering baseline choices. No performance or compliance claim has been tested.
+engineering baseline choices. Performance/recovery were measured locally in Stage 16; compliance is not certified.
 Institutional policy is never inferred from these choices. The register preserves
 identifiers and marks provenance rather than silently promoting proposals.
 

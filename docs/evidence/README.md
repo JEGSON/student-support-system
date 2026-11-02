@@ -14,3 +14,10 @@ values stay in ignored runtime storage.
 
 See `../testing/verification-plan.csv` for actual partial/complete coverage. Blank
 fields mean no evidence. Use [template.md](template.md) for later checks.
+
+Current delivery adds [staff work](stage-09/README.md), [communication](stage-10/README.md),
+[worker](stage-11/README.md), [referrals](stage-12/README.md), [retention](stage-13/README.md),
+[accessibility](stage-14/README.md), [operations](stage-15/README.md), and
+[integrated evaluation](stage-16/README.md). Final packaging is documented in the
+[release checklist](../handbook/release-checklist.md); the external dist receipt
+identifies the actual archive commit and checksum.

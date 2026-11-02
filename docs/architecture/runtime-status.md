@@ -1,29 +1,31 @@
-# Target architecture versus implemented runtime
+# Implemented architecture and production target
 
-2 November 2026, Stages 07/08 implemented. The v1.0 HTML and draw.io remain the preserved
-proposed baseline, not an as-built or production claim. No change to trust boundaries
-or demonstration access rules is authorised by a layout preview.
+As-built v2, 2 November 2026. Stages 01–19 local synthetic delivery. The original
+secure-design HTML remains the requirements/proposal baseline; the editable eight-
+page draw.io model, PNGs and overview now identify implemented local controls and
+conditional production infrastructure. No public deployment occurred.
 
-| Decision | Implemented now | Still pending |
+| Area | Implemented | Remaining gate |
 | --- | --- | --- |
-| ADR-01 | Flask application factory; separate configuration/health/gallery modules | Staff work/communication/referrals (09 onward) |
-| ADR-02 | Jinja base/components, local CSS, synthetic development shells | Student, account and access pages reviewed at 390/768/1440 |
-| ADR-03 | Snapshot/majority transactions; version/revocation guards; append-only audit DB grants; atomic submission | Full lifecycle/outbox-feature coverage; current 16 validators/index sets verified |
-| ADR-04/05 | Authlib OIDC/S256; issuer/subject mapping; opaque hashed Mongo sessions and CSRF; explicit context | Production provider/MFA integration; operational hardening (15) |
-| ADR-06 | Generic transactional outbox and lease/retry/dead states; restricted worker DB identities | Email rendering/delivery/contact policy and operational alerts (11) |
-| ADR-07 | Loopback local runner; initial host/header/body/error controls | Gunicorn/HTTPS edge/proxy and operational verification (15) |
-| ADR-08/09 | Generated ignored local secrets; image digests and dependency lock; local database separation | Production encryption, backups, recovery, CI and institutional operation |
+| Application | Modular Flask/Jinja; routes → services → current policies → typed repositories | Wider role-load and large administration review |
+| Identity/access | OIDC/S256, issuer+subject mapping, opaque hashed sessions, CSRF, independent grants and revocation guards | University provider/MFA and access owners |
+| Case work | Own-case submission; metadata queues/expiring triage; eligible assignment; explicit start; messages/notes/corrections; question/reply; close/reopen | Institution-approved service wording |
+| Referrals | Assigned source proposal → source manager approval → minimal target review → one separate New case | Real sharing grounds |
+| Persistence | 18 validators/index sets; snapshot/majority transactions; version/account/team guards; atomic event/audit/outbox | Production replica topology and storage encryption |
+| Worker | Restricted identity; loopback reserved-contact SMTP; leases, bounded retry/dead/expiry and age alerts; at least once | Real contact provenance, mail provider and alert routing |
+| Lifecycle | Reassignment review; Closed archive; purpose-audited scoped archive read; holds; dual-approved synthetic disposal ledger/offline executor | Real retention/backup expiry and archived forensic review |
+| Operations | Gunicorn template; exact trusted single proxy; shared Mongo limits; safe headers/logs; encrypted bounded snapshots and quarantined restore | Actual HTTPS edge, KMS/offsite backups, on-call and HA |
 
-Local ports: Flask 5050, identity 8180→container 8080, MongoDB 27017, Mailpit
-8025/1025. None is a public endpoint. An origin URL is now configured locally; remote history
-has not been verified and no deployment is claimed.
+Collections: users, teams, memberships, cases, messages, internal_notes, case_events, referrals, audit_events, notification_outbox, sessions, auth_attempts, submission_keys, triage_claims, privileged_grants, service_principals, rate_limits, disposal_records. New disposal_records and rate_limits
+implement the authorised retention/abuse requirements. Quarantine is a separate
+operator DB; the web/worker cannot access it. No new narrative-sharing boundary.
 
-Current evidence: `../evidence/stage-07/README.md` and `../evidence/stage-08/README.md`.
-Student submission/tracking, current role/session/admin and atomic persistence
-checks are executable. Later case-work/lifecycle/operational coverage remains pending.
+All business mutations require current context/scope and signed CSRF; versioned
+forms reject stale updates. Notes use separate service/retrieval paths. Request
+identifiers and metadata-only denial audits assist review without logging bodies.
+See [workflow/permission inventory](implementation-inventory.md), [evidence](../evidence/stage-16/README.md)
+and [handover](../handbook/handover.md) for practical limits.
 
-Current data contracts and additions are in `persistence-contract.md`.
-`identity-access-contract.md` preserves the Stage 05/06 checkpoint;
-`transaction-audit-contract.md` and `student-journey-contract.md` define current
-behaviour. Student case endpoints now exist. Staff/communication endpoints remain
-absent. The preserved draw.io topology still applies; no trust boundary changed.
+The origin URL is configured; remote history/publication was not verified. Local
+Git commits supply development evidence. Earlier contracts are historical stage
+checkpoints; this document and the source describe the completed local runtime.

@@ -24,3 +24,9 @@ requirement based on one happy path. Preserve prior failures in evidence records
 
 `verification-plan.csv` lists V01–V16 and their expected methods. Statuses are updated only with observed, scoped stage evidence. Stage 01's documentation integrity check is not one of those runtime
 verifications. No placeholders under `tests/` count as executable tests.
+
+Current consolidated coverage is in stage-16 evidence. V11 remains partial for
+archived/disposed forensic review; V14 for human accessibility review; V15 for
+real backup cadence/custody/policy; V16 for production deployment/independent review.
+Other passed records refer to the specified local synthetic checks, not universal
+security or policy acceptance. Earlier failures remain described with their fixes.

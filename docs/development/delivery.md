@@ -3,7 +3,7 @@
 Stage 01 authorised on 2 November 2026. Reuse this checkout. The incoming scaffold
 was entirely untracked with no commits; preserve it in the first meaningful local
 commit. No applicable workspace AGENTS.md was found; the available
-`/Users/wealth/.codex/AGENTS.md` was empty. Existing `.venv` is ignored and untouched.
+`/Users/wealth/.codex/AGENTS.md` was empty. Existing `.venv` is ignored; later authorised stages refresh locked dependencies.
 
 Only the requested stage is authorised. Do not push, publish, deploy, contact third
 parties or handle real student information. Public documentation research is
@@ -76,3 +76,8 @@ dependencies before continuing. That audit is complete, with scoped evidence und
 No prior sequential instruction overrides this newer scope restriction. Remote
 push, production deployment, real student processing and third-party messages
 remain unauthorised.
+
+The later instruction explicitly authorised remaining Stages 09–19 sequentially.
+That local synthetic delivery is recorded in current evidence/handover; the initial
+stage-only rule above preserves its historical context. No remote push, production
+deployment, real student data or third-party contact was authorised or performed.
