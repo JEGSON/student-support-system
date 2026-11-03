@@ -199,3 +199,15 @@ sign-in guide linked from the homepage/student account and documented the local
 manager workflow. Existing role/team permissions and provisioning remain unchanged;
 no public staff-role registration or credential disclosure was added. Existing
 complete browser journeys now enter staff sign-in through the new homepage link.
+
+## 3 November 2026 — Real-service transition design
+
+The user requested real user/profile functionality and account deletion, and chose
+a single-university operating model with themselves as initial operator. Codex
+reviewed current identity/profile/worker/retention constraints and current primary
+ICO guidance; recorded a production transition plan distinguishing implemented
+features from proposed verification, staff provisioning, closure/erasure, deployment
+and operational work. No real user data was collected, existing records deleted,
+production gates relaxed, provider provisioned, external mail sent or deployment
+performed during this planning step. Account deletion remains proposed until the
+next implementation increment; no completed functionality is implied by this log.
