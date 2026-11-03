@@ -11,6 +11,15 @@ from app.services.policy import Policy
 from app.services.transactions import transaction
 
 ACTIONS = {
+    "verified_contact_changed",
+    "team_changed",
+    "service_bootstrapped",
+    "account_closed",
+    "privacy_review",
+    "privacy_reviewed",
+    "invitation_created",
+    "invitation_revoked",
+    "invitation_accepted",
     "account_created",
     "profile_read",
     "profile_updated",
@@ -44,8 +53,11 @@ ACTIONS = {
     "case_changed",
     "audit_reviewed",
 }
-TARGETS = {"user", "case", "privileged_grant"}
+TARGETS = {"user", "case", "privileged_grant", "team"}
 FIELDS = {
+    "verified_contact",
+    "category_scope",
+    "routing_categories",
     "display_name",
     "course_label",
     "legal_hold",

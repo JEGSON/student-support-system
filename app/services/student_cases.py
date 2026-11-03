@@ -47,9 +47,10 @@ def student_view(case, detail=False):
 
 
 class StudentCases:
-    def __init__(self, database, routing):
+    def __init__(self, database, routing, routing_source="environment"):
         self.db = database
         self.routing = routing
+        self.routing_source = routing_source
         self.cases = StudentCaseRepository(database)
 
     def authorise(self, actor, context, sid):
@@ -73,7 +74,16 @@ class StudentCases:
             self.authorise(actor, context, sid)
 
             def create():
-                team_id = self.routing.get(category)
+                intake = self.db.teams.find_one(
+                    {"active": True, "routing_categories": category}, {"_id": 1}, session=sid
+                )
+                team_id = (
+                    intake["_id"]
+                    if intake
+                    else (
+                        self.routing.get(category) if self.routing_source == "environment" else None
+                    )
+                )
                 if not team_id:
                     raise RoutingUnavailable("Support routing is unavailable.")
                 team = self.db.teams.find_one(

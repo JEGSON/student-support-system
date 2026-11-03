@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<mxfile host="app.diagrams.net" modified="2026-11-02T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+<mxfile host="app.diagrams.net" modified="2026-11-03T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
   <diagram id="page-1" name="01 System context">
     <mxGraphModel dx="1600" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1080" math="0" shadow="0">
       <root>
@@ -8,7 +8,7 @@
         <mxCell id="title" value="01 System context" style="text;html=0;align=left;verticalAlign=middle;fontSize=30;fontStyle=1;fontColor=#172b3a;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="30" width="1510" height="55" />
         </mxCell>
-        <mxCell id="subtitle" value="One fictional UK university • people, system responsibilities and external dependencies • local demo v2" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="One fictional UK university • people, system responsibilities and external dependencies • configurable release v3" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="95" width="1510" height="45" />
         </mxCell>
         <mxCell id="student" value="Student&#10;&#10;Submit support requests; track own cases; exchange messages." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#fff1db;strokeColor=#936626;strokeWidth=1.5;" vertex="1" parent="1">
@@ -23,10 +23,10 @@
         <mxCell id="system" value="Student Support System&#10;&#10;Secure case management across finance, academic, wellbeing, disability and accommodation teams." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e7f1fa;strokeColor=#30658a;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="580" y="350" width="420" height="250" />
         </mxCell>
-        <mxCell id="idp" value="Identity provider&#10;&#10;Local OIDC/PKCE and synthetic student signup. University identity/MFA integration remains unapproved." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#f1edf8;strokeColor=#715497;strokeWidth=1.5;" vertex="1" parent="1">
+        <mxCell id="idp" value="Identity provider&#10;&#10;OIDC/PKCE, verified invitations and fresh auth for closure. Live university identity/MFA still needs configuration." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#f1edf8;strokeColor=#715497;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="1200" y="180" width="330" height="150" />
         </mxCell>
-        <mxCell id="email" value="Email delivery&#10;&#10;Mailpit loopback capture only. Generic messages; real external delivery disabled." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#f1edf8;strokeColor=#715497;strokeWidth=1.5;" vertex="1" parent="1">
+        <mxCell id="email" value="Email delivery&#10;&#10;Local capture tested; opt-in authenticated TLS SMTP adapter prepared. Real delivery needs approved configuration." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#f1edf8;strokeColor=#715497;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="1200" y="420" width="330" height="150" />
         </mxCell>
         <mxCell id="owners" value="Institutional service owners&#10;&#10;Supply privacy, retention, safeguarding and operational policies." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#fff1db;strokeColor=#936626;strokeWidth=1.5;" vertex="1" parent="1">
@@ -73,7 +73,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="footer" value="COM7033 | Local implementation v2.0 / production target | 2 November 2026 | 01 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
+        <mxCell id="footer" value="COM7033 | Configurable service v3 / production target | 3 November 2026 | 01 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="1045" width="1500" height="25" />
         </mxCell>
       </root>
@@ -87,7 +87,7 @@
         <mxCell id="title" value="02 Containers and trust boundaries" style="text;html=0;align=left;verticalAlign=middle;fontSize=30;fontStyle=1;fontColor=#172b3a;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="30" width="1510" height="55" />
         </mxCell>
-        <mxCell id="subtitle" value="Runtime responsibilities • arrows show principal data-flow direction, not every network exchange • local demo v2" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="Runtime responsibilities • arrows show principal data-flow direction, not every network exchange • configurable release v3" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="95" width="1510" height="45" />
         </mxCell>
         <mxCell id="private" value="PRIVATE APPLICATION NETWORK" style="rounded=1;html=0;verticalAlign=top;align=left;spacingTop=12;spacingLeft=14;fontSize=14;fontStyle=1;fillColor=#f5f7fa;strokeColor=#9aaab7;dashed=1;" vertex="1" parent="1">
@@ -180,7 +180,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="footer" value="COM7033 | Local implementation v2.0 / production target | 2 November 2026 | 02 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
+        <mxCell id="footer" value="COM7033 | Configurable service v3 / production target | 3 November 2026 | 02 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="1045" width="1500" height="25" />
         </mxCell>
       </root>
@@ -194,7 +194,7 @@
         <mxCell id="title" value="03 Application components" style="text;html=0;align=left;verticalAlign=middle;fontSize=30;fontStyle=1;fontColor=#172b3a;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="30" width="1510" height="55" />
         </mxCell>
-        <mxCell id="subtitle" value="Logical layers inside the Flask deployment • policy is enforced in services for every entry point • local demo v2" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="Logical layers inside the Flask deployment • policy is enforced in services for every entry point • configurable release v3" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="95" width="1510" height="45" />
         </mxCell>
         <mxCell id="web" value="WEB AND PRESENTATION" style="rounded=1;html=0;verticalAlign=top;align=left;spacingTop=12;spacingLeft=14;fontSize=14;fontStyle=1;fillColor=#f5f7fa;strokeColor=#9aaab7;dashed=1;" vertex="1" parent="1">
@@ -280,7 +280,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="footer" value="COM7033 | Local implementation v2.0 / production target | 2 November 2026 | 03 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
+        <mxCell id="footer" value="COM7033 | Configurable service v3 / production target | 3 November 2026 | 03 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="1045" width="1500" height="25" />
         </mxCell>
       </root>
@@ -294,7 +294,7 @@
         <mxCell id="title" value="04 Deployment and delivery" style="text;html=0;align=left;verticalAlign=middle;fontSize=30;fontStyle=1;fontColor=#172b3a;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="30" width="1510" height="55" />
         </mxCell>
-        <mxCell id="subtitle" value="Implemented local verification; production topology remains a reviewed template, not a deployed service • local demo v2" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="Implemented local verification; production topology remains a reviewed template, not a deployed service • configurable release v3" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="95" width="1510" height="45" />
         </mxCell>
         <mxCell id="dev" value="DEVELOPMENT" style="rounded=1;html=0;verticalAlign=top;align=left;spacingTop=12;spacingLeft=14;fontSize=14;fontStyle=1;fillColor=#f5f7fa;strokeColor=#9aaab7;dashed=1;" vertex="1" parent="1">
@@ -364,7 +364,7 @@
         <mxCell id="edge-6" value="Backup / metrics" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#526574;strokeWidth=1.5;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="cluster" target="ops">
           <mxGeometry as="geometry" relative="1" />
         </mxCell>
-        <mxCell id="footer" value="COM7033 | Local implementation v2.0 / production target | 2 November 2026 | 04 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
+        <mxCell id="footer" value="COM7033 | Configurable service v3 / production target | 3 November 2026 | 04 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="1045" width="1500" height="25" />
         </mxCell>
       </root>
@@ -378,13 +378,13 @@
         <mxCell id="title" value="05 Business data relationships" style="text;html=0;align=left;verticalAlign=middle;fontSize=30;fontStyle=1;fontColor=#172b3a;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="30" width="1510" height="55" />
         </mxCell>
-        <mxCell id="subtitle" value="Logical MongoDB model • references are enforced by services, not relational foreign keys • local demo v2" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="Logical MongoDB model • references are enforced by services, not relational foreign keys • configurable release v3" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="95" width="1510" height="45" />
         </mxCell>
-        <mxCell id="user" value="USERS&#10;&#10;issuer + subject; account status&#10;Preferred name/course; profile_version&#10;Account guard; controlled staff grants" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
+        <mxCell id="user" value="USERS&#10;&#10;issuer + subject; active/closed status&#10;Name/course; profile_version&#10;Closure fingerprint; controlled grants" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="190" width="330" height="155" />
         </mxCell>
-        <mxCell id="team" value="TEAMS&#10;&#10;id; name [unique]&#10;category_scope; active" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
+        <mxCell id="team" value="TEAMS&#10;&#10;id; name [unique]&#10;category_scope; active&#10;unique category intake routes" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="635" y="190" width="330" height="155" />
         </mxCell>
         <mxCell id="member" value="MEMBERSHIPS&#10;&#10;user_id + team_id + role [unique]&#10;active; granted_by; revoked_at" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
@@ -461,7 +461,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="footer" value="COM7033 | Local implementation v2.0 / production target | 2 November 2026 | 05 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
+        <mxCell id="footer" value="COM7033 | Configurable service v3 / production target | 3 November 2026 | 05 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="1045" width="1500" height="25" />
         </mxCell>
       </root>
@@ -475,13 +475,13 @@
         <mxCell id="title" value="06 Security and operational data" style="text;html=0;align=left;verticalAlign=middle;fontSize=30;fontStyle=1;fontColor=#172b3a;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="30" width="1510" height="55" />
         </mxCell>
-        <mxCell id="subtitle" value="Accountability, sessions and reliable notifications • data access is separated by purpose • local demo v2" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="Accountability, sessions and reliable notifications • data access is separated by purpose • configurable release v3" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="95" width="1510" height="45" />
         </mxCell>
         <mxCell id="user" value="USERS&#10;&#10;Internal identity and current account status. Memberships determine current staff scope." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="200" width="330" height="160" />
         </mxCell>
-        <mxCell id="session" value="SESSIONS / AUTH ATTEMPTS&#10;&#10;Hashed opaque token; server state&#10;Idle/absolute expiry; revocation&#10;10-minute OIDC nonce/PKCE state" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
+        <mxCell id="session" value="SESSIONS / AUTH ATTEMPTS&#10;&#10;Hashed opaque token; nonce/PKCE state&#10;Idle/absolute expiry; revocation&#10;Fresh auth_time for account deletion" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="635" y="200" width="330" height="160" />
         </mxCell>
         <mxCell id="browser" value="BROWSER / SHARED LIMITS&#10;&#10;Opaque HttpOnly cookie + CSRF&#10;Mongo rate counters / TTL cleanup&#10;Secure cookie required in production" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#fff1db;strokeColor=#936626;strokeWidth=1.5;" vertex="1" parent="1">
@@ -496,16 +496,16 @@
         <mxCell id="outbox" value="NOTIFICATION OUTBOX&#10;&#10;event key [unique per recipient/channel]&#10;state; lease; retry count&#10;Generic template only" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="1210" y="480" width="330" height="170" />
         </mxCell>
-        <mxCell id="review" value="SCOPED AUDIT REVIEW&#10;&#10;Approved case/team scope and purpose. Separate read credential; append-only evidence." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#fff1db;strokeColor=#936626;strokeWidth=1.5;" vertex="1" parent="1">
+        <mxCell id="review" value="ENROLMENT / PRIVACY REVIEW&#10;&#10;Verified one-use invitations; closure records and policy reviews. Separate scoped audit reader." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#fff1db;strokeColor=#936626;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="635" y="760" width="330" height="135" />
         </mxCell>
         <mxCell id="worker" value="RESTRICTED WORKER&#10;&#10;Lease jobs; resolve contact; send; mark outcome. No narrative read." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e7f1fa;strokeColor=#30658a;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="1210" y="760" width="330" height="135" />
         </mxCell>
-        <mxCell id="backup" value="RECOVERY / DISPOSAL&#10;&#10;Encrypted snapshot; restore quarantine&#10;Durable disposal ledger replay&#10;Invalidate sessions; suppress jobs" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
+        <mxCell id="backup" value="RECOVERY / DISPOSAL&#10;&#10;Encrypted snapshot; restore quarantine&#10;Case + closure ledger replay&#10;Clear sessions, invitations and stale mail" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="760" width="330" height="135" />
         </mxCell>
-        <mxCell id="note" value="18 collection contracts&#10;&#10;Additional guard data: memberships, privileged grants, triage claims, service principals, disposal ledger and rate limits. Synthetic one-day retention only; no real duration approved." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#fff9e8;strokeColor=#a3852d;strokeWidth=1.5;" vertex="1" parent="1">
+        <mxCell id="note" value="20 collection contracts&#10;&#10;Additional stores: enrolment invitations and account closures. Team routes are unique; closure fingerprints prevent re-enrolment. Retention periods require configured policy; backup/closure ledgers replay in quarantine." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#fff9e8;strokeColor=#a3852d;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="950" width="1500" height="85" />
         </mxCell>
         <mxCell id="edge-0" value="1 user → 0..* sessions" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#526574;strokeWidth=1.5;fontSize=14;labelBackgroundColor=#ffffff;dashed=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="user" target="session">
@@ -543,7 +543,7 @@
         <mxCell id="edge-7" value="Recovery coverage" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#526574;strokeWidth=1.5;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="case" target="backup">
           <mxGeometry as="geometry" relative="1" />
         </mxCell>
-        <mxCell id="footer" value="COM7033 | Local implementation v2.0 / production target | 2 November 2026 | 06 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
+        <mxCell id="footer" value="COM7033 | Configurable service v3 / production target | 3 November 2026 | 06 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="1045" width="1500" height="25" />
         </mxCell>
       </root>
@@ -557,7 +557,7 @@
         <mxCell id="title" value="07 Case workflow and controlled referral" style="text;html=0;align=left;verticalAlign=middle;fontSize=30;fontStyle=1;fontColor=#172b3a;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="30" width="1510" height="55" />
         </mxCell>
-        <mxCell id="subtitle" value="Business transitions • separate role gates and referral lifecycle from case status • local demo v2" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="Business transitions • separate role gates and referral lifecycle from case status • configurable release v3" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="95" width="1510" height="45" />
         </mxCell>
         <mxCell id="submit" value="Student submits&#10;&#10;Owner and timestamps set by server. Category maps to accountable team." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#fff1db;strokeColor=#936626;strokeWidth=1.5;" vertex="1" parent="1">
@@ -578,7 +578,7 @@
         <mxCell id="archive" value="ARCHIVED FLAG&#10;&#10;Separate lifecycle attribute. Retention review and legal-hold checks." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="430" y="480" width="280" height="145" />
         </mxCell>
-        <mxCell id="dispose" value="SYNTHETIC DISPOSAL&#10;&#10;One-day test policy only; hold checks; separate approval; offline executor and durable ledger." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
+        <mxCell id="dispose" value="POLICY-BASED DISPOSAL&#10;&#10;Configured category retention, hold checks, independent approval and offline executor. One-day fallback is local-only." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e8f3ec;strokeColor=#37704b;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="480" width="280" height="145" />
         </mxCell>
         <mxCell id="proposal" value="1 Propose referral&#10;&#10;Assigned officer provides purpose and selected summary; source manager approves." style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e7f1fa;strokeColor=#30658a;strokeWidth=1.5;" vertex="1" parent="1">
@@ -625,7 +625,7 @@
         <mxCell id="edge-8" value="Accept atomically" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#526574;strokeWidth=1.5;fontSize=14;labelBackgroundColor=#ffffff;dashed=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="decision" target="targetcase">
           <mxGeometry as="geometry" relative="1" />
         </mxCell>
-        <mxCell id="footer" value="COM7033 | Local implementation v2.0 / production target | 2 November 2026 | 07 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
+        <mxCell id="footer" value="COM7033 | Configurable service v3 / production target | 3 November 2026 | 07 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="1045" width="1500" height="25" />
         </mxCell>
       </root>
@@ -639,7 +639,7 @@
         <mxCell id="title" value="08 Case submission sequence" style="text;html=0;align=left;verticalAlign=middle;fontSize=30;fontStyle=1;fontColor=#172b3a;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="30" width="1510" height="55" />
         </mxCell>
-        <mxCell id="subtitle" value="Successful path plus failure guarantees • database transaction excludes external email calls • local demo v2" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="Successful path plus failure guarantees • database transaction excludes external email calls • configurable release v3" style="text;html=0;align=left;verticalAlign=middle;fontSize=17;fontColor=#526574;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="95" width="1510" height="45" />
         </mxCell>
         <mxCell id="student" value="Student browser&#10;&#10;" style="rounded=1;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=15;fontSize=16;fillColor=#e7f1fa;strokeColor=#30658a;strokeWidth=1.5;" vertex="1" parent="1">
@@ -738,7 +738,7 @@
             <mxPoint as="targetPoint" x="1385.0" y="900" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="footer" value="COM7033 | Local implementation v2.0 / production target | 2 November 2026 | 08 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
+        <mxCell id="footer" value="COM7033 | Configurable service v3 / production target | 3 November 2026 | 08 / 08" style="text;html=0;align=left;fontSize=12;fontColor=#526574;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="50" y="1045" width="1500" height="25" />
         </mxCell>
       </root>

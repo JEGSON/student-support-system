@@ -479,7 +479,16 @@ p.box(
     "id; issuer + subject [unique]\nstudent_reference; status; optional course",
     "data",
 )
-p.box("team", 635, 190, 330, 155, "TEAMS", "id; name [unique]\ncategory_scope; active", "data")
+p.box(
+    "team",
+    635,
+    190,
+    330,
+    155,
+    "TEAMS",
+    "id; name [unique]\ncategory_scope; active\nunique category intake routes",
+    "data",
+)
 p.box(
     "member",
     1210,
@@ -864,13 +873,13 @@ revise(
     1,
     "idp",
     "Identity provider",
-    "Local OIDC/PKCE and synthetic student signup. University identity/MFA integration remains unapproved.",
+    "OIDC/PKCE, verified invitations and fresh auth for closure. Live university identity/MFA still needs configuration.",
 )
 revise(
     1,
     "email",
     "Email delivery",
-    "Mailpit loopback capture only. Generic messages; real external delivery disabled.",
+    "Local capture tested; opt-in authenticated TLS SMTP adapter prepared. Real delivery needs approved configuration.",
 )
 revise(
     1,
@@ -924,7 +933,7 @@ revise(
     5,
     "user",
     "USERS",
-    "issuer + subject; account status\nPreferred name/course; profile_version\nAccount guard; controlled staff grants",
+    "issuer + subject; active/closed status\nName/course; profile_version\nClosure fingerprint; controlled grants",
 )
 revise(
     5,
@@ -942,7 +951,7 @@ revise(
     6,
     "session",
     "SESSIONS / AUTH ATTEMPTS",
-    "Hashed opaque token; server state\nIdle/absolute expiry; revocation\n10-minute OIDC nonce/PKCE state",
+    "Hashed opaque token; nonce/PKCE state\nIdle/absolute expiry; revocation\nFresh auth_time for account deletion",
 )
 revise(
     6,
@@ -953,32 +962,32 @@ revise(
 revise(
     6,
     "review",
-    "SCOPED AUDIT REVIEW",
-    "Approved case/team scope and purpose. Separate read credential; append-only evidence.",
+    "ENROLMENT / PRIVACY REVIEW",
+    "Verified one-use invitations; closure records and policy reviews. Separate scoped audit reader.",
 )
 revise(
     6,
     "backup",
     "RECOVERY / DISPOSAL",
-    "Encrypted snapshot; restore quarantine\nDurable disposal ledger replay\nInvalidate sessions; suppress jobs",
+    "Encrypted snapshot; restore quarantine\nCase + closure ledger replay\nClear sessions, invitations and stale mail",
 )
 revise(
     6,
     "note",
-    "18 collection contracts",
-    "Additional guard data: memberships, privileged grants, triage claims, service principals, disposal ledger and rate limits. Synthetic one-day retention only; no real duration approved.",
+    "20 collection contracts",
+    "Additional stores: enrolment invitations and account closures. Team routes are unique; closure fingerprints prevent re-enrolment. Retention periods require configured policy; backup/closure ledgers replay in quarantine.",
 )
 revise(
     7,
     "dispose",
-    "SYNTHETIC DISPOSAL",
-    "One-day test policy only; hold checks; separate approval; offline executor and durable ledger.",
+    "POLICY-BASED DISPOSAL",
+    "Configured category retention, hold checks, independent approval and offline executor. One-day fallback is local-only.",
 )
 pages[
     3
 ].subtitle = "Implemented local verification; production topology remains a reviewed template, not a deployed service"
 for page in pages:
-    page.subtitle += " • local demo v2"
+    page.subtitle += " • configurable release v3"
 
 
 def anchor(n, side):
@@ -993,7 +1002,7 @@ def anchor(n, side):
 mx = ET.Element(
     "mxfile",
     host="app.diagrams.net",
-    modified="2026-11-02T00:00:00.000Z",
+    modified="2026-11-03T00:00:00.000Z",
     agent="Codex",
     version="24.7.17",
     type="device",
@@ -1127,7 +1136,7 @@ for idx, p in enumerate(pages, 1):
                 )
     vertex(
         "footer",
-        f"COM7033 | Local implementation v2.0 / production target | 2 November 2026 | {idx:02d} / {len(pages):02d}",
+        f"COM7033 | Configurable service v3 / production target | 3 November 2026 | {idx:02d} / {len(pages):02d}",
         50,
         1045,
         1500,
@@ -1271,7 +1280,7 @@ for idx, p in enumerate(pages, 1):
             yy += fs + 5
     d.text(
         (50, 1045),
-        f"COM7033 | Local implementation v2.0 / production target | 2 November 2026 | {idx:02d} / {len(pages):02d}",
+        f"COM7033 | Configurable service v3 / production target | 3 November 2026 | {idx:02d} / {len(pages):02d}",
         font=font(12),
         fill="#526574",
     )

@@ -70,7 +70,9 @@ SCHEMAS = {
         profile_updated_at=DATE,
         verified_contact=text(254),
         course_label=text(160),
-        account_status=enum(["active", "disabled"]),
+        account_status=enum(["active", "disabled", "closed"]),
+        identity_fingerprint=HASH,
+        closed_at=DATE,
         global_roles=array(enum(GLOBAL_ROLES)),
         authorization_revision=INTEGER,
         guard_version=INTEGER,
@@ -80,6 +82,7 @@ SCHEMAS = {
         ["name", "category_scope", "active", "authorization_revision"],
         name=text(100),
         category_scope=array(enum(CATEGORIES)),
+        routing_categories={**array(enum(CATEGORIES)), "minItems": 1},
         active=BOOL,
         authorization_revision=INTEGER,
     ),
@@ -332,18 +335,43 @@ SCHEMAS = {
     "service_principals": schema(
         ["name", "kind", "active", "authorization_revision"],
         name=text(100),
-        kind=enum(["notification_worker"]),
+        kind=enum(["notification_worker", "bootstrap_guard"]),
         active=BOOL,
         authorization_revision=INTEGER,
     ),
 }
+SCHEMAS["account_closures"] = schema(
+    ["user_id", "identity_fingerprint", "state", "requested_at"],
+    user_id=ID,
+    identity_fingerprint=HASH,
+    state=enum(["review_required", "profile_erased", "retained"]),
+    requested_at=DATE,
+    retention_reason=text(1000),
+    policy_reference=text(200),
+    reviewed_by=ID,
+    review_due_at=DATE,
+)
+SCHEMAS["enrolment_invitations"] = schema(
+    ["token_hash", "email", "issuer", "role", "created_by", "created_at", "expires_at", "state"],
+    token_hash=HASH,
+    email=text(254),
+    issuer=text(500),
+    role=enum(["student", "officer", "triage"]),
+    team_id=ID,
+    created_by=ID,
+    created_at=DATE,
+    expires_at=DATE,
+    state=enum(["pending", "accepted", "revoked"]),
+    accepted_by=ID,
+    accepted_at=DATE,
+)
 SCHEMAS["rate_limits"] = schema(["count", "expires_at"], count=INTEGER, expires_at=DATE)
 SCHEMAS["disposal_records"] = schema(
     ["case_id", "requested_by", "policy", "reason", "state", "created_at"],
     case_id=ID,
     requested_by=ID,
     approved_by=ID,
-    policy=enum(["synthetic-demo-1day"]),
+    policy=text(200),
     reason=text(1000),
     state=enum(["pending", "approved", "completed"]),
     created_at=DATE,
@@ -432,14 +460,56 @@ INDEXES["cases"].append(
 )
 
 
-def install_schema(database):
+INDEXES["teams"].append(([("routing_categories", 1)], {"unique": True, "sparse": True}))
+INDEXES["account_closures"] = [
+    ([("user_id", 1)], {"unique": True}),
+    ([("state", 1), ("requested_at", -1)], {}),
+]
+INDEXES["enrolment_invitations"] = [
+    ([("token_hash", 1)], {"unique": True}),
+    ([("created_by", 1), ("created_at", -1)], {}),
+    ([("expires_at", 1)], {"expireAfterSeconds": 0}),
+]
+INDEXES["users"].append(
+    (
+        [("identity_fingerprint", 1)],
+        {"unique": True, "partialFilterExpression": {"identity_fingerprint": {"$type": "string"}}},
+    )
+)
+
+
+# Bound account-closure and operator-list lookups as user/history volume grows.
+INDEXES["account_closures"].append(([("requested_at", -1), ("_id", -1)], {}))
+INDEXES["enrolment_invitations"].append(([("created_at", -1), ("_id", -1)], {}))
+INDEXES["teams"].append(([("name", 1), ("_id", 1)], {}))
+for _collection, _field in [
+    ("messages", "author_id"),
+    ("internal_notes", "author_id"),
+    ("case_events", "actor_id"),
+    ("referrals", "requested_by"),
+    ("sessions", "user_id"),
+]:
+    INDEXES[_collection].append(([(_field, 1)], {}))
+INDEXES["auth_attempts"].append(([("data.reauth_user", 1)], {"sparse": True}))
+INDEXES["notification_outbox"].extend(
+    [
+        ([("recipient_user_id", 1), ("state", 1)], {}),
+        ([("case_id", 1)], {}),
+    ]
+)
+
+
+def install_schema(database, *, allow_production=False):
     """Explicit privileged setup, never called from public application startup."""
     if database.name not in {
         "student_support_dev",
         "student_support_test",
         "student_support_restore_test",
     }:
-        raise ValueError("Schema setup is limited to isolated local databases.")
+        if not allow_production or database.name in {"admin", "local", "config"}:
+            raise ValueError(
+                "Schema setup is limited to isolated local databases unless production setup is explicit."
+            )
     existing = set(database.list_collection_names())
     for name, validator in SCHEMAS.items():
         if name in existing:

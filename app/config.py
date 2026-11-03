@@ -67,9 +67,15 @@ def load_config(overrides=None):
     expected = {"development": "student_support_dev", "testing": "student_support_test"}
     if local and database != expected[env]:
         raise ConfigurationError("Development and test databases must be isolated.")
-    if not re.fullmatch(r"[a-z][a-z0-9_]{2,62}", database):
+    if not re.fullmatch(r"[a-z][a-z0-9_]{2,62}", database) or database in {
+        "admin",
+        "local",
+        "config",
+    }:
         raise ConfigurationError("Invalid database name.")
-    if not local and database in expected.values():
+    if not local and (
+        database in expected.values() or database.startswith("student_support_restore_")
+    ):
         raise ConfigurationError("Production cannot use a development/test database.")
     # Deeper URI validation is performed by PyMongo without printing the URI.
     if not source["MONGODB_URI"].startswith(("mongodb://", "mongodb+srv://")):
@@ -172,13 +178,131 @@ def load_config(overrides=None):
         not local or source["OIDC_ISSUER"] != "http://127.0.0.1:8180/realms/student-support"
     ):
         raise ConfigurationError("Self-registration is restricted to the local synthetic provider.")
+    enrolment = source.get(
+        "ENROLMENT_MODE", "local_demo" if registration == "1" else "preprovisioned"
+    )
+    if enrolment not in {"local_demo", "preprovisioned", "invitation"} or (
+        not local and enrolment == "local_demo"
+    ):
+        raise ConfigurationError("Choose a valid university enrolment mode.")
+    identity_key = source.get("IDENTITY_FINGERPRINT_KEY", secret if local else "")
+    if not isinstance(identity_key, str) or len(identity_key) < 48 or "REPLACE_" in identity_key:
+        raise ConfigurationError("A stable IDENTITY_FINGERPRINT_KEY must be configured separately.")
+    try:
+        previous_keys = json.loads(source.get("IDENTITY_FINGERPRINT_PREVIOUS_KEYS", "[]"))
+        if (
+            not isinstance(previous_keys, list)
+            or len(previous_keys) > 3
+            or any(not isinstance(k, str) or len(k) < 48 for k in previous_keys)
+            or len(set(previous_keys)) != len(previous_keys)
+        ):
+            raise ValueError
+    except (ValueError, TypeError):
+        raise ConfigurationError(
+            "Configure at most three distinct previous identity-protection keys."
+        ) from None
+    try:
+        retention_days = json.loads(
+            source.get("RETENTION_DAYS_JSON", "{}"), object_pairs_hook=unique_pairs
+        )
+        categories = {"academic", "finance", "wellbeing", "disability", "accommodation"}
+        if (
+            not isinstance(retention_days, dict)
+            or set(retention_days) - categories
+            or any(type(v) is not int or not 1 <= v <= 36500 for v in retention_days.values())
+        ):
+            raise ValueError
+    except (ValueError, TypeError):
+        raise ConfigurationError(
+            "RETENTION_DAYS_JSON must contain approved category/day values."
+        ) from None
+    retention_reference = source.get("RETENTION_POLICY_REFERENCE", "")
+    if (
+        (retention_days and not retention_reference)
+        or len(retention_reference) > 200
+        or (
+            not local
+            and (
+                set(retention_days) != categories
+                or not retention_reference
+                or retention_reference == "synthetic-demo-1day"
+            )
+        )
+    ):
+        raise ConfigurationError(
+            "Production requires an approved retention-policy reference and all five category durations."
+        )
+    routing_source = source.get("CASE_ROUTING_SOURCE", "environment" if local else "database")
+    if routing_source not in {"environment", "database"} or (
+        not local and routing_source != "database"
+    ):
+        raise ConfigurationError(
+            "Production intake routing must use administrator-managed database routes."
+        )
+    try:
+        privacy_review_days = int(source.get("ACCOUNT_PRIVACY_REVIEW_DAYS", "30" if local else "0"))
+    except (ValueError, TypeError):
+        raise ConfigurationError(
+            "Configure ACCOUNT_PRIVACY_REVIEW_DAYS from the approved review procedure."
+        ) from None
+    if not 1 <= privacy_review_days <= 366:
+        raise ConfigurationError(
+            "Account privacy requests require a review interval from 1 to 366 days."
+        )
+    presentation = {}
+    defaults = {
+        "INSTITUTION_NAME": "University Student Support",
+        "PRIVACY_CONTACT": "Contact your university's privacy office.",
+        "PRIVACY_NOTICE": "Privacy information must be provided by the university before launch.",
+        "SERVICE_HOURS_TEXT": "Service hours must be confirmed by the university.",
+        "URGENT_HELP_TEXT": "Urgent-help arrangements must be confirmed by the university.",
+    }
+    for name, default in defaults.items():
+        value = source.get(name, default if local else "")
+        if (
+            not isinstance(value, str)
+            or not value.strip()
+            or len(value) > 12000
+            or "REPLACE_" in value
+        ):
+            raise ConfigurationError(f"{name} must contain university-approved information.")
+        presentation[name] = value.strip()
+    if not local and source.get("SERVICE_POLICY_APPROVED") != "1":
+        raise ConfigurationError(
+            "Production requires the operator's SERVICE_POLICY_APPROVED acknowledgement."
+        )
+    account_url = source.get("OIDC_ACCOUNT_URL", "")
+    if account_url:
+        parsed = service_url(account_url, "OIDC_ACCOUNT_URL")
+        issuer_origin = service_url(source["OIDC_ISSUER"], "OIDC_ISSUER")
+        if (
+            (parsed.scheme, parsed.netloc) != (issuer_origin.scheme, issuer_origin.netloc)
+            or parsed.username
+            or parsed.query
+            or parsed.fragment
+        ):
+            raise ConfigurationError(
+                "OIDC_ACCOUNT_URL must be an approved same-provider account page."
+            )
     return {
+        **presentation,
+        "ACCOUNT_PRIVACY_REVIEW_DAYS": privacy_review_days,
+        "ENROLMENT_MODE": enrolment,
+        "DEMO_MODE": enrolment == "local_demo",
+        "REGISTRATION_AVAILABLE": enrolment in {"local_demo", "invitation"},
+        "IDENTITY_FINGERPRINT_KEY": identity_key,
+        "IDENTITY_FINGERPRINT_PREVIOUS_KEYS": previous_keys,
+        "RETENTION_DAYS": retention_days,
+        "RETENTION_POLICY_REFERENCE": retention_reference,
+        "SERVICE_POLICY_APPROVED": source.get("SERVICE_POLICY_APPROVED") == "1",
+        "OIDC_ACCOUNT_URL": account_url,
         "SELF_REGISTRATION_ENABLED": registration == "1",
         "TRUST_PROXY": trust_proxy == "1",
         "PROXY_TRUSTED_IP": trusted_ip,
         "RATE_LIMIT_ENABLED": enabled == "1",
         **rates,
         "CASE_ROUTING": routing,
+        "CASE_ROUTING_SOURCE": routing_source,
         "OIDC_TOKEN_AUTH_METHOD": method,
         "OIDC_CLIENT_SECRET": source.get("OIDC_CLIENT_SECRET"),
         "OIDC_REQUIRED_ACR": source.get("OIDC_REQUIRED_ACR"),

@@ -21,6 +21,13 @@ class Outbox:
     def enqueue(self, sid, event_key, recipient, case_id, template):
         if template not in TEMPLATES or not isinstance(event_key, str) or len(event_key) > 160:
             raise ValueError("Invalid notification metadata.")
+        # Serialize notification intent against account closure/contact revocation.
+        if not self.db.users.update_one(
+            {"_id": identifier(recipient), "account_status": "active"},
+            {"$inc": {"guard_version": 1}},
+            session=sid,
+        ).matched_count:
+            return
         now = utc_now()
         self.db.notification_outbox.insert_one(
             {

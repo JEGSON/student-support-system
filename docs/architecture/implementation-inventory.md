@@ -1,6 +1,6 @@
 # Endpoint, permissions and workflow inventory
 
-As-built local v2. All POST requests require CSRF; services validate current actor/context,
+Configurable service v3. All POST requests require CSRF; services validate current actor/context,
 scope and input independently. GET/HEAD do not change business state (session/read-audit
 metadata may change). Health and authentication routes have their specific public rules.
 
@@ -10,6 +10,15 @@ metadata may change). Health and authentication routes have their specific publi
 | GET | `/_dev/components` | Development only; synthetic component shells. |
 | GET | `/_dev/shell/<context>` | Development only; synthetic component shells. |
 | GET, POST | `/access` | Admin metadata/actions or independent approver; no narrative access; service enforces each operation. |
+| GET, POST | `/access/teams` | Current administrator only; unique intake routes, version/history guards and configuration audit. |
+| GET, POST | `/access/invitations` | Current administrator; one-use 24h verified-identity invitations for initial ordinary roles; code shown once. |
+| GET, POST | `/access/privacy` | Current administrator; closure metadata and policy/review decisions, no blanket case-body access. |
+| GET, POST | `/join` | Invitation-code handoff only; no role/profile creation before verified OIDC callback. |
+| GET | `/join/continue`, `/join/sign-in` | Server-stored invitation hash; normal OIDC navigation preserves CSP. |
+| GET | `/account/reauthenticate` | Active principal; same-person fresh OIDC login with auth_time proof for closure. |
+| GET, POST | `/account/delete` | Current user only; CSRF, expected version, DELETE confirmation and five-minute reauthentication. Staff must hand over responsibilities first. |
+| GET | `/account/closed` | Timed anonymous session receipt; generic closure status only, no lookup by public reference. |
+| GET | `/privacy` | Operator-supplied public privacy/service information. |
 | GET | `/account` | Authenticated current principal; available explicit contexts. |
 | POST | `/account/context` | Authenticated; select only currently permitted context. |
 | GET | `/auth/callback` | Validated state/nonce/issuer/audience/ACR, mapped active principal. |
@@ -59,7 +68,7 @@ Real durations are unconfigured. Audit and minimal completed-disposal ledger rem
 
 ## Data and trust decisions
 
-The 18 collection contracts and indexes live in app/repositories/schema.py. UUID string identifiers,
+The 20 collection contracts and indexes live in app/repositories/schema.py. UUID string identifiers,
 UTC timestamps and safe typed filters are required. Relationship integrity is service-enforced.
 Version/account/team writes detect concurrent policy changes within transactions. Worker does not read
 cases/messages/notes; restore credentials only access quarantine. Audit reads require a separate scoped

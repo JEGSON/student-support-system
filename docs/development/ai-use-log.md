@@ -211,3 +211,17 @@ and operational work. No real user data was collected, existing records deleted,
 production gates relaxed, provider provisioned, external mail sent or deployment
 performed during this planning step. Account deletion remains proposed until the
 next implementation increment; no completed functionality is implied by this log.
+
+## 3 November 2026 — Configurable university-service implementation
+
+The user authorised the release plan and selected configuration-first because no
+production services/domain were available. Codex implemented account closure/profile
+erasure with OIDC fresh-auth proof and retained-record review, closure replay after
+restore, verified invitation enrolment, team/routing administration, configured
+retention, TLS SMTP and operator-only production setup/recovery. Added focused
+negative/concurrency/rollback and actual Keycloak browser checks. Production templates
+contain placeholders only; no paid resources, live deployment, real provider contacts
+or external SMTP were used. Existing local data/credentials were preserved.
+The operator guide explicitly records the remaining complete-erasure/fingerprint
+expiry, invitation-email, bounce handling, external services and policy/human-review
+gaps. Local test isolation issues were fixed rather than disabling reset guards.

@@ -1,5 +1,12 @@
 # Student Support Case Management System
 
+The configurable university-service release adds profile deletion/account closure,
+verified invitations, administrator-managed teams/intake routing and opt-in production
+SMTP/setup/recovery tools. Start with [the real-service operator guide](docs/handbook/real-service-setup.md).
+Real hosting, identity/email services and university policy inputs are still required
+before public operation; no real records or external messages were used for verification.
+
+
 Python/Flask/MongoDB university support demonstration. Stages 01–19 are delivered
 for local synthetic testing: student requests, scoped staff work, conversation and
 internal notes, lifecycle, referrals, generic captured notifications, access controls,

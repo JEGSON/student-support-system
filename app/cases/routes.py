@@ -59,6 +59,7 @@ def service():
     return StudentCases(
         current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]],
         current_app.config["CASE_ROUTING"],
+        current_app.config["CASE_ROUTING_SOURCE"],
     )
 
 

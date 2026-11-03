@@ -50,8 +50,9 @@ def test_student_signup_profile_and_first_case(engine, width):
     server = make_server("127.0.0.1", 5051, app, request_handler=SafeRequestHandler, threaded=True)
     thread = Thread(target=server.serve_forever, daemon=True)
     thread.start()
-    evidence = ROOT / "docs/evidence/account-profiles"
-    evidence.mkdir(exist_ok=True)
+    evidence = ROOT / "docs/evidence/real-service"
+    evidence.mkdir(parents=True, exist_ok=True)
+    account_ids = []
     report = {}
     try:
         with sync_playwright() as pw:
@@ -109,6 +110,7 @@ def test_student_signup_profile_and_first_case(engine, width):
             case_id = page.url.split("/cases/")[1].split("?")[0]
             created = db.cases.find_one({"_id": case_id})
             user = db.users.find_one({"_id": created["student_id"]})
+            account_ids.append(user["_id"])
             assert user["global_roles"] == ["student"] and user["display_name"] == "Synthetic Alex"
             denied = page.request.get("http://127.0.0.1:5051/cases/" + fixture_id("case_a"))
             assert denied.status == 404 and "SYNTHETIC_NOTE" not in denied.text()
@@ -131,6 +133,51 @@ def test_student_signup_profile_and_first_case(engine, width):
                 admin_denied=True,
                 repeat_login=True,
             )
+            page.get_by_role("link", name="Your profile", exact=True).click()
+            page.get_by_role("link", name="Delete profile and close account", exact=True).click()
+            assert page.get_by_role("button", name="Delete profile and close account").count() == 0
+            page.get_by_role("link", name="Sign in again to continue").click()
+            page.locator("#password").wait_for(state="visible")
+            if (
+                page.locator("#username").count()
+                and page.locator("#username").is_visible()
+                and page.locator("#username").is_enabled()
+            ):
+                page.locator("#username").fill(username)
+            page.locator("#password").fill(password)
+            page.locator("#kc-login").click()
+            page.wait_for_url("http://127.0.0.1:5051/account/delete")
+            page.locator("#confirmation").fill("DELETE")
+            page.get_by_role("button", name="Delete profile and close account", exact=True).click()
+            page.wait_for_url("http://127.0.0.1:5051/account/closed")
+            expect(
+                page.get_by_role("heading", name="Your account is closed", exact=True)
+            ).to_be_visible()
+            erased = db.users.find_one({"_id": user["_id"]})
+            assert (
+                erased["account_status"] == "closed" and erased["display_name"] == "Closed account"
+            )
+            assert "verified_contact" not in erased and "course_label" not in erased
+            assert db.cases.find_one({"_id": case_id}) is not None
+            page.screenshot(path=str(evidence / f"{engine}-{width}-closed.png"), full_page=True)
+            page.evaluate(axe.read_text())
+            closure_accessibility = page.evaluate(
+                "async()=>await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}})"
+            )
+            assert not closure_accessibility["violations"]
+            page.goto("http://127.0.0.1:5051/sign-in")
+            expect(
+                page.get_by_role("heading", name="We could not sign you in", exact=True)
+            ).to_be_visible()
+            assert db.users.count_documents({"_id": user["_id"]}) == 1
+            report.update(
+                fresh_reauthentication=True,
+                profile_erased=True,
+                sessions_closed=True,
+                case_review_preserved=True,
+                automatic_reenrolment_denied=True,
+                closure_axe_violations=0,
+            )
             browser.close()
     finally:
         server.shutdown()
@@ -144,8 +191,13 @@ def test_student_signup_profile_and_first_case(engine, width):
                 users = list(
                     db.users.find(
                         {
-                            "identity_subject": provider["id"],
-                            "identity_issuer": values["OIDC_ISSUER"],
+                            "$or": [
+                                {
+                                    "identity_subject": provider["id"],
+                                    "identity_issuer": values["OIDC_ISSUER"],
+                                },
+                                {"_id": {"$in": account_ids}},
+                            ],
                         },
                         {"_id": 1},
                     )
@@ -158,6 +210,12 @@ def test_student_signup_profile_and_first_case(engine, width):
                 db.sessions.delete_many({"user_id": {"$in": ids}})
                 db.audit_events.delete_many({"actor_id": {"$in": ids}})
                 db.cases.delete_many({"_id": {"$in": cases}})
+                closure_ids = [
+                    r["_id"]
+                    for r in db.account_closures.find({"user_id": {"$in": ids}}, {"_id": 1})
+                ]
+                db.auth_attempts.delete_many({"data.closure_reference": {"$in": closure_ids}})
+                db.account_closures.delete_many({"user_id": {"$in": ids}})
                 db.users.delete_many({"_id": {"$in": ids}})
                 response = http.delete(base + "/" + provider["id"], timeout=5)
                 response.raise_for_status()

@@ -125,6 +125,22 @@ def sample_documents():
                 authorization_revision=0,
                 version=1,
             ),
+            "account_closures": dict(
+                user_id=uid,
+                identity_fingerprint="f" * 64,
+                state="review_required",
+                requested_at=stamp,
+            ),
+            "enrolment_invitations": dict(
+                token_hash="e" * 64,
+                email="invited@example.invalid",
+                issuer="http://127.0.0.1:8180/realms/student-support",
+                role="student",
+                created_by=fixture_id("administrator"),
+                created_at=stamp,
+                expires_at=stamp + timedelta(hours=24),
+                state="pending",
+            ),
             "privileged_grants": dict(
                 user_id=uid,
                 role="manager",

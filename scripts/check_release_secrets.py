@@ -19,8 +19,18 @@ def main():
     secrets = {
         v.encode()
         for k, v in values.items()
-        if v and len(v) >= 12 and ("PASSWORD" in k or "SECRET" in k)
+        if v
+        and len(v) >= 12
+        and ("PASSWORD" in k or "SECRET" in k or k.endswith("_KEY") or k.endswith("_KEYS"))
     }
+    for key, value in values.items():
+        if key.endswith("_KEYS") and value:
+            try:
+                secrets.update(
+                    v.encode() for v in json.loads(value) if isinstance(v, str) and len(v) >= 12
+                )
+            except (ValueError, TypeError):
+                pass
     credentials = ROOT / "runtime/synthetic-logins.json"
     if credentials.exists():
         secrets.update(

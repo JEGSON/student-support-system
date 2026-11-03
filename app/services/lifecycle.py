@@ -1,7 +1,9 @@
-"""Explicit synthetic retention; no institution policy or automatic case TTL."""
+"""Configured retention and explicit disposal; local test policy remains separate."""
 
 from datetime import timedelta
 from uuid import uuid4
+
+from flask import current_app, has_app_context
 
 from app.repositories.core import identifier, plain_text, utc_now
 from app.services.access import AccessService
@@ -13,12 +15,22 @@ POLICY = "synthetic-demo-1day"
 
 
 class Lifecycle:
-    def __init__(self, database):
+    def __init__(self, database, settings=None):
         self.db = database
+        self.settings = (
+            settings if settings is not None else (current_app.config if has_app_context() else {})
+        )
+        self.policy_reference = self.settings.get("RETENTION_POLICY_REFERENCE") or POLICY
 
     def require_synthetic(self, policy):
-        if policy != POLICY or self.db.name not in {"student_support_dev", "student_support_test"}:
-            raise AccessDenied("Real retention is unconfigured; synthetic local policy only.")
+        if policy == POLICY and self.db.name in {"student_support_dev", "student_support_test"}:
+            return
+        if (
+            policy != self.settings.get("RETENTION_POLICY_REFERENCE")
+            or not self.settings.get("SERVICE_POLICY_APPROVED")
+            or not self.settings.get("RETENTION_DAYS")
+        ):
+            raise AccessDenied("An approved retention policy must be configured before disposal.")
 
     def reassignment(self, actor, context):
         def read(sid):
@@ -155,7 +167,7 @@ class Lifecycle:
                 "_id": str(uuid4()),
                 "case_id": identifier(case_id),
                 "requested_by": actor,
-                "policy": POLICY,
+                "policy": policy,
                 "reason": reason,
                 "state": "pending",
                 "created_at": utc_now(),
@@ -192,12 +204,24 @@ class Lifecycle:
                 "status": "Closed",
                 "archive_state": "archived",
                 "legal_hold": False,
-                "closed_at": {"$lte": utc_now() - timedelta(days=1)},
             },
             session=sid,
         )
-        if not case:
-            raise AccessDenied("Not eligible under the synthetic one-day policy, or held.")
+        days = self.settings.get("RETENTION_DAYS", {}).get(case["category"]) if case else None
+        if self.policy_reference == POLICY and self.db.name in {
+            "student_support_dev",
+            "student_support_test",
+        }:
+            days = 1
+        if (
+            not case
+            or not days
+            or not case.get("closed_at")
+            or case["closed_at"] > utc_now() - timedelta(days=days)
+        ):
+            raise AccessDenied(
+                "Case is held or not eligible under the configured retention policy."
+            )
         return case
 
     def execute(self, record_id):

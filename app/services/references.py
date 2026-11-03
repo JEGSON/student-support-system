@@ -4,6 +4,8 @@ from app.repositories.core import InvalidInput, identifier
 from app.repositories.schema import CATEGORIES, SCHEMAS
 
 REFERENCES = {
+    "account_closures": {"user_id": "users", "reviewed_by": "users"},
+    "enrolment_invitations": {"created_by": "users", "accepted_by": "users", "team_id": "teams"},
     "memberships": {"user_id": "users", "team_id": "teams", "granted_by": "users"},
     "cases": {
         "student_id": "users",
@@ -93,7 +95,10 @@ def validate_references(database, collection, document, session=None):
         ] != document.get("case_id", document.get("_id")):
             raise InvalidInput("Referenced record belongs to another case.")
     if collection == "cases":
-        if "student" not in records["student_id"]["global_roles"]:
+        if (
+            "student" not in records["student_id"]["global_roles"]
+            and records["student_id"]["account_status"] != "closed"
+        ):
             raise InvalidInput("Case ownership requires a student account.")
         team = records["team_id"]
         category = document.get("category")

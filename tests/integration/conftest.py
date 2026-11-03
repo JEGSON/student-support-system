@@ -52,10 +52,13 @@ def bundle():
     ]:
         db[name].delete_many({"case_id": {"$in": case_ids}})
     db.referrals.delete_many({"source_case_id": {"$in": case_ids}})
+    db.account_closures.delete_many({"user_id": {"$in": list(ids.values())}})
+    db.enrolment_invitations.delete_many({"created_by": {"$in": list(ids.values())}})
     db.disposal_records.delete_many({"requested_by": {"$in": list(ids.values())}})
     db.cases.delete_many({"_id": {"$in": case_ids}})
     db.submission_keys.delete_many({"user_id": {"$in": list(ids.values())}})
     db.sessions.delete_many({"user_id": {"$in": list(ids.values())}})
+    db.auth_attempts.delete_many({"data.reauth_user": {"$in": list(ids.values())}})
     for name in documents:
         db[name].delete_many({"_id": {"$in": list(ids.values())}})
     db.privileged_grants.delete_many({"user_id": {"$in": list(ids.values())}})

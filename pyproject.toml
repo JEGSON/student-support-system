@@ -57,3 +57,11 @@ select = ["E4", "E7", "E9", "F", "I", "B"]
 "scripts/recovery.py" = ["E402"]
 "scripts/evaluate_workload.py" = ["E402"]
 "scripts/security_probe.py" = ["E402"]
+
+"scripts/run_production_worker.py" = ["E402"]
+
+"scripts/production_setup.py" = ["E402"]
+
+"scripts/production_recovery.py" = ["E402"]
+
+"scripts/check_production.py" = ["E402"]

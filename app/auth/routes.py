@@ -17,7 +17,9 @@ from flask import (
 from pymongo.errors import PyMongoError
 
 from app.repositories.core import utc_now
+from app.services.account_privacy import AccountPrivacy
 from app.services.accounts import Accounts, profile_errors
+from app.services.enrolment import invitation_hash
 from app.services.policy import AccessDenied
 from app.services.transactions import VersionConflict
 
@@ -41,7 +43,11 @@ def safe_return_path(value):
         or any(ord(c) < 32 for c in decoded)
     ):
         return "/account"
-    return decoded if decoded in {"/account", "/access", "/account/profile"} else "/account"
+    return (
+        decoded
+        if decoded in {"/account", "/access", "/account/profile", "/account/delete"}
+        else "/account"
+    )
 
 
 def available_contexts(database, user, db_session=None):
@@ -91,7 +97,10 @@ def start_sign_in(registration=False):
         return redirect(url_for("identity.account"))
     if session.storage_failed:
         return "Sign-in service unavailable. Please try again.", 503
+    pending_invitation = session.get("invitation_hash")
     session.rotate()
+    if pending_invitation:
+        session["invitation_hash"] = pending_invitation
     session["context"] = safe_return_path(request.args.get("next"))
     try:
         client = current_app.extensions["university_oidc"]
@@ -124,6 +133,10 @@ def callback():
             "iat": {"essential": True},
             "nonce": {"essential": True},
         }
+        reauth_user = session.get("reauth_user")
+        reauth_started = session.get("reauth_started")
+        if reauth_user:
+            options["auth_time"] = {"essential": True}
         if current_app.config.get("OIDC_REQUIRED_ACR"):
             options["acr"] = {"essential": True, "value": current_app.config["OIDC_REQUIRED_ACR"]}
         token = current_app.extensions["university_oidc"].authorize_access_token(
@@ -134,12 +147,28 @@ def callback():
             raise ValueError("Verified identity required.")
         database = current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]]
         user = Accounts(database).resolve(
-            issuer, claims, allow_registration=current_app.config["SELF_REGISTRATION_ENABLED"]
+            issuer,
+            claims,
+            allow_registration=current_app.config["SELF_REGISTRATION_ENABLED"] and not reauth_user,
+            invitation_hash=session.get("invitation_hash") if not reauth_user else None,
         )
         if not user:
             raise ValueError("Account is unavailable.")
+        now = utc_now()
+        if reauth_user:
+            auth_time = claims.get("auth_time")
+            if (
+                user["_id"] != reauth_user
+                or type(auth_time) is not int
+                or type(reauth_started) is not int
+                or not reauth_started - 5 <= auth_time <= now.timestamp() + 30
+                or now.timestamp() - auth_time > 300
+            ):
+                raise AccessDenied("Fresh authentication for the same account is required.")
         destination = safe_return_path(session.get("context"))
-        session.rotate(user_id=user["_id"], authentication_time=utc_now())
+        session.rotate(user_id=user["_id"], authentication_time=now)
+        if reauth_user:
+            session["reauthenticated_at"] = int(now.timestamp())
         contexts = available_contexts(database, user)
         if len(contexts) == 1:
             session["context"] = contexts[0]
@@ -205,6 +234,8 @@ def staff_sign_in():
 
 @identity.get("/register")
 def register():
+    if current_app.config["ENROLMENT_MODE"] == "invitation":
+        return redirect(url_for("identity.join"))
     if not current_app.config["SELF_REGISTRATION_ENABLED"]:
         abort(404)
     if g.user:
@@ -214,6 +245,8 @@ def register():
 
 @identity.get("/register/start")
 def register_start():
+    if current_app.config["ENROLMENT_MODE"] == "invitation":
+        return redirect(url_for("identity.join"))
     if not current_app.config["SELF_REGISTRATION_ENABLED"]:
         abort(404)
     return start_sign_in(registration=True)
@@ -276,3 +309,130 @@ def profile():
             context="account",
             message="We could not confirm your profile. Please try again shortly.",
         ), 503
+
+
+@identity.route("/join", methods=["GET", "POST"])
+def join():
+    if not current_app.config["REGISTRATION_AVAILABLE"]:
+        abort(404)
+    error = None
+    if request.method == "POST":
+        if set(request.form) != {"csrf_token", "code"} or any(
+            len(request.form.getlist(k)) != 1 for k in request.form
+        ):
+            abort(400)
+        try:
+            digest = invitation_hash(request.form["code"].strip())
+        except ValueError:
+            error = "Enter the complete invitation code supplied by your university."
+        else:
+            session.rotate()
+            session["invitation_hash"] = digest
+            return redirect(url_for("identity.join_continue"), code=303)
+    return render_template(
+        "auth/join.html", title="Join Student Support", context="public", error=error
+    ), 400 if error else 200
+
+
+@identity.get("/join/continue")
+def join_continue():
+    if not session.get("invitation_hash"):
+        return redirect(url_for("identity.join"))
+    return render_template(
+        "auth/join_continue.html", title="Verify your university account", context="public"
+    )
+
+
+@identity.get("/join/sign-in")
+def join_sign_in():
+    if not session.get("invitation_hash"):
+        return redirect(url_for("identity.join"))
+    # GET navigation preserves form-action CSP; provider owns verification/recovery.
+    return start_sign_in()
+
+
+@identity.get("/account/reauthenticate")
+@authenticated
+def reauthenticate():
+    actor = g.user["_id"]
+    session.rotate()
+    session["reauth_user"] = actor
+    session["reauth_started"] = int(utc_now().timestamp())
+    session["context"] = "/account/delete"
+    try:
+        return current_app.extensions["university_oidc"].authorize_redirect(
+            current_app.config["APP_BASE_URL"].rstrip("/") + "/auth/callback",
+            prompt="login",
+            max_age=0,
+        )
+    except Exception:
+        session.logout()
+        current_app.logger.warning("reauthentication_unavailable")
+        abort(503)
+
+
+@identity.route("/account/delete", methods=["GET", "POST"])
+@authenticated
+def delete_account():
+    db = current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]]
+    error = None
+    status = 200
+    fresh = session.get("reauthenticated_at")
+    recent = type(fresh) is int and 0 <= utc_now().timestamp() - fresh <= 300
+    try:
+        if request.method == "POST":
+            if set(request.form) != {"csrf_token", "version", "confirmation"} or any(
+                len(request.form.getlist(k)) != 1 for k in request.form
+            ):
+                abort(400)
+            if request.form["confirmation"] != "DELETE" or not recent:
+                error = "Sign in again, then type DELETE to confirm."
+                status = 400
+            else:
+                try:
+                    record = AccountPrivacy(
+                        db, current_app.config["IDENTITY_FINGERPRINT_KEY"]
+                    ).close(g.user["_id"], int(request.form["version"]), fresh)
+                except VersionConflict:
+                    error, status = "Your profile changed. Review this page and try again.", 409
+                except AccessDenied as problem:
+                    error, status = str(problem), 403
+                except ValueError:
+                    abort(400)
+                else:
+                    session.rotate()
+                    session["closure_reference"] = record["_id"]
+                    session["closure_state"] = record["state"]
+                    return redirect(url_for("identity.account_closed"), code=303)
+        return render_template(
+            "auth/delete_account.html",
+            title="Delete your profile and close your account",
+            context=session.get("context", "account"),
+            recent=recent,
+            error=error,
+            version=g.user.get("profile_version", 0),
+        ), status
+    except PyMongoError:
+        abort(503)
+
+
+@identity.get("/account/closed")
+def account_closed():
+    if not session.get("closure_reference"):
+        return redirect(url_for("index"))
+    return render_template(
+        "auth/account_closed.html",
+        title="Your account is closed",
+        context="public",
+        reference=session["closure_reference"],
+        review=session.get("closure_state") == "review_required",
+    )
+
+
+@identity.get("/privacy")
+def privacy_notice():
+    return render_template(
+        "auth/privacy.html",
+        title="Privacy and service information",
+        context=session.get("context", "public"),
+    )

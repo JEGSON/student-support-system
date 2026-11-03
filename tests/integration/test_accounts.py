@@ -117,7 +117,7 @@ def test_own_profile_http_validation_csrf_conflict_and_role_isolation(bundle, we
 
 def test_profile_write_rolls_back_on_audit_failure_and_denies_disabled(bundle, monkeypatch):
     db, uid = bundle
-    svc = Accounts(db)
+    svc = Accounts(db, {"IDENTITY_FINGERPRINT_KEY": "service-account-test-key-" * 3})
     before = db.users.find_one({"_id": uid("student_a")})
 
     def fail(*args, **kwargs):
@@ -151,7 +151,7 @@ def test_verified_enrolment_is_student_only_repeat_safe_and_never_reactivates(bu
     db, uid = bundle
     # Use independent identities so the shared fixture reset remains strict.
     subject = "synthetic-new-" + uuid4().hex
-    svc = Accounts(db)
+    svc = Accounts(db, {"IDENTITY_FINGERPRINT_KEY": "service-account-test-key-" * 3})
     claims = {
         "sub": subject,
         "name": "Demo New Student",
@@ -208,3 +208,54 @@ def test_registration_start_creates_only_oidc_state(web_app, monkeypatch):
     monkeypatch.setattr(app.extensions["university_oidc"], "authorize_redirect", authorise)
     assert client.get("/register/start").status_code == 302
     assert seen == {"prompt": "create"}
+
+
+def test_delete_http_requires_csrf_explicit_confirmation_and_fresh_authentication(bundle, web_app):
+    db, uid = bundle
+    app, client = web_app
+    data = {**form(client), "confirmation": "DELETE"}
+    assert client.get("/account/delete").status_code == 200
+    assert (
+        client.post(
+            "/account/delete", data={k: v for k, v in data.items() if k != "csrf_token"}
+        ).status_code
+        == 400
+    )
+    assert client.post("/account/delete", data=data).status_code == 400
+    assert db.users.find_one({"_id": uid("student_a")})["account_status"] == "active"
+    assert not db.account_closures.find_one({"user_id": uid("student_a")})
+
+
+@pytest.mark.parametrize("invalid", ["stale", "future", "different_user", "missing"])
+def test_reauthentication_rejects_stale_or_wrong_identity(bundle, web_app, monkeypatch, invalid):
+    db, uid = bundle
+    app, client = web_app
+    user = db.users.find_one({"_id": uid("student_a")})
+    app.config["OIDC_ISSUER"] = user["identity_issuer"]
+    requested = {}
+
+    def begin(uri, **kwargs):
+        requested.update(kwargs)
+        return "Provider authentication", 302
+
+    monkeypatch.setattr(app.extensions["university_oidc"], "authorize_redirect", begin)
+    assert client.get("/account/reauthenticate").status_code == 302
+    assert requested == {"prompt": "login", "max_age": 0}
+    claims = {"sub": user["identity_subject"], "auth_time": int(utc_now().timestamp())}
+    if invalid == "stale":
+        claims["auth_time"] -= 3600
+    if invalid == "future":
+        claims["auth_time"] += 3600
+    if invalid == "different_user":
+        claims["sub"] = db.users.find_one({"_id": uid("student_b")})["identity_subject"]
+    if invalid == "missing":
+        claims.pop("auth_time")
+
+    def validate(**kwargs):
+        assert kwargs["claims_options"]["auth_time"]["essential"] is True
+        return {"userinfo": claims}
+
+    monkeypatch.setattr(app.extensions["university_oidc"], "authorize_access_token", validate)
+    assert client.get("/auth/callback?state=synthetic&code=synthetic").status_code == 400
+    assert client.get("/account/delete").status_code == 302
+    assert not db.account_closures.find_one({"user_id": uid("student_a")})

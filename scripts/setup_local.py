@@ -27,6 +27,7 @@ def main():
     values = {
         key: secrets.token_urlsafe(48)
         for key in [
+            "IDENTITY_FINGERPRINT_KEY",
             "MONGO_ROOT_PASSWORD",
             "MONGO_APP_PASSWORD",
             "MONGO_TEST_PASSWORD",

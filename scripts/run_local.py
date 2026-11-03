@@ -20,6 +20,19 @@ def local_web_settings():
     # Keep operator/maintenance/worker credentials out of the retained web config
     # and os.environ. This local account can still read its own private .env file.
     allowed = {
+        "IDENTITY_FINGERPRINT_PREVIOUS_KEYS",
+        "RETENTION_DAYS_JSON",
+        "RETENTION_POLICY_REFERENCE",
+        "ACCOUNT_PRIVACY_REVIEW_DAYS",
+        "ENROLMENT_MODE",
+        "IDENTITY_FINGERPRINT_KEY",
+        "INSTITUTION_NAME",
+        "PRIVACY_CONTACT",
+        "PRIVACY_NOTICE",
+        "SERVICE_HOURS_TEXT",
+        "URGENT_HELP_TEXT",
+        "SERVICE_POLICY_APPROVED",
+        "OIDC_ACCOUNT_URL",
         "APP_ENV",
         "SELF_REGISTRATION_ENABLED",
         "SECRET_KEY",
@@ -35,6 +48,7 @@ def local_web_settings():
         "OIDC_REQUIRED_ACR",
         "EMAIL_HEALTH_URL",
         "CASE_ROUTING_JSON",
+        "CASE_ROUTING_SOURCE",
         "TRUST_PROXY",
         "PROXY_HOPS",
         "PROXY_TRUSTED_IP",

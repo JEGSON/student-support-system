@@ -38,7 +38,16 @@ class ServerSession(CallbackDict, SessionMixin):
         )
 
     def __setitem__(self, key, value):
-        if key not in {"csrf_token", "context"} and not key.startswith("_state_university_"):
+        if key not in {
+            "csrf_token",
+            "context",
+            "reauth_user",
+            "reauth_started",
+            "reauthenticated_at",
+            "invitation_hash",
+            "closure_reference",
+            "closure_state",
+        } and not key.startswith("_state_university_"):
             raise ValueError("Unsupported server-session field.")
         super().__setitem__(key, value)
 

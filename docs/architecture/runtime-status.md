@@ -1,4 +1,37 @@
-# Implemented architecture and production target
+# Configurable university-service runtime
+
+3 November 2026. The current release builds on the completed local case-management
+system with verified invitation enrolment, account closure/profile erasure, privacy
+review, database-managed teams/intake, configured retention and opt-in production
+SMTP/setup/recovery tools. No live provider/deployment is configured. Read the
+[operator guide](../handbook/real-service-setup.md) for actual capabilities and gates.
+
+The current database has **20 collection contracts**: the original 18 plus
+account_closures and enrolment_invitations. Closure erases editable profile/contact
+fields and closes platform sessions. Minimal HMAC suppression/attribution records
+remain, linked cases follow retention review, and restored snapshots replay closure
+records. This is not a claim of complete anonymisation or all-system erasure.
+
+The editable eight-page architecture/PNG gallery now reflects these additions.
+Core Flask/Jinja, Mongo transactions, current scope checks, separate notes, explicit
+referrals and restricted worker boundaries are retained. Production web roles do
+not delete cases/history/audit; approved offline maintenance handles disposal.
+
+Single-university enrolment uses exact trusted issuer + signed verified email +
+operator-issued invitation. Domain-only trust and submitted role claims grant no
+access. Privileged roles still need independent approval. Destructive closure
+requires same-person OIDC max_age=0/auth_time proof and explicit CSRF confirmation.
+
+Teams/routing are administrator-managed with unique intake categories. Production
+has no environment-route fallback. Retention durations, approved policy, privacy
+review interval, service wording and private identity key are mandatory production
+inputs. Actual host/provider credentials, service governance and external assurance
+remain unconfigured. The existing loopback environment remains available for testing.
+
+Below is the historical Stage 19 checkpoint; current details above and the operator
+guide supersede its older counts/limitations.
+
+## Historical implementation checkpoint
 
 As-built v2, 2 November 2026. Stages 01–19 local synthetic delivery. The original
 secure-design HTML remains the requirements/proposal baseline; the editable eight-

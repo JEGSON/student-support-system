@@ -1,5 +1,12 @@
 # Single-university real-service release plan
 
+Implementation checkpoint: the configurable release now implements the next coding
+increment. See [operator guide](../handbook/real-service-setup.md) and
+[release evidence](../evidence/real-service/README.md). The plan below remains the
+original scope; external services, complete-erasure expiry/re-registration operations,
+invitation-email automation and independent assurance remain explicitly limited in
+the guide. No production launch is claimed.
+
 3 November 2026. The user requests real user/account/database functionality,
 including creating and deleting profiles. The user selected a single university
 as the operating model and acts as the initial service operator. This is a design

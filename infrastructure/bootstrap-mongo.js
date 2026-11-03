@@ -41,9 +41,11 @@ for(const database of ['student_support_dev','student_support_test']) {
   ...collections.map(collection=>({resource:{db:database,collection},actions:['find','insert','update','remove']})),
   {resource:{db:database,collection:'rate_limits'},actions:['find','insert','update']},
   {resource:{db:database,collection:'disposal_records'},actions:['find','insert','update']},
+  {resource:{db:database,collection:'account_closures'},actions:['find','insert','update']},
+  {resource:{db:database,collection:'enrolment_invitations'},actions:['find','insert','update']},
   {resource:{db:database,collection:'case_events'},actions:['find','insert']},
   {resource:{db:database,collection:'audit_events'},actions:['insert']},
-  {resource:{db:database,collection:'notification_outbox'},actions:['find','insert']}
+  {resource:{db:database,collection:'notification_outbox'},actions:['find','insert','update']}
  ]);
  ensureRole(database,'support_audit_reader',[{resource:{db:database,collection:'audit_events'},actions:['find']}]);
  ensureRole(database,'support_notification_worker',[

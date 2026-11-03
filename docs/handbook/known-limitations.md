@@ -1,4 +1,15 @@
-# Known limitations and gates
+# Current release boundaries
+
+The configurable service release is implemented locally; use [the operator guide](real-service-setup.md).
+It adds verified invitation enrolment, profile erasure/account closure, team/routing
+administration, policy-based disposal and opt-in SMTP/production setup/recovery.
+No live deployment, real identity integration or external email has been performed.
+The original handover limits below are historical where superseded by that guide.
+Profile closure is not a claim of complete erasure of all cases/security metadata;
+full privacy/fingerprint expiry and re-registration remain reviewed operator work.
+Automatic invitation email and bounce/webhook integration remain unimplemented.
+
+# Original handover limitations
 
 - Synthetic demonstration only. Privacy grounds, DPIA, retention schedule, urgent-help
   wording, operating hours, identity/MFA, access owners, hosting and production KMS/

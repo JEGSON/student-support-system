@@ -25,3 +25,8 @@ identifies the actual archive commit and checksum.
 The post-handover [student registration and profile extension](account-profiles/README.md)
 adds real synthetic provider signup, own-profile edits and an integrated 301-pass
 regression, without enabling production signup or self-assigned staff access.
+
+The [configurable real-service release](real-service/README.md) adds verified
+university invitations, account/profile closure, team routing, configured retention
+and opt-in production adapters. External services/approval boundaries are recorded
+in its operator guide; no live deployment is implied.
