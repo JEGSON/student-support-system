@@ -65,7 +65,12 @@ def test_complete_case_lifecycle(engine, width):
         contexts.append(context)
         page = context.new_page()
         page.on("response", lambda r: request_ids.append(r.headers.get("x-request-id", "")))
-        page.goto("http://127.0.0.1:5051/sign-in")
+        if name == "student_a":
+            page.goto("http://127.0.0.1:5051/sign-in")
+        else:
+            page.goto("http://127.0.0.1:5051/")
+            page.get_by_role("link", name="University staff sign-in", exact=True).click()
+            page.get_by_role("link", name="Sign in as university staff", exact=True).click()
         page.locator("#username").fill(accounts[name]["username"])
         page.locator("#password").fill(accounts[name]["password"])
         page.locator("#kc-login").click()

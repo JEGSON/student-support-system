@@ -25,6 +25,7 @@ metadata may change). Health and authentication routes have their specific publi
 | GET, POST | `/account/profile` | Current active user only; name/course edit with CSRF, expected profile version and atomic audit; no role/contact/identity changes. |
 | GET | `/sign-in` | Public OIDC/S256 initiation; exact safe return target. |
 | POST | `/sign-out` | Authenticated local session invalidation. |
+| GET | `/staff/sign-in` | Public staff-entry guide only; sign-in and team permissions remain enforced by existing routes/services. |
 | GET | `/staff` | Current staff context/team; officer assigned-only, manager/triage permitted metadata. |
 | GET, POST | `/staff/archive` | Scoped current manager; metadata list; purpose-audited POST for archived initial content. |
 | GET | `/staff/cases/<case_id>` | Current assigned officer or scoped manager; successful read audit required. |

@@ -1,0 +1,38 @@
+[
+  {
+    "engine": "chromium",
+    "width": 390,
+    "overflow": false,
+    "axe_violations": 0
+  },
+  {
+    "engine": "chromium",
+    "width": 768,
+    "overflow": false,
+    "axe_violations": 0
+  },
+  {
+    "engine": "chromium",
+    "width": 1440,
+    "overflow": false,
+    "axe_violations": 0
+  },
+  {
+    "engine": "webkit",
+    "width": 390,
+    "overflow": false,
+    "axe_violations": 0
+  },
+  {
+    "engine": "webkit",
+    "width": 768,
+    "overflow": false,
+    "axe_violations": 0
+  },
+  {
+    "engine": "webkit",
+    "width": 1440,
+    "overflow": false,
+    "axe_violations": 0
+  }
+]

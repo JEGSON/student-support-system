@@ -18,6 +18,9 @@ cd /Users/wealth/Documents/Codex/2026-11-02/go/student-support-system
 
 Open http://127.0.0.1:5050. Choose **Create a student account** to register with
 synthetic details, then **Your profile** to edit your preferred name/course.
+University staff can use **University staff sign-in** on the homepage, or open
+http://127.0.0.1:5050/staff/sign-in. Existing demo staff credentials are in the
+private runtime/synthetic-logins.json file; use manager_finance for finance requests.
 Docker dependencies must already be running. For a new
 installation follow setup, including frozen dependency sync, private configuration,
 database contracts/routing and synthetic identity provisioning. Generated passwords

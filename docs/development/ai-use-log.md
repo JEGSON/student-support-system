@@ -189,3 +189,13 @@ GitHub publication succeeded: origin/main advanced from ddcfca1 to 91d1df9, pres
 the existing incremental commits and the explanatory editor-configuration commit.
 The README publication status was then reconciled. The earlier stage records remain
 historical evidence of their original no-push scope, rather than current restrictions.
+
+## 3 November 2026 — Staff access discoverability
+
+The user could register/submit as a student but could not find how the school
+accesses/replies to requests. Codex checked the existing manager/officer/admin
+accounts and reply services without printing credentials. Added a public staff
+sign-in guide linked from the homepage/student account and documented the local
+manager workflow. Existing role/team permissions and provisioning remain unchanged;
+no public staff-role registration or credential disclosure was added. Existing
+complete browser journeys now enter staff sign-in through the new homepage link.

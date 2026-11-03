@@ -194,6 +194,15 @@ def sign_out():
     return render_template("auth/signed_out.html", title="Signed out", context="public")
 
 
+@identity.get("/staff/sign-in")
+def staff_sign_in():
+    return render_template(
+        "auth/staff_sign_in.html",
+        title="University staff sign-in",
+        context=session.get("context", "public"),
+    )
+
+
 @identity.get("/register")
 def register():
     if not current_app.config["SELF_REGISTRATION_ENABLED"]:

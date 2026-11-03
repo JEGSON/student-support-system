@@ -41,6 +41,16 @@ information, passwords or another person's details into this demo.
 
 ## Staff and managers
 
+The homepage has a University staff sign-in link to /staff/sign-in. This explains
+individual staff accounts, approved memberships and the reply workflow. A student
+account does not have the school/team view. For local testing, find the existing
+manager_finance and officer_assigned account credentials in private
+runtime/synthetic-logins.json; never publish that file. Use a separate private
+browser session for staff while keeping the student's normal window open. A manager
+can assign an eligible officer, start the assigned case and reply directly within
+their team scope; the assigned officer can also handle the conversation. For another
+category use that category's manager. Existing accounts are provided for all five teams.
+
 Staff context → Staff workspace. Queues show reference, category, submitted time,
 status and responsible team, not narrative previews. Officers see assigned cases;
 managers see current team scope. Triage members may claim an initial New request
