@@ -151,7 +151,7 @@ p.box(
     290,
     140,
     "Browser",
-    "Server-rendered HTML; CSRF-protected forms; opaque session cookie.",
+    "HTML forms + CSRF; separate student/university session cookies.",
     "actor",
 )
 p.box(
@@ -951,13 +951,13 @@ revise(
     6,
     "session",
     "SESSIONS / AUTH ATTEMPTS",
-    "Hashed opaque token; nonce/PKCE state\nIdle/absolute expiry; revocation\nFresh auth_time for account deletion",
+    "Hashed token + workspace; nonce/PKCE\nIndependent idle/absolute expiry\nFresh auth_time for account deletion",
 )
 revise(
     6,
     "browser",
     "BROWSER / SHARED LIMITS",
-    "Opaque HttpOnly cookie + CSRF\nMongo rate counters / TTL cleanup\nSecure cookie required in production",
+    "Separate /student and /university\nHttpOnly cookies + CSRF; shared limits\nSame-workspace tabs share sign-in",
 )
 revise(
     6,
@@ -1002,7 +1002,7 @@ def anchor(n, side):
 mx = ET.Element(
     "mxfile",
     host="app.diagrams.net",
-    modified="2026-11-03T00:00:00.000Z",
+    modified="2026-11-04T00:00:00.000Z",
     agent="Codex",
     version="24.7.17",
     type="device",
@@ -1136,7 +1136,7 @@ for idx, p in enumerate(pages, 1):
                 )
     vertex(
         "footer",
-        f"COM7033 | Configurable service v3 / production target | 3 November 2026 | {idx:02d} / {len(pages):02d}",
+        f"COM7033 | Configurable service v3 / production target | 4 November 2026 | {idx:02d} / {len(pages):02d}",
         50,
         1045,
         1500,
@@ -1280,7 +1280,7 @@ for idx, p in enumerate(pages, 1):
             yy += fs + 5
     d.text(
         (50, 1045),
-        f"COM7033 | Configurable service v3 / production target | 3 November 2026 | {idx:02d} / {len(pages):02d}",
+        f"COM7033 | Configurable service v3 / production target | 4 November 2026 | {idx:02d} / {len(pages):02d}",
         font=font(12),
         fill="#526574",
     )

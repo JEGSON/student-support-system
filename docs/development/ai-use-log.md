@@ -237,3 +237,16 @@ server request IDs and corrected the tracing cache's treatment of identical code
 objects. Initial failures and coverage limits remain in the dated evidence record.
 No application feature, production configuration, real data or remote service was
 changed. The report distinguishes observed execution from exhaustive branch proof.
+
+## 4 November 2026 — Concurrent student/university account sessions
+
+The user reproduced account reuse across tabs. Codex identified the single app
+cookie and provider SSO reuse, described the session-architecture addition, then
+implemented two fixed URL mounts with independent path cookies and server-bound
+workspace/OAuth state. Existing root sessions and per-request role policies remain
+compatible. Normal login prompts credentials; destructive reauthentication retains
+same-user/auth_time proof. Exact loopback callback URLs were appended locally
+without changing provider accounts/grants. Updated architecture/ADR/operator guide
+and added shared-cookie-jar browser tests in both login orders, different-engine
+browser tests and HTTP token-binding/CSRF/legacy-role regression checks. No real
+student data, external SMTP, deployment or remote push was involved.

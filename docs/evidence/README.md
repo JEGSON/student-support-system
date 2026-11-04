@@ -34,3 +34,7 @@ in its operator guide; no live deployment is implied.
 The [4 November browser/function walkthrough](function-review-2026-11-04/README.md)
 provides an inspectable report with each test result, class/function execution
 mapping, screenshots, initial failures and their scoped test-isolation corrections.
+
+The [parallel-account regression](parallel-accounts/README.md) verifies simultaneous
+student/staff identities in one browser cookie jar, independent logout, namespace
+binding and existing-browser compatibility after the reported session collision.

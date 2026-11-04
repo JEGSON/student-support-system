@@ -52,6 +52,27 @@ mark real addresses verified without proof. The real-browser invitation tests us
 unique synthetic provider identities and remove them afterwards. New production
 users are never seeded from local demo fixtures.
 
+## Student and staff accounts at the same time
+
+Open `/student/sign-in` for the student identity and `/university/sign-in` for
+staff/admin in another tab. The account page provides **Open student account
+separately** and **Open staff account separately** links. Each workspace retains
+its own opaque session cookie, CSRF values, OAuth state and expiry. Refreshing or
+signing out of one does not replace the other account. Tabs within the same
+workspace share that identity. Existing unprefixed URLs remain compatible.
+
+Sign-in explicitly requests credentials. If the identity provider displays its
+previous username, choose its **Not you?** / restart-sign-in control before entering
+the other username. Local application logout does not end every identity-provider
+session. Separate browsers/profiles keep separate cookie jars as usual.
+
+For an existing local install, configure the exact additional loopback callbacks
+without resetting data/accounts, then restart the app:
+
+```sh
+.venv/bin/python -m scripts.configure_workspaces
+```
+
 ## Production configuration
 
 Use the three templates under infrastructure/production. They contain placeholders,
@@ -84,6 +105,10 @@ service wording are mandatory for production. No real retention duration is supp
 by the code. A student reference beginning SSU is an application reference, not an
 assertion of an official university student ID; trusted student-record integration
 is still a separate task.
+
+Register these exact redirect paths on the same configured HTTPS origin: `/auth/callback`,
+`/student/auth/callback` and `/university/auth/callback`. Do not use wildcard callback
+URLs. Verify the provider’s credential prompt/account-switch control during integration.
 
 The identity provider must validate ownership of the intended email before issuing
 email_verified=true, support the approved authentication class/MFA and fresh

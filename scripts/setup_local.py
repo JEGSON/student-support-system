@@ -70,7 +70,10 @@ def main():
                 "publicClient": True,
                 "standardFlowEnabled": True,
                 "directAccessGrantsEnabled": False,
-                "redirectUris": ["http://127.0.0.1:5050/auth/callback"],
+                "redirectUris": [
+                    f"http://127.0.0.1:5050{prefix}/auth/callback"
+                    for prefix in ["", "/student", "/university"]
+                ],
                 "attributes": {"pkce.code.challenge.method": "S256"},
             }
         ],

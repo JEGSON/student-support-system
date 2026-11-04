@@ -166,6 +166,11 @@ def test_student_signup_profile_and_first_case(engine, width):
             )
             assert not closure_accessibility["violations"]
             page.goto("http://127.0.0.1:5051/sign-in")
+            if page.locator("#reset-login").count():
+                page.locator("#reset-login").click()
+            page.locator("#username").fill(username)
+            page.locator("#password").fill(password)
+            page.locator("#kc-login").click()
             expect(
                 page.get_by_role("heading", name="We could not sign you in", exact=True)
             ).to_be_visible()

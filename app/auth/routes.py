@@ -16,6 +16,7 @@ from flask import (
 )
 from pymongo.errors import PyMongoError
 
+from app.auth.workspaces import callback_url
 from app.repositories.core import utc_now
 from app.services.account_privacy import AccountPrivacy
 from app.services.accounts import Accounts, profile_errors
@@ -105,8 +106,8 @@ def start_sign_in(registration=False):
     try:
         client = current_app.extensions["university_oidc"]
         return client.authorize_redirect(
-            current_app.config["APP_BASE_URL"].rstrip("/") + "/auth/callback",
-            **({"prompt": "create"} if registration else {}),
+            callback_url(),
+            **({"prompt": "create"} if registration else {"prompt": "login"}),
         )
     except Exception:
         session.logout()
@@ -172,7 +173,7 @@ def callback():
         contexts = available_contexts(database, user)
         if len(contexts) == 1:
             session["context"] = contexts[0]
-        return redirect(destination)
+        return redirect(request.script_root + destination)
     except Exception:
         session.logout()
         current_app.logger.warning("identity_response_rejected")
@@ -361,7 +362,7 @@ def reauthenticate():
     session["context"] = "/account/delete"
     try:
         return current_app.extensions["university_oidc"].authorize_redirect(
-            current_app.config["APP_BASE_URL"].rstrip("/") + "/auth/callback",
+            callback_url(),
             prompt="login",
             max_age=0,
         )

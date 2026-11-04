@@ -10,6 +10,7 @@ from flask import g
 from flask.sessions import SessionInterface, SessionMixin
 from werkzeug.datastructures import CallbackDict
 
+from app.auth.workspaces import cookie_settings, workspace
 from app.repositories.core import utc_now
 
 COOKIE = "support_session"
@@ -41,6 +42,7 @@ class ServerSession(CallbackDict, SessionMixin):
         if key not in {
             "csrf_token",
             "context",
+            "workspace",
             "reauth_user",
             "reauth_started",
             "reauthenticated_at",
@@ -76,7 +78,7 @@ class MongoSessionInterface(SessionInterface):
 
     def open_session(self, app, request):
         g.user = None
-        raw = request.cookies.get(COOKIE)
+        raw = request.cookies.get(cookie_settings()[0])
         result = ServerSession()
         if not raw:
             return result
@@ -98,6 +100,7 @@ class MongoSessionInterface(SessionInterface):
                 and not record.get("revoked_at")
                 and record["absolute_expires_at"] > now
                 and record["idle_expires_at"] > now
+                and record.get("data", {}).get("workspace", "general") == workspace()
             )
             if not valid:
                 result.invalid_cookie = True
@@ -124,13 +127,14 @@ class MongoSessionInterface(SessionInterface):
         database = app.extensions["mongo"][app.config["MONGODB_DATABASE"]]
         now = utc_now()
         response.vary.add("Cookie")
+        cookie, cookie_path = cookie_settings()
         try:
             for name, key in session.retired:
                 database[name].update_one({"_id": key}, {"$set": {"revoked_at": now}})
             if session.invalid_cookie:
                 response.delete_cookie(
-                    COOKIE,
-                    path="/",
+                    cookie,
+                    path=cookie_path,
                     secure=app.config["SESSION_COOKIE_SECURE"],
                     httponly=True,
                     samesite="Lax",
@@ -150,7 +154,7 @@ class MongoSessionInterface(SessionInterface):
                 record = {
                     "_id": str(uuid4()),
                     "token_hash": token_hash(session.token),
-                    "data": dict(session),
+                    "data": {**dict(session), "workspace": workspace()},
                     "created_at": now,
                     "last_seen_at": now,
                     "idle_expires_at": idle,
@@ -177,16 +181,22 @@ class MongoSessionInterface(SessionInterface):
                     query["version"] = session.record.get("version", 0)
                     update.update({"$set": {"data": dict(session)}, "$inc": {"version": 1}})
                 if not database[collection].update_one(query, update).matched_count:
-                    response.delete_cookie(COOKIE, path="/")
+                    response.delete_cookie(
+                        cookie,
+                        path=cookie_path,
+                        secure=app.config["SESSION_COOKIE_SECURE"],
+                        httponly=True,
+                        samesite="Lax",
+                    )
                     return
             response.set_cookie(
-                COOKIE,
+                cookie,
                 session.token,
                 max_age=max(1, int((absolute - now).total_seconds())),
                 secure=app.config["SESSION_COOKIE_SECURE"],
                 httponly=True,
                 samesite="Lax",
-                path="/",
+                path=cookie_path,
             )
         except Exception:
             app.logger.error("session_storage_unavailable")

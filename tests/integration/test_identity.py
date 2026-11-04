@@ -195,7 +195,8 @@ def test_verified_subject_mapping_ignores_provider_roles(
         raw = client.get_cookie(COOKIE).value
         record = db.sessions.find_one({"token_hash": token_hash(raw)})
         assert record["user_id"] == fixture_id("student_a") and record["data"] == {
-            "context": "student"
+            "context": "student",
+            "workspace": "general",
         }
         assert db.users.find_one({"_id": record["user_id"]})["global_roles"] == ["student"]
     else:

@@ -10,6 +10,7 @@ from .auth.access_routes import access
 from .auth.oidc import configure_oidc
 from .auth.routes import identity
 from .auth.sessions import MongoSessionInterface
+from .auth.workspaces import AccountWorkspaces, workspace, workspace_url
 from .cases.routes import cases
 from .config import ConfigurationError, load_config
 from .health import database_ready, email_ready, identity_ready
@@ -29,7 +30,11 @@ def create_app(config=None):
     app = SupportFlask(__name__)
     app.config.update(load_config(config))
     app.session_interface = MongoSessionInterface()
-    app.wsgi_app = TrustedProxy(app.wsgi_app, app.config)
+    app.wsgi_app = TrustedProxy(AccountWorkspaces(app.wsgi_app), app.config)
+
+    @app.context_processor
+    def account_workspace_links():
+        return {"account_workspace": workspace(), "workspace_url": workspace_url}
 
     @app.before_request
     def correlate_request():

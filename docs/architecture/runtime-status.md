@@ -1,6 +1,6 @@
 # Configurable university-service runtime
 
-3 November 2026. The current release builds on the completed local case-management
+4 November 2026. The current release builds on the completed local case-management
 system with verified invitation enrolment, account closure/profile erasure, privacy
 review, database-managed teams/intake, configured retention and opt-in production
 SMTP/setup/recovery tools. No live provider/deployment is configured. Read the
@@ -11,6 +11,13 @@ account_closures and enrolment_invitations. Closure erases editable profile/cont
 fields and closes platform sessions. Minimal HMAC suppression/attribution records
 remain, linked cases follow retention review, and restored snapshots replay closure
 records. This is not a claim of complete anonymisation or all-system erasure.
+
+Student and university accounts can run concurrently in the same browser through
+fixed `/student` and `/university` mounts. Distinct path-scoped HttpOnly cookies and
+server-side workspace binding isolate sessions, CSRF and OIDC attempts. These URL
+namespaces grant no role; the current database policies remain authoritative.
+Existing root URLs/sessions remain compatible. Normal sign-in requests credentials
+explicitly; privileged destructive reauthentication keeps its same-person proof.
 
 The editable eight-page architecture/PNG gallery now reflects these additions.
 Core Flask/Jinja, Mongo transactions, current scope checks, separate notes, explicit

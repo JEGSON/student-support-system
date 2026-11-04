@@ -81,3 +81,13 @@ narrative sharing is introduced. Production HTTPS/KMS/offsite custody remain pro
 
 See [current architecture](runtime-status.md), [threat evaluation](../security/risk-register.csv)
 and [limits](../handbook/known-limitations.md).
+
+## Parallel account sessions (4 November 2026)
+
+All existing routes also work under fixed `/student` and `/university` mounts, with
+namespace-aware generated URLs and exact provider callbacks. Each mount has a
+distinct path-scoped opaque cookie; sessions and OAuth attempts are bound to the
+workspace. A URL name never grants student/staff permissions. Root sessions remain
+compatible. Tabs in one workspace share their account; use different workspaces
+for concurrent student/staff identities. Logout only ends the current workspace;
+account disabling/closure still revokes all sessions for that principal.

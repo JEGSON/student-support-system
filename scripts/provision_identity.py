@@ -12,6 +12,7 @@ from dotenv import dotenv_values
 
 from app.repositories.fixtures import fixture_documents
 from scripts.configure_registration import configure
+from scripts.configure_workspaces import configure as configure_workspaces
 from scripts.database_setup import ROOT, local_client
 
 ORIGIN = "http://127.0.0.1:8180"
@@ -53,7 +54,10 @@ def provision():
                 "publicClient": True,
                 "standardFlowEnabled": True,
                 "directAccessGrantsEnabled": False,
-                "redirectUris": ["http://127.0.0.1:5051/auth/callback"],
+                "redirectUris": [
+                    f"http://127.0.0.1:5051{prefix}/auth/callback"
+                    for prefix in ["", "/student", "/university"]
+                ],
                 "webOrigins": [],
                 "attributes": {"pkce.code.challenge.method": "S256"},
             },
@@ -128,6 +132,7 @@ def provision():
                 if not result.matched_count:
                     raise ValueError("Seed isolated fixtures before provisioning.")
     http.close()
+    configure_workspaces()
     configure()
     print(
         "Synthetic identities mapped. Credentials are private in runtime/synthetic-logins.json; no passwords printed."
