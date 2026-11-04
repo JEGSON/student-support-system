@@ -225,3 +225,15 @@ or external SMTP were used. Existing local data/credentials were preserved.
 The operator guide explicitly records the remaining complete-erasure/fingerprint
 expiry, invitation-email, bounce handling, external services and policy/human-review
 gaps. Local test isolation issues were fixed rather than disabling reset guards.
+
+## 4 November 2026 — Browser and function-by-function review
+
+At the user's request, Codex loaded the running app in native Safari, executed the
+isolated Chromium/WebKit workflows and instrumented named app/worker Python calls
+against individual test cases. Added HTTP checks for previously unobserved triage,
+archive, privacy/retention and invitation-revocation routes, plus repository lookup
+and worker-alert assertions. Corrected headed-browser audit cleanup using scoped
+server request IDs and corrected the tracing cache's treatment of identical code
+objects. Initial failures and coverage limits remain in the dated evidence record.
+No application feature, production configuration, real data or remote service was
+changed. The report distinguishes observed execution from exhaustive branch proof.

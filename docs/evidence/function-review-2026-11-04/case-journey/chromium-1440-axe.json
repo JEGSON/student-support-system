@@ -1,0 +1,32 @@
+{
+  "staff-queue": {
+    "violations": [],
+    "incomplete": [],
+    "passes": 20
+  },
+  "staff-notes": {
+    "violations": [],
+    "incomplete": [],
+    "passes": 23
+  },
+  "student-conversation": {
+    "violations": [],
+    "incomplete": [],
+    "passes": 23
+  },
+  "minimal-referral": {
+    "violations": [],
+    "incomplete": [],
+    "passes": 21
+  },
+  "closed-outcome": {
+    "violations": [],
+    "incomplete": [],
+    "passes": 18
+  },
+  "session-expired": {
+    "violations": [],
+    "incomplete": [],
+    "passes": 10
+  }
+}

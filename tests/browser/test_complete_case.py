@@ -9,6 +9,7 @@ from uuid import uuid4
 
 import pytest
 from dotenv import dotenv_values
+from flask import g
 from playwright.sync_api import expect, sync_playwright
 from werkzeug.serving import make_server
 
@@ -45,6 +46,14 @@ def test_complete_case_lifecycle(engine, width):
     marker = "Synthetic complete flow " + uuid4().hex
     private = "PRIVATE_NOTE_" + uuid4().hex
     request_ids = []
+
+    @app.after_request
+    def track_test_request(response):
+        # Headed browsers can fetch favicons outside page response listeners.
+        # Record every isolated-server request so cleanup includes denial audits.
+        request_ids.append(getattr(g, "request_id", ""))
+        return response
+
     case_ids = []
     contexts = []
     reports = {}

@@ -30,3 +30,7 @@ The [configurable real-service release](real-service/README.md) adds verified
 university invitations, account/profile closure, team routing, configured retention
 and opt-in production adapters. External services/approval boundaries are recorded
 in its operator guide; no live deployment is implied.
+
+The [4 November browser/function walkthrough](function-review-2026-11-04/README.md)
+provides an inspectable report with each test result, class/function execution
+mapping, screenshots, initial failures and their scoped test-isolation corrections.

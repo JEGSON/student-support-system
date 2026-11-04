@@ -1,0 +1,120 @@
+"""Trace executed project functions during the authorised isolated regression suite."""
+import ast
+import collections
+import json
+import os
+import sys
+import threading
+import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+OUT = ROOT / 'docs/evidence/function-review-2026-11-04'
+OUT.mkdir(exist_ok=True)
+RUN = ROOT / 'runtime/function-review'
+START = time.time()
+current = {'test': '<collection/setup>'}
+observed = collections.defaultdict(set)
+cache = {}
+results = []
+classes = []
+functions = []
+
+class Discover(ast.NodeVisitor):
+    def __init__(self, path):
+        self.path = path
+        self.prefix = ''
+        self.owner = None
+    def visit_ClassDef(self, node):
+        old, owner = self.prefix, self.owner
+        name = self.prefix + node.name
+        classes.append({'file': self.path, 'name': name, 'line': node.lineno})
+        self.prefix, self.owner = name + '.', name
+        self.generic_visit(node)
+        self.prefix, self.owner = old, owner
+    def visit_FunctionDef(self, node):
+        old = self.prefix
+        name = self.prefix + node.name
+        functions.append({'file': self.path, 'name': name, 'line': node.lineno, 'class': self.owner})
+        self.prefix = name + '.<locals>.'
+        self.generic_visit(node)
+        self.prefix = old
+    visit_AsyncFunctionDef = visit_FunctionDef
+
+for directory in ['app', 'worker']:
+    for path in sorted((ROOT / directory).rglob('*.py')):
+        Discover(str(path.relative_to(ROOT))).visit(ast.parse(path.read_text()))
+
+prefixes = tuple(str(ROOT / part) + '/' for part in ['app', 'worker'])
+def profile(frame, event, arg):
+    if event != 'call':
+        return
+    code = frame.f_code
+    code_id = id(code)
+    if code_id not in cache:
+        filename = code.co_filename
+        key = ((str(Path(filename).relative_to(ROOT)), code.co_qualname)
+               if filename.startswith(prefixes) and code.co_name != '<module>' else None)
+        cache[code_id] = (code, key)
+    key = cache[code_id][1]
+    if key:
+        observed[key].add(current['test'])
+
+import pytest
+
+class Review:
+    def pytest_collection_modifyitems(self, items):
+        # Redirect configurable evidence roots; keep each run separate from prior evidence.
+        for module in {item.module for item in items}:
+            if module.__name__.endswith('test_complete_case'):
+                module.EVIDENCE = OUT / 'case-journey'
+        (RUN / 'collected.json').write_text(json.dumps([item.nodeid for item in items], indent=2))
+    def pytest_runtest_setup(self, item):
+        current['test'] = item.nodeid
+    def pytest_runtest_logreport(self, report):
+        if report.when == 'call' or (report.when in {'setup','teardown'} and report.failed):
+            row = {'test': report.nodeid, 'phase': report.when, 'outcome': report.outcome,
+                   'seconds': round(report.duration, 4)}
+            results.append(row)
+            with (OUT / 'test-progress.jsonl').open('a') as stream:
+                stream.write(json.dumps(row) + '\n')
+    def pytest_sessionfinish(self, session, exitstatus):
+        sys.setprofile(None)
+        threading.setprofile(None)
+        for row in functions:
+            row['tests'] = sorted(observed[(row['file'], row['name'])])
+            row['status'] = 'observed execution' if row['tests'] else 'not observed'
+        for row in classes:
+            methods = [f for f in functions if f['file'] == row['file'] and f['class'] == row['name']]
+            row['declared_functions'] = len(methods)
+            row['observed_functions'] = sum(bool(f['tests']) for f in methods)
+        output = {'exit_code': int(exitstatus), 'elapsed_seconds': round(time.time()-START, 2),
+                  'scope': 'Runtime app/worker Python call observations mapped to tests; not branch coverage or proof of an assertion for every call. CLI subprocesses and external production services are not instrumented.',
+                  'functions': functions, 'classes': classes, 'tests': results}
+        (OUT / 'function-review.json').write_text(json.dumps(output, indent=2)+'\n')
+        print('\nFUNCTION REVIEW:', sum(bool(f['tests']) for f in functions), '/', len(functions), 'functions observed')
+
+# The user previously authorised isolated Playwright tests. Show Chromium's main
+# desktop case journey while retaining private contexts and test-only databases.
+from playwright.sync_api import BrowserType
+original_launch = BrowserType.launch
+def visible_launch(self, *args, **kwargs):
+    if self.name == 'chromium' and 'test_complete_case_lifecycle[1440-chromium]' in current['test']:
+        kwargs.update(headless=False, slow_mo=180)
+    return original_launch(self, *args, **kwargs)
+BrowserType.launch = visible_launch
+
+os.environ.update(RUN_RUNTIME='1', RUN_BROWSER='1',
+                  PLAYWRIGHT_BROWSERS_PATH=str(ROOT/'runtime/playwright-browsers'),
+                  STUDENT_EVIDENCE_DIR=str(OUT/'student'),
+                  IDENTITY_EVIDENCE_DIR=str(OUT/'identity'),
+                  BROWSER_EVIDENCE_DIR=str(OUT/'layout'))
+sys.setprofile(profile)
+threading.setprofile(profile)
+try:
+    code = pytest.main(['tests', '-v', '--tb=short', '--junitxml='+str(OUT/'full-results.xml')], plugins=[Review()])
+finally:
+    sys.setprofile(None)
+    threading.setprofile(None)
+raise SystemExit(code)

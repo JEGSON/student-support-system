@@ -1,0 +1,16 @@
+{
+  "profile_axe_violations": 0,
+  "registration": true,
+  "reserved_email_validation": true,
+  "profile_persisted": true,
+  "first_case": true,
+  "other_student_denied": true,
+  "admin_denied": true,
+  "repeat_login": true,
+  "fresh_reauthentication": true,
+  "profile_erased": true,
+  "sessions_closed": true,
+  "case_review_preserved": true,
+  "automatic_reenrolment_denied": true,
+  "closure_axe_violations": 0
+}

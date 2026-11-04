@@ -1,0 +1,44 @@
+import collections
+import html
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+OUT = ROOT/'docs/evidence/function-review-2026-11-04'
+d = json.loads((OUT/'function-review.json').read_text())
+e = html.escape
+groups = collections.defaultdict(list)
+for row in d['tests']:
+    groups[row['test'].split('::')[0]].append(row)
+passed = sum(r['outcome']=='passed' for r in d['tests'])
+failed = sum(r['outcome']=='failed' for r in d['tests'])
+exercised = sum(bool(r['tests']) for r in d['functions'])
+parts = ['''<!doctype html><html lang="en-GB"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Student Support — function and workflow review</title><style>body{font:16px/1.6 system-ui,sans-serif;background:#f7f7f3;color:#183139;margin:0}main{max-width:1180px;margin:auto;padding:32px}h1{font-size:2.5rem;line-height:1.2}h2{margin-top:2.5rem}a{color:#086c63}summary{cursor:pointer;font-weight:700;padding:12px;background:#e6f1ed}details{margin:8px 0;border:1px solid #ccd9d5;border-radius:8px;overflow:hidden}details>div{padding:16px}table{width:100%;border-collapse:collapse}th,td{padding:10px;text-align:left;border-bottom:1px solid #d5ded9;vertical-align:top}code{overflow-wrap:anywhere;white-space:normal;font-size:13px}.good{color:#075e42}.gap{color:#8a390b}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}figure{margin:0;background:white;padding:12px;border:1px solid #ccd9d5;border-radius:8px}img{width:100%;max-height:320px;object-fit:contain;object-position:top}figcaption{font-size:14px}p{max-width:92ch}.scroll{overflow-x:auto}input{font:inherit;padding:10px;width:95%;margin:12px 0;border:1px solid #607d76}small{color:#48625d}</style><main><p>4 November 2026 · local isolated verification</p><h1>Student Support: tests you can inspect</h1>''']
+parts.append(f'<p><strong>{passed} passed · {failed} failed</strong>. {exercised} of {len(d["functions"])} discovered Python functions were observed executing across {len(d["classes"])} declared classes. Each test and function is listed below.</p>')
+parts.append('<p>Safari verified the running app’s homepage, registration guidance, privacy information and staff entrance. Mutating browser/backend tests used separate synthetic test records and the test database. The current development records were preserved.</p><p><strong>How to read this:</strong> “Observed execution” means the function ran during the listed test. It is not independent proof of every branch or an assertion for every internal helper. Production services and CLI subprocesses were not instrumented. Unobserved functions are displayed explicitly.</p><p><a href="full-results.xml">Full test XML</a> · <a href="function-review.json">Function/test mapping</a> · <a href="README.md">Review scope and limitations</a></p>')
+parts.append('<h2>Browser walkthrough</h2><div class="cards">')
+shots = [('case-journey/chromium-1440-staff-queue.png','1. Student submits a request; the manager sees it in the scoped queue.'),('case-journey/chromium-1440-staff-notes.png','2. Assigned staff start work, ask a question and record a private note.'),('case-journey/chromium-1440-student-conversation.png','3. Student reads the question and replies; private note must be absent.'),('case-journey/chromium-1440-minimal-referral.png','4. Target team sees only the approved selected referral summary.'),('case-journey/chromium-1440-closed-outcome.png','5. Recorded resolution closes the request and is visible to the student.'),('case-journey/chromium-1440-session-expired.png','6. Expired form is refused; its unsaved contents are not submitted.'),('accounts/chromium-1440-profile.png','7. New synthetic account edits its own profile and creates its first case.'),('accounts/chromium-1440-closed.png','8. Fresh same-user sign-in permits profile closure; automatic re-enrolment is refused.'),('accounts/chromium-1440-invitations.png','9. Administrator creates a team and an ordinary staff invitation. The one-time code is omitted from screenshots.')]
+for name, caption in shots:
+    if (OUT/name).is_file():
+        parts.append(f'<figure><a href="{e(name)}"><img src="{e(name)}" alt="{e(caption)}" loading="lazy"></a><figcaption>{e(caption)}</figcaption></figure>')
+parts.append('</div><h2>Every test, in execution order</h2><p>Expand a file to inspect each scenario, its result and elapsed time. Test names describe the assertion being exercised; the source contains the exact checks.</p>')
+for file, rows in groups.items():
+    parts.append(f'<details><summary>{e(file)} — {sum(r["outcome"]=="passed" for r in rows)} passed / {len(rows)} results</summary><div><table><tr><th>Scenario</th><th>Result</th><th>Seconds</th></tr>')
+    for r in rows:
+        parts.append(f'<tr><td><code>{e(r["test"].split("::",1)[1])}</code></td><td>{e(r["outcome"])}</td><td>{r["seconds"]}</td></tr>')
+    parts.append('</table></div></details>')
+parts.append('<h2>Class inventory</h2><p>Counts include functions declared within each class, including nested transactional helpers. Classes with no explicit methods (for example exception types) have no method-call coverage metric.</p><div class="scroll"><table><tr><th>Class</th><th>Source</th><th>Observed / declared functions</th></tr>')
+for r in d['classes']:
+    parts.append(f'<tr><td><code>{e(r["name"])}</code></td><td><code>{e(r["file"])}:{r["line"]}</code></td><td>{r["observed_functions"]} / {r["declared_functions"]}</td></tr>')
+parts.append('</table></div><h2>Function-by-function evidence</h2><label for="filter">Find a function, class, file or test</label><input id="filter" type="search" placeholder="For example: AccountPrivacy.close or referrals"><p>Unobserved functions appear first. Expand a row to see the tests that executed it.</p><section id="functions">')
+for r in sorted(d['functions'], key=lambda r:(bool(r['tests']),r['file'],r['line'])):
+    style='good' if r['tests'] else 'gap'
+    parts.append(f'<details><summary><code>{e(r["file"])}:{r["line"]} · {e(r["name"])}</code> <span class="{style}">{e(r["status"])}</span></summary><div>')
+    if r['tests']:
+        parts.append('<ul>'+''.join(f'<li><code>{e(t)}</code></li>' for t in r['tests'])+'</ul>')
+    else:
+        parts.append('<p>No call observed in the instrumented app/worker processes for this suite. Review explicitly; do not infer a pass.</p>')
+    parts.append('</div></details>')
+parts.append('</section><p>External university SSO/SMTP/hosting acceptance, all error branches, load capacity and human accessibility review are outside this run.</p></main><script>document.querySelector("#filter").addEventListener("input",e=>{const q=e.target.value.toLowerCase();document.querySelectorAll("#functions>details").forEach(d=>d.hidden=!d.textContent.toLowerCase().includes(q))})</script></html>')
+(OUT/'index.html').write_text(''.join(parts))
+print(json.dumps({'tests_passed':passed,'failed_results':failed,'functions_observed':exercised,'functions_discovered':len(d['functions']),'classes':len(d['classes']),'report':str(OUT/'index.html')}))
