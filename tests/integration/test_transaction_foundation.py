@@ -181,6 +181,39 @@ def test_real_collection_privileges_append_only_audit_and_worker_boundaries(bund
     assert worker.users.find_one({"_id": uid("student_a")}, {"verified_contact": 1})
 
 
+@pytest.mark.parametrize(
+    "collection,operation",
+    [
+        ("cases", "delete"),
+        ("messages", "update"),
+        ("messages", "delete"),
+        ("internal_notes", "update"),
+        ("internal_notes", "delete"),
+        ("users", "delete"),
+        ("teams", "delete"),
+        ("memberships", "delete"),
+        ("referrals", "delete"),
+        ("privileged_grants", "delete"),
+        ("service_principals", "find"),
+    ],
+)
+def test_web_database_identity_cannot_erase_history_or_manage_worker_principals(
+    restricted, collection, operation
+):
+    # A fresh nonmatching ID proves command authorisation without altering data,
+    # even when running this regression against the old overly broad role.
+    target = restricted["web_testing"][collection]
+    selector = {"_id": str(uuid4())}
+    with pytest.raises(OperationFailure) as failure:
+        if operation == "delete":
+            target.delete_one(selector)
+        elif operation == "update":
+            target.update_one(selector, {"$set": {"body": "No matching record"}})
+        else:
+            target.find_one(selector)
+    assert failure.value.code == 13
+
+
 def test_explicit_audit_reader_requires_scope_purpose_and_successful_read_audit(
     bundle, restricted, monkeypatch
 ):
@@ -202,6 +235,7 @@ def test_explicit_audit_reader_requires_scope_purpose_and_successful_read_audit(
             reader.for_case(uid("reviewer"), "audit", uid(case), purpose)
     events = reader.for_case(uid("reviewer"), "audit", uid("case_a"), "Synthetic review")
     assert events and events[0]["action"] == "audit_reviewed" and "description" not in str(events)
+    assert events[0]["purpose"] == "Synthetic review"
 
     def fail(*args, **kwargs):
         raise RuntimeError("Audit unavailable")

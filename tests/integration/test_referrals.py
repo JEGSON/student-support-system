@@ -3,9 +3,12 @@ from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
+from app.repositories.core import utc_now
+from app.services.access import AccessService
 from app.services.policy import AccessDenied
 from app.services.referrals import Referrals
 from app.services.staff_cases import StaffCases
+from app.services.transactions import transaction
 
 pytestmark = [
     pytest.mark.runtime,
@@ -157,3 +160,52 @@ def test_reassigned_proposer_loses_outgoing_summary_access(bundle):
         {"_id": uid("case_a")}, {"$set": {"assignee_id": uid("officer_unassigned")}}
     )
     assert all(row["_id"] != proposal for row in service.list(uid("officer_assigned"), "staff"))
+
+
+def test_acceptance_rechecks_concurrent_source_archival(bundle, monkeypatch):
+    db, uid = bundle
+    service = Referrals(db)
+    proposal = service.propose(
+        uid("officer_assigned"),
+        "staff",
+        uid("case_a"),
+        uid("team_disability"),
+        "disability",
+        "Review support needs",
+        "Only the approved summary",
+    )
+    service.decide(uid("manager_finance"), "staff", proposal, "approve", "Approved summary")
+    db.cases.update_one(
+        {"_id": uid("case_a")},
+        {"$set": {"status": "Closed", "closed_at": utc_now()}},
+    )
+    touch = AccessService.touch_user
+    archived = []
+
+    def archive_after_acceptance_snapshot(access, actor, sid):
+        touch(access, actor, sid)
+        if actor == uid("manager_disability") and not archived:
+            archived.append(True)
+
+            def commit_archival(other_sid):
+                # Model the archiver's case/team writes independently of the
+                # source approver user guard already held by this acceptance.
+                db.cases.update_one(
+                    {"_id": uid("case_a")},
+                    {"$set": {"archive_state": "archived"}, "$inc": {"version": 1}},
+                    session=other_sid,
+                )
+                db.teams.update_one(
+                    {"_id": uid("team_finance")},
+                    {"$inc": {"authorization_revision": 1}},
+                    session=other_sid,
+                )
+
+            transaction(db, commit_archival)
+
+    monkeypatch.setattr(AccessService, "touch_user", archive_after_acceptance_snapshot)
+    with pytest.raises(AccessDenied):
+        service.decide(uid("manager_disability"), "staff", proposal, "accept", "Accept summary")
+    assert archived
+    assert db.referrals.find_one({"_id": proposal})["status"] == "source_approved"
+    assert db.cases.count_documents({"originating_referral_id": proposal}) == 0

@@ -6,9 +6,9 @@ from urllib.parse import urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from dotenv import dotenv_values
-from werkzeug.serving import WSGIRequestHandler
+from werkzeug.serving import WSGIRequestHandler, run_simple
 
-from app import create_app
+from app.portals import create_portals
 
 
 class SafeRequestHandler(WSGIRequestHandler):
@@ -20,6 +20,10 @@ def local_web_settings():
     # Keep operator/maintenance/worker credentials out of the retained web config
     # and os.environ. This local account can still read its own private .env file.
     allowed = {
+        "STUDENT_PORTAL_ORIGIN",
+        "STAFF_PORTAL_ORIGIN",
+        "STUDENT_OIDC_CLIENT_ID",
+        "STAFF_OIDC_CLIENT_ID",
         "IDENTITY_FINGERPRINT_PREVIOUS_KEYS",
         "RETENTION_DAYS_JSON",
         "RETENTION_POLICY_REFERENCE",
@@ -65,13 +69,18 @@ def local_web_settings():
 
 
 def main():
-    app = create_app(local_web_settings())
-    if app.config["APP_ENV"] != "development":
+    settings = local_web_settings()
+    if settings.get("APP_ENV") != "development":
         raise SystemExit("This runner is restricted to local development.")
-    app.run(
-        host="127.0.0.1",
-        port=urlsplit(app.config["APP_BASE_URL"]).port or 5050,
-        debug=False,
+    portals = create_portals(settings)
+    print("Student portal: " + portals.student_origin, flush=True)
+    print("Staff portal: " + portals.staff_origin, flush=True)
+    run_simple(
+        "127.0.0.1",
+        urlsplit(settings["APP_BASE_URL"]).port or 5050,
+        portals,
+        threaded=True,
+        use_debugger=False,
         use_reloader=False,
         request_handler=SafeRequestHandler,
     )

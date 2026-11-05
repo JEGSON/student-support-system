@@ -15,6 +15,7 @@ uv sync --frozen --cache-dir runtime/uv-cache
 .venv/bin/python scripts/database_setup.py --environment testing --seed
 .venv/bin/python scripts/configure_routing.py
 .venv/bin/python scripts/provision_identity.py
+.venv/bin/python -m scripts.configure_portals
 .venv/bin/python scripts/run_local.py
 ```
 
@@ -24,11 +25,30 @@ missing local role secrets. Do not delete volumes or overwrite .env to resolve
 credential mismatches. Stop/restart an existing Flask terminal after source/config
 changes; do not launch a second listener on 5050 or stop unrelated services.
 
-Open http://127.0.0.1:5050. Generated credentials for 17 synthetic accounts are
+Open http://127.0.0.1:5050 for students and http://localhost:5050 for staff. Keep
+these hostnames distinct: changing only the port does not isolate browser cookies.
+Existing installations should run the dependency starter to mount the portal login
+theme, then `.venv/bin/python -m scripts.configure_portals`. This preserves existing
+accounts/passwords, installs four exact local/test callback clients, and assigns
+the portal-specific identity theme. It automatically advances through Keycloak's
+native fresh-account action when an identity is remembered, without global logout.
+The theme requires JavaScript for this convenience; Keycloak's manual account
+selection remains available when JavaScript is disabled.
+
+After updating source, apply the current validators without reseeding records:
+`.venv/bin/python scripts/database_setup.py --environment development` and the
+same command with `--environment testing`. The codebase review added an optional
+audit-purpose field used by controlled archive/audit reads. Restart the runner
+after applying validators. Existing staff/admin accounts sign in directly; only
+new service access needs an invitation and a matching verified provider account.
+
+Generated credentials for 17 synthetic accounts are
 private in runtime/synthetic-logins.json (0600), excluded from Git/package. There
 is no shared/default password. Account labels and flows are in user-guide.md.
-The provisioning command also configures local student registration and enforces
-reserved @example.invalid addresses. On an existing seeded installation you may run
+The provisioning command also configures local student registration. Continue to
+use reserved @example.invalid addresses for local testing. The portal configurator
+removes the provider's demo-only email-field hint while preserving the reserved
+email-domain restriction. On an existing seeded installation you may run
 `.venv/bin/python scripts/configure_registration.py` to configure only registration
 without remapping fixture identities. Restart the app afterwards. SELF_REGISTRATION_ENABLED
 defaults to 0 and can only be enabled with the exact synthetic provider; it is

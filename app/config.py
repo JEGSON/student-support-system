@@ -253,9 +253,9 @@ def load_config(overrides=None):
     defaults = {
         "INSTITUTION_NAME": "University Student Support",
         "PRIVACY_CONTACT": "Contact your university's privacy office.",
-        "PRIVACY_NOTICE": "Privacy information must be provided by the university before launch.",
-        "SERVICE_HOURS_TEXT": "Service hours must be confirmed by the university.",
-        "URGENT_HELP_TEXT": "Urgent-help arrangements must be confirmed by the university.",
+        "PRIVACY_NOTICE": "Your account details and support requests are used to provide support and manage your cases. Only staff authorised for your case may access its contents. Profile closure and retention of linked case records are handled separately.",
+        "SERVICE_HOURS_TEXT": "Your support team will reply in your request. Check your account for questions and updates.",
+        "URGENT_HELP_TEXT": "This portal is not an emergency service. If someone is in immediate danger, contact the emergency services.",
     }
     for name, default in defaults.items():
         value = source.get(name, default if local else "")
@@ -284,7 +284,27 @@ def load_config(overrides=None):
             raise ConfigurationError(
                 "OIDC_ACCOUNT_URL must be an approved same-provider account page."
             )
+    portal = source.get("PORTAL_KIND", "general")
+    if portal not in {"general", "student", "university"}:
+        raise ConfigurationError("Choose a valid portal.")
+    other = source.get("OTHER_PORTAL_ORIGIN", "")
+    if portal != "general":
+        target = service_url(other, "OTHER_PORTAL_ORIGIN")
+        if (
+            target.scheme != base.scheme
+            or target.hostname == base.hostname
+            or target.username
+            or target.password
+            or target.query
+            or target.fragment
+            or target.path not in {"", "/"}
+            or not target.hostname
+            or (local and target.hostname not in {"localhost", "127.0.0.1"})
+        ):
+            raise ConfigurationError("Portals require distinct, explicit trusted hostnames.")
     return {
+        "PORTAL_KIND": portal,
+        "OTHER_PORTAL_ORIGIN": other.rstrip("/"),
         **presentation,
         "ACCOUNT_PRIVACY_REVIEW_DAYS": privacy_review_days,
         "ENROLMENT_MODE": enrolment,

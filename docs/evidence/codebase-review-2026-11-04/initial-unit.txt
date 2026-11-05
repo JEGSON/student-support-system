@@ -1,0 +1,46 @@
+......FFFFF.........FF.....                                              [100%]
+=================================== FAILURES ===================================
+____ test_staff_bookmarks_on_student_host_use_staff_portal[/staff/sign-in] _____
+tests/unit/test_portals.py:53: in test_staff_bookmarks_on_student_host_use_staff_portal
+    assert response.status_code == 302
+E   assert 200 == 302
+E    +  where 200 = <TestResponse streamed [200 OK]>.status_code
+________ test_staff_bookmarks_on_student_host_use_staff_portal[/staff] _________
+tests/unit/test_portals.py:53: in test_staff_bookmarks_on_student_host_use_staff_portal
+    assert response.status_code == 302
+E   assert 200 == 302
+E    +  where 200 = <TestResponse streamed [200 OK]>.status_code
+__ test_staff_bookmarks_on_student_host_use_staff_portal[/access/invitations] __
+tests/unit/test_portals.py:53: in test_staff_bookmarks_on_student_host_use_staff_portal
+    assert response.status_code == 302
+E   assert 200 == 302
+E    +  where 200 = <TestResponse streamed [200 OK]>.status_code
+______ test_staff_bookmarks_on_student_host_use_staff_portal[/retention] _______
+tests/unit/test_portals.py:53: in test_staff_bookmarks_on_student_host_use_staff_portal
+    assert response.status_code == 302
+E   assert 200 == 302
+E    +  where 200 = <TestResponse streamed [200 OK]>.status_code
+___________ test_student_case_links_on_staff_host_use_student_portal ___________
+tests/unit/test_portals.py:60: in test_student_case_links_on_staff_host_use_student_portal
+    assert response.location == "http://127.0.0.1:5050/cases/new?category=finance"
+E   AssertionError: assert None == 'http://127.0.0.1:5050/cases/new?category=finance'
+E    +  where None = <TestResponse streamed [200 OK]>.location
+___________ test_notification_links_never_contain_url_credentials[] ____________
+tests/unit/test_service_release.py:74: in test_notification_links_never_contain_url_credentials
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_______ test_notification_links_never_contain_url_credentials[:password] _______
+tests/unit/test_service_release.py:74: in test_notification_links_never_contain_url_credentials
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+=========================== short test summary info ============================
+FAILED tests/unit/test_portals.py::test_staff_bookmarks_on_student_host_use_staff_portal[/staff/sign-in]
+FAILED tests/unit/test_portals.py::test_staff_bookmarks_on_student_host_use_staff_portal[/staff]
+FAILED tests/unit/test_portals.py::test_staff_bookmarks_on_student_host_use_staff_portal[/access/invitations]
+FAILED tests/unit/test_portals.py::test_staff_bookmarks_on_student_host_use_staff_portal[/retention]
+FAILED tests/unit/test_portals.py::test_student_case_links_on_staff_host_use_student_portal
+FAILED tests/unit/test_service_release.py::test_notification_links_never_contain_url_credentials[]
+FAILED tests/unit/test_service_release.py::test_notification_links_never_contain_url_credentials[:password]
+7 failed, 20 passed in 0.10s

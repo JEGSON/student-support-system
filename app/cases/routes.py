@@ -131,7 +131,9 @@ def overview():
 @authenticated
 def new_request():
     errors = {}
-    category = ""
+    category = request.args.get("category", "") if request.method == "GET" else ""
+    if category not in {"academic", "finance", "wellbeing", "disability", "accommodation"}:
+        category = ""
     description = ""
     key = form_key()
     status = 200

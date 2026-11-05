@@ -21,7 +21,8 @@ class LocalDelivery:
             or origin.path not in {"", "/"}
             or origin.query
             or origin.fragment
-            or origin.username
+            or origin.username is not None
+            or origin.password is not None
         ):
             raise ValueError("Only loopback synthetic delivery is enabled.")
         self.db = database
@@ -128,7 +129,8 @@ class SMTPDelivery(LocalDelivery):
             or origin.path not in {"", "/"}
             or origin.query
             or origin.fragment
-            or origin.username
+            or origin.username is not None
+            or origin.password is not None
         ):
             raise ValueError("Configure the approved HTTPS application origin.")
         if any(

@@ -1,8 +1,10 @@
 # Student, staff and access-administration guide
 
 Use generated private credentials; labels below have no default password. Sign in
-with the university-account button, then choose the explicit context if multiple
-are available. Logout is a CSRF-protected local action through Your account. It
+at http://127.0.0.1:5050 for students or http://localhost:5050 for staff. Enter your
+account email, continue to secure sign-in, and enter the password. Staff with
+multiple authorised contexts can choose a workspace on their account page.
+Logout is a CSRF-protected local action through Your account. It
 does not terminate Keycloak/university SSO; shared-device users must also follow
 the provider's logout process.
 
@@ -41,12 +43,13 @@ information, passwords or another person's details into this demo.
 
 ## Staff and managers
 
-The homepage has a University staff sign-in link to /staff/sign-in. This explains
+The homepage's University staff sign-in link opens the separate staff portal. This explains
 individual staff accounts, approved memberships and the reply workflow. A student
 account does not have the school/team view. For local testing, find the existing
 manager_finance and officer_assigned account credentials in private
-runtime/synthetic-logins.json; never publish that file. Use a separate private
-browser session for staff while keeping the student's normal window open. A manager
+runtime/synthetic-logins.json; never publish that file. Open another
+tab at http://localhost:5050 for staff while keeping the student's tab at
+http://127.0.0.1:5050 open in the same browser. A manager
 can assign an eligible officer, start the assigned case and reply directly within
 their team scope; the assigned officer can also handle the conversation. For another
 category use that category's manager. Existing accounts are provided for all five teams.

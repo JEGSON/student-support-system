@@ -229,6 +229,13 @@ class Referrals:
                     )
                     changes.update(status="accepted", target_case_id=target_id)
             AccessService(self.db).touch_user(actor, sid)
+            # Serialize source routing/archiving against this decision. Source
+            # case business fields remain unchanged; their services share this guard.
+            self.db.teams.update_one(
+                {"_id": source["team_id"]},
+                {"$inc": {"authorization_revision": 1}},
+                session=sid,
+            )
             self.db.teams.update_one(
                 {"_id": referral["target_team_id"]},
                 {"$inc": {"authorization_revision": 1}},

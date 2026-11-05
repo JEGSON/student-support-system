@@ -117,6 +117,11 @@ class Accounts:
                 "verified_contact": "student-" + key.replace("-", "") + "@example.invalid",
                 "created_at": utc_now(),
             }
+            if self.settings.get("PORTAL_KIND", "general") != "general" and not invite:
+                user["student_reference"] = "SSU-" + key.replace("-", "").upper()
+                user.pop("verified_contact", None)
+                if claims.get("email_verified") is True:
+                    user["verified_contact"] = contact_address(claims.get("email"))
             if identity_hash:
                 user["identity_fingerprint"] = identity_hash
             if invite:

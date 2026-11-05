@@ -1,5 +1,7 @@
 """Fixed ownership filters and projections for student case queries."""
 
+from flask import current_app, has_app_context
+
 from app.repositories.core import identifier
 
 LIST_FIELDS = {
@@ -26,6 +28,8 @@ class StudentCaseRepository:
 
     def page(self, actor, after, sid):
         query = {"student_id": identifier(actor), "archive_state": "active"}
+        if has_app_context() and current_app.config["PORTAL_KIND"] != "general":
+            query["fixture_version"] = {"$ne": "synthetic-v1"}
         if after:
             stamp, key = after
             query["$or"] = [

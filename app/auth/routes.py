@@ -15,16 +15,32 @@ from flask import (
     url_for,
 )
 from pymongo.errors import PyMongoError
+from requests.exceptions import RequestException
 
-from app.auth.workspaces import callback_url
+from app.auth.workspaces import callback_url, workspace_url
 from app.repositories.core import utc_now
 from app.services.account_privacy import AccountPrivacy
 from app.services.accounts import Accounts, profile_errors
-from app.services.enrolment import invitation_hash
+from app.services.enrolment import contact_address, invitation_hash
 from app.services.policy import AccessDenied
 from app.services.transactions import VersionConflict
 
 identity = Blueprint("identity", __name__)
+
+
+class PortalAccessDenied(AccessDenied):
+    """A verified identity belongs in the other portal."""
+
+
+@identity.errorhandler(PyMongoError)
+def identity_storage_unavailable(error):
+    current_app.logger.warning("identity_storage_unavailable")
+    return render_template(
+        "error.html",
+        title="Sign-in service temporarily unavailable",
+        message="Please try again shortly. Your account details have not been changed.",
+        context="public",
+    ), 503
 
 
 def safe_return_path(value):
@@ -88,12 +104,54 @@ def authenticated(view):
     return wrapped
 
 
-@identity.get("/sign-in")
+@identity.route("/sign-in", methods=["GET", "POST"])
 def sign_in():
-    return start_sign_in()
+    if current_app.config["PORTAL_KIND"] == "general":
+        return start_sign_in()
+    if g.user:
+        return redirect(url_for("identity.account"))
+    if session.storage_failed:
+        abort(503)
+    error = None
+    if request.method == "POST":
+        if set(request.form) != {"csrf_token", "email"} or any(
+            len(request.form.getlist(k)) != 1 for k in request.form
+        ):
+            abort(400)
+        try:
+            hint = contact_address(request.form["email"].strip().lower())
+        except ValueError:
+            error = "Enter a valid email address."
+        else:
+            session["login_hint"] = hint
+            return render_template(
+                "auth/portal_sign_in.html",
+                title="Continue to sign in",
+                context="public",
+                ready=hint,
+                error=None,
+                return_to=safe_return_path(request.args.get("next")),
+            )
+    return render_template(
+        "auth/portal_sign_in.html",
+        title="Staff sign-in"
+        if current_app.config["PORTAL_KIND"] == "university"
+        else "Student sign-in",
+        context="public",
+        error=error,
+        return_to=safe_return_path(request.args.get("next")),
+    ), 400 if error else 200
 
 
-def start_sign_in(registration=False):
+@identity.get("/sign-in/continue")
+def sign_in_continue():
+    hint = session.get("login_hint")
+    if current_app.config["PORTAL_KIND"] == "general" or not hint:
+        return redirect(url_for("identity.sign_in"))
+    return start_sign_in(login_hint=hint)
+
+
+def start_sign_in(registration=False, login_hint=None):
     if g.user:
         return redirect(url_for("identity.account"))
     if session.storage_failed:
@@ -108,6 +166,7 @@ def start_sign_in(registration=False):
         return client.authorize_redirect(
             callback_url(),
             **({"prompt": "create"} if registration else {"prompt": "login"}),
+            **({"login_hint": login_hint} if login_hint else {}),
         )
     except Exception:
         session.logout()
@@ -122,6 +181,7 @@ def start_sign_in(registration=False):
 
 @identity.get("/auth/callback")
 def callback():
+    failure_stage = "response"
     try:
         if len(request.args.getlist("state")) != 1 or len(request.args.getlist("code")) != 1:
             raise ValueError("Invalid response.")
@@ -140,6 +200,7 @@ def callback():
             options["auth_time"] = {"essential": True}
         if current_app.config.get("OIDC_REQUIRED_ACR"):
             options["acr"] = {"essential": True, "value": current_app.config["OIDC_REQUIRED_ACR"]}
+        failure_stage = "token_validation"
         token = current_app.extensions["university_oidc"].authorize_access_token(
             claims_options=options, leeway=0
         )
@@ -147,6 +208,7 @@ def callback():
         if not claims or not isinstance(claims.get("sub"), str):
             raise ValueError("Verified identity required.")
         database = current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]]
+        failure_stage = "account_lookup"
         user = Accounts(database).resolve(
             issuer,
             claims,
@@ -166,22 +228,63 @@ def callback():
                 or now.timestamp() - auth_time > 300
             ):
                 raise AccessDenied("Fresh authentication for the same account is required.")
+        contexts = available_contexts(database, user)
+        portal = current_app.config["PORTAL_KIND"]
+        if (portal == "student" and "student" not in contexts) or (
+            portal == "university" and not set(contexts) & {"staff", "admin", "audit"}
+        ):
+            raise PortalAccessDenied("This identity is not approved for this portal.")
         destination = safe_return_path(session.get("context"))
         session.rotate(user_id=user["_id"], authentication_time=now)
         if reauth_user:
             session["reauthenticated_at"] = int(now.timestamp())
         contexts = available_contexts(database, user)
-        if len(contexts) == 1:
+        if portal == "student":
+            session["context"] = "student"
+        elif portal == "university":
+            session["context"] = next(c for c in ["staff", "admin", "audit"] if c in contexts)
+        elif len(contexts) == 1:
             session["context"] = contexts[0]
         return redirect(request.script_root + destination)
-    except Exception:
+    except PortalAccessDenied:
         session.logout()
-        current_app.logger.warning("identity_response_rejected")
+        current_app.logger.warning("identity_wrong_portal")
+        staff_portal = current_app.config["PORTAL_KIND"] == "student"
         return render_template(
             "error.html",
             title="We could not sign you in",
-            message="Your sign-in response was invalid, expired or your account is unavailable. Start sign-in again.",
             context="public",
+            message=(
+                "This is the student portal. Staff and administrators must use the staff portal."
+                if staff_portal
+                else "This is the staff portal. Use the student portal for your student account."
+            ),
+            action_label="Open staff sign-in" if staff_portal else "Open student sign-in",
+            action_url=workspace_url(
+                "identity.sign_in", "university" if staff_portal else "student"
+            ),
+        ), 400
+    except (PyMongoError, RequestException):
+        session.logout()
+        current_app.logger.warning("identity_dependency_unavailable stage=%s", failure_stage)
+        return render_template(
+            "error.html",
+            title="Sign-in service temporarily unavailable",
+            context="public",
+            message="We could not reach the sign-in service. Please start sign-in again shortly.",
+            action_label="Start sign-in again",
+            action_url=url_for("identity.sign_in"),
+        ), 503
+    except Exception:
+        session.logout()
+        current_app.logger.warning("identity_response_rejected stage=%s", failure_stage)
+        return render_template(
+            "error.html",
+            title="We could not sign you in",
+            message="Your sign-in attempt expired, could not be verified, or your account is unavailable. Start sign-in again.",
+            context="public",
+            action_label="Start sign-in again",
+            action_url=url_for("identity.sign_in"),
         ), 400
 
 
@@ -190,13 +293,25 @@ def callback():
 def account():
     database = current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]]
     contexts = available_contexts(database, g.user)
+    if current_app.config["PORTAL_KIND"] == "student":
+        contexts = [c for c in contexts if c == "student"]
+    elif current_app.config["PORTAL_KIND"] == "university":
+        contexts = [c for c in contexts if c != "student"]
     if session.get("context") not in contexts:
         session.pop("context", None)
+    recent = []
+    if current_app.config["PORTAL_KIND"] == "student" and session.get("context") == "student":
+        from app.services.student_cases import StudentCases
+
+        recent, _ = StudentCases(
+            database, current_app.config["CASE_ROUTING"], current_app.config["CASE_ROUTING_SOURCE"]
+        ).list(g.user["_id"], "student")
     return render_template(
         "auth/account.html",
         title="Your account",
         context=session.get("context", "Choose a context"),
         contexts=contexts,
+        recent=recent[:5],
     )
 
 
@@ -209,6 +324,11 @@ def choose_context():
         return "Invalid request.", 400
     database = current_app.extensions["mongo"][current_app.config["MONGODB_DATABASE"]]
     context = request.form.get("context")
+    portal = current_app.config["PORTAL_KIND"]
+    if (portal == "student" and context != "student") or (
+        portal == "university" and context == "student"
+    ):
+        abort(403)
     if context not in available_contexts(database, g.user):
         return "Access denied.", 403
     auth_time = session.authentication_time
@@ -436,4 +556,11 @@ def privacy_notice():
         "auth/privacy.html",
         title="Privacy and service information",
         context=session.get("context", "public"),
+    )
+
+
+@identity.get("/support")
+def support_directory():
+    return render_template(
+        "support.html", title="Support services", context=session.get("context", "public")
     )

@@ -2,6 +2,8 @@
 
 from uuid import uuid4
 
+from flask import current_app, has_app_context
+
 from app.repositories.core import identifier, plain_text, utc_now
 from app.services.access import AccessService
 from app.services.audit import AuditWriter
@@ -54,6 +56,8 @@ class StaffCases:
             if not rules:
                 return [], False
             query = {"archive_state": "active", "$or": rules}
+            if has_app_context() and current_app.config["PORTAL_KIND"] != "general":
+                query["fixture_version"] = {"$ne": "synthetic-v1"}
             if status:
                 if status not in {"New", "In Progress", "Awaiting Student", "Closed"}:
                     raise ValueError("Invalid status.")

@@ -46,7 +46,7 @@ def configure_oidc(app):
         server_metadata_url=app.config["OIDC_ISSUER"].rstrip("/")
         + "/.well-known/openid-configuration",
         client_kwargs={
-            "scope": "openid profile",
+            "scope": "openid profile email",
             "code_challenge_method": "S256",
             "token_endpoint_auth_method": app.config["OIDC_TOKEN_AUTH_METHOD"],
             "default_timeout": 5,

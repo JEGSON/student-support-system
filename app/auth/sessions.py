@@ -43,6 +43,7 @@ class ServerSession(CallbackDict, SessionMixin):
             "csrf_token",
             "context",
             "workspace",
+            "login_hint",
             "reauth_user",
             "reauth_started",
             "reauthenticated_at",

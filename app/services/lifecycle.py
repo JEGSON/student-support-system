@@ -23,7 +23,11 @@ class Lifecycle:
         self.policy_reference = self.settings.get("RETENTION_POLICY_REFERENCE") or POLICY
 
     def require_synthetic(self, policy):
-        if policy == POLICY and self.db.name in {"student_support_dev", "student_support_test"}:
+        if (
+            policy == POLICY
+            and self.db.name in {"student_support_dev", "student_support_test"}
+            and self.settings.get("PORTAL_KIND", "general") == "general"
+        ):
             return
         if (
             policy != self.settings.get("RETENTION_POLICY_REFERENCE")
@@ -95,7 +99,7 @@ class Lifecycle:
         return AccessService(self.db).guard(actor, context, "assign_case", case_id, write)
 
     def archive_read(self, actor, context, case_id, purpose):
-        plain_text(purpose, 1000)
+        purpose = plain_text(purpose, 1000)
 
         def read(sid):
             policy = Policy(self.db, actor, context, sid)
@@ -105,7 +109,9 @@ class Lifecycle:
             if not case or not policy.membership(case["team_id"], {"manager"}):
                 raise AccessDenied("Scoped archived access required.")
             AccessService(self.db).touch_user(actor, sid)
-            AuditWriter(self.db).append(actor, "archive_read", "case", case_id, [], sid)
+            AuditWriter(self.db).append(
+                actor, "archive_read", "case", case_id, [], sid, purpose=purpose
+            )
             return {
                 key: case[key]
                 for key in ["reference", "description", "status", "created_at", "_id"]

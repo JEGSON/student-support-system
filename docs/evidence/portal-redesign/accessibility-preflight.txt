@@ -1,0 +1,16 @@
+..........................F
+=================================== FAILURES ===================================
+_ test_real_portal_signin_case_reply_isolation_and_design[student-390-chromium] _
+tests/browser/test_real_portals.py:157: in test_real_portal_signin_case_reply_isolation_and_design
+    capture(student, "home")
+tests/browser/test_real_portals.py:149: in capture
+    assert not violations, violations
+E   AssertionError: [('color-contrast', 'serious')]
+E   assert not [('color-contrast', 'serious')]
+------------------------------ Captured log call -------------------------------
+INFO     werkzeug:_internal.py:97 127.0.0.1 - - [04/Nov/2026 21:36:03] request method=GET status=200
+INFO     werkzeug:_internal.py:97 127.0.0.1 - - [04/Nov/2026 21:36:03] request method=GET status=200
+=========================== short test summary info ============================
+FAILED tests/browser/test_real_portals.py::test_real_portal_signin_case_reply_isolation_and_design[student-390-chromium]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 26 passed in 67.86s (0:01:07)

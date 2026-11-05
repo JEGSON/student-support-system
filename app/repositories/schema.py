@@ -221,6 +221,7 @@ SCHEMAS = {
         occurred_at=DATE,
         request_id=text(64),
         changed_field_names=array(text(80)),
+        purpose=text(1000),
     ),
     "notification_outbox": schema(
         [

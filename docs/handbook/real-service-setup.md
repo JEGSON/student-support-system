@@ -54,6 +54,14 @@ users are never seeded from local demo fixtures.
 
 ## Student and staff accounts at the same time
 
+The redesigned **local runner** uses `http://127.0.0.1:5050` for students and
+`http://localhost:5050` for staff, with separate host-only sessions and exact OIDC
+clients. Run `.venv/bin/python -m scripts.configure_portals` after mounting the
+current Compose identity theme. See [local setup](setup.md). Old local GET
+bookmarks redirect to these hosts; old form submissions are not forwarded.
+The compatibility instructions below apply to the general application entry
+point used by the existing production setup, which has not been deployed.
+
 Open `/student/sign-in` for the student identity and `/university/sign-in` for
 staff/admin in another tab. The account page provides **Open student account
 separately** and **Open staff account separately** links. Each workspace retains

@@ -12,10 +12,15 @@ fields and closes platform sessions. Minimal HMAC suppression/attribution record
 remain, linked cases follow retention review, and restored snapshots replay closure
 records. This is not a claim of complete anonymisation or all-system erasure.
 
-Student and university accounts can run concurrently in the same browser through
-fixed `/student` and `/university` mounts. Distinct path-scoped HttpOnly cookies and
-server-side workspace binding isolate sessions, CSRF and OIDC attempts. These URL
-namespaces grant no role; the current database policies remain authoritative.
+The local runner now uses distinct student (`127.0.0.1:5050`) and staff
+(`localhost:5050`) hosts with host-only, root-path HttpOnly cookies and separate
+OIDC clients. Server-side workspace binding isolates sessions, CSRF and OIDC
+attempts. Legacy local GET mounts redirect; mutations must be resubmitted from a
+new portal form. The general application/production entry point retains its
+`/student` and `/university` compatibility mounts. Neither hosts nor URL namespaces
+grant roles; current database policies remain authoritative. See the
+[portal evidence](../evidence/portal-redesign/README.md) for the local provider theme
+and browser checks.
 Existing root URLs/sessions remain compatible. Normal sign-in requests credentials
 explicitly; privileged destructive reauthentication keeps its same-person proof.
 

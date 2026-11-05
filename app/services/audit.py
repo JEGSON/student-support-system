@@ -6,7 +6,7 @@ from uuid import uuid4
 from flask import g, has_request_context
 from pymongo.write_concern import WriteConcern
 
-from app.repositories.core import identifier, utc_now
+from app.repositories.core import identifier, plain_text, utc_now
 from app.services.policy import Policy
 from app.services.transactions import transaction
 
@@ -94,6 +94,7 @@ class AuditWriter:
         sid=None,
         request_id=None,
         outcome="allowed",
+        purpose=None,
     ):
         if outcome not in {"allowed", "denied", "failed"}:
             raise ValueError("Invalid audit outcome.")
@@ -115,6 +116,13 @@ class AuditWriter:
             "request_id": request_id,
             "changed_field_names": sorted(set(fields)),
         }
+        if purpose is not None:
+            if action not in {"archive_read", "audit_reviewed"}:
+                raise ValueError("Read purposes are restricted to controlled review actions.")
+            purpose = plain_text(purpose, 1000)
+            if any(ord(c) < 32 or ord(c) == 127 for c in purpose):
+                raise ValueError("Use a single-line review purpose.")
+            doc["purpose"] = purpose
         collection = self.db.audit_events
         if sid is None:
             collection = collection.with_options(
@@ -139,7 +147,9 @@ class AuditReader:
             case = self.db.cases.find_one({"_id": identifier(case_id)}, session=sid)
             policy.require("read_audit", case, purpose=purpose)
             self.db.users.update_one({"_id": actor}, {"$inc": {"guard_version": 1}}, session=sid)
-            AuditWriter(self.db).append(actor, "audit_reviewed", "case", case_id, [], sid)
+            AuditWriter(self.db).append(
+                actor, "audit_reviewed", "case", case_id, [], sid, purpose=purpose
+            )
 
         transaction(self.db, authorise)
         return list(
@@ -154,6 +164,7 @@ class AuditReader:
                     "request_id": 1,
                     "changed_field_names": 1,
                     "outcome": 1,
+                    "purpose": 1,
                 },
                 max_time_ms=1500,
             )

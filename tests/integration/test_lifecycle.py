@@ -42,6 +42,10 @@ def test_departure_review_archive_read_and_hold(bundle):
     assert lifecycle.archive_read(
         uid("manager_finance"), "staff", uid("case_a"), "Synthetic audit"
     )["reference"]
+    assert (
+        db.audit_events.find_one({"action": "archive_read", "target_id": uid("case_a")})["purpose"]
+        == "Synthetic audit"
+    )
     with pytest.raises(AccessDenied):
         lifecycle.archive_read(uid("manager_disability"), "staff", uid("case_a"), "Wrong scope")
     lifecycle.hold(uid("administrator"), "admin", uid("case_a"), True, "Synthetic legal hold")

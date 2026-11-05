@@ -30,7 +30,9 @@ def create_app(config=None):
     app = SupportFlask(__name__)
     app.config.update(load_config(config))
     app.session_interface = MongoSessionInterface()
-    app.wsgi_app = TrustedProxy(AccountWorkspaces(app.wsgi_app), app.config)
+    app.wsgi_app = TrustedProxy(
+        AccountWorkspaces(app.wsgi_app, app.config["PORTAL_KIND"]), app.config
+    )
 
     @app.context_processor
     def account_workspace_links():
@@ -76,7 +78,7 @@ def create_app(config=None):
     def index():
         return render_template("entry.html", title="Student Support", context="public")
 
-    if app.config["APP_ENV"] == "development":
+    if app.config["APP_ENV"] == "development" and app.config["PORTAL_KIND"] == "general":
         from .gallery import gallery
 
         app.register_blueprint(gallery)

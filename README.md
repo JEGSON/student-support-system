@@ -23,15 +23,28 @@ cd /Users/wealth/Documents/Codex/2026-11-02/go/student-support-system
 .venv/bin/python scripts/run_local.py
 ```
 
-Open http://127.0.0.1:5050. Choose **Create a student account** to register with
+Open the student portal at http://127.0.0.1:5050 and the staff portal at
+http://localhost:5050. These distinct hostnames keep the two accounts signed in
+independently in the same browser. Enter the account's email, then its password on
+the secure identity page. Choose **Create a student account** to register with
 synthetic details, then **Your profile** to edit your preferred name/course.
 University staff can use **University staff sign-in** on the homepage, or open
-http://127.0.0.1:5050/staff/sign-in. Existing demo staff credentials are in the
+http://localhost:5050/sign-in. Existing demo staff credentials are in the
 private runtime/synthetic-logins.json file; use manager_finance for finance requests.
 Docker dependencies must already be running. For a new
 installation follow setup, including frozen dependency sync, private configuration,
 database contracts/routing and synthetic identity provisioning. Generated passwords
 are in ignored runtime/synthetic-logins.json; none are committed or packaged.
+
+For an existing installation, refresh the identity container with the current
+Compose file and run `.venv/bin/python -m scripts.configure_portals` before
+starting the preview. See [portal verification](docs/evidence/portal-redesign/README.md)
+for the host, sign-in and session boundaries.
+
+The subsequent [codebase review](docs/evidence/codebase-review-2026-11-04/README.md)
+documents fixes to old staff bookmarks, authentication error handling, audit purposes,
+referral concurrency, notification URL checks and local database privileges, with
+the complete regression results and the remaining manual-login uncertainty.
 
 See [handover](docs/handbook/handover.md), [operations](docs/handbook/operations.md),
 [known limitations](docs/handbook/known-limitations.md), [as-built architecture](docs/architecture/runtime-status.md),

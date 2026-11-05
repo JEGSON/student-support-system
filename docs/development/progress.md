@@ -193,3 +193,52 @@ User authorised all remaining local stages. Implemented scoped staff/triage work
 ## Stages 11–13
 
 Local generic SMTP capture, current-scope minimal referrals and synthetic retention/holds/dual-approved offline disposal implemented. Stage gates saved in stage-11, stage-12, stage-13 evidence. Full 234-test unit/integration gate passes. Added durable disposal ledger after informing user; web cannot erase history, execution requires offline maintenance. Next: rendered accessibility and operational hardening.
+
+
+## 4 November 2026 — Portal redesign continuation complete
+
+Resumed the unfinished separate-host portal redesign from partial browser evidence.
+Student and staff previews now run at 127.0.0.1:5050 and localhost:5050 with distinct
+host-only cookies, exact OIDC clients, portal role gates and email-first entry.
+The provider-specific theme advances its native fresh-account action so remembered
+SSO identities do not require a manual account-selection step. Existing credentials,
+roles and development records were preserved. Production entry/deployment unchanged.
+
+Fixed legacy navigation ambiguities, restored the reserved email-domain rule for
+local registration, and darkened step/directory numbering after axe contrast findings.
+All 373 tests pass on the final version in two complementary runs: 12 portal browser
+checks (58.19s), then 361 remaining checks (227.21s), zero skips/errors/failures.
+Forty-eight current portal screenshots and axe reports document both engines and
+390/768/1440 layouts; zero selected-rule violations. Lint/format, foundation/links,
+static design, whitespace and actual-secret checks pass. Historical evidence
+overwritten by legacy tests was restored. Both preview hosts are ready.
+
+See ../evidence/portal-redesign/README.md for the observed failures, corrections,
+reports and limits. No remote push, public deployment, real student record or external
+message was introduced.
+
+
+## 4 November 2026 — Codebase review after administrator login report
+
+Reviewed authentication/OIDC/session and portal boundaries, authorisation, case/
+communication/referral/lifecycle/privacy services, audit, notification delivery,
+persistence and operational setup/recovery. Native Safari still had an old staff
+page on the student hostname; refreshed it and verified the correct administrator
+identity on the staff password page. The exact user-entered password rejection
+was not reproduced; no credential reset was performed.
+
+Fixed eight confirmed findings: overly broad local web DB privileges; cross-host
+staff/case navigation; lost email-step return destinations; misleading callback
+errors and outage status; ambiguous existing-account/invitation wording; discarded
+read purposes; source referral snapshot concurrency; notification URL userinfo.
+Applied the optional audit-purpose validator and corrected local role definitions
+without seeding/resetting records or changing credentials.
+
+Final complete gate under the tightened roles: **400 passed in 294.85 seconds**,
+zero failures/errors/skips (60 browser, 230 integration, 110 unit). Forty-eight
+portal axe reports have zero selected-rule violations. Advisory scan: 55 Python
+dependencies, zero skipped, zero known findings. Lint/format, foundation/links,
+static design, whitespace and private-secret scans pass. Preserved historical
+screenshots and current review evidence separately. Local previews remain ready.
+See ../evidence/codebase-review-2026-11-04/README.md for findings, failed pre-fix
+checks, corrections, native-browser scope and remaining login uncertainty.

@@ -1,0 +1,70 @@
+FFFFFFFFFFF                                                              [100%]
+=================================== FAILURES ===================================
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[cases-delete] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[messages-update] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[messages-delete] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[internal_notes-update] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[internal_notes-delete] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[users-delete] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[teams-delete] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[memberships-delete] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[referrals-delete] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[privileged_grants-delete] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+_ test_web_database_identity_cannot_erase_history_or_manage_worker_principals[service_principals-find] _
+tests/integration/test_transaction_foundation.py:202: in test_web_database_identity_cannot_erase_history_or_manage_worker_principals
+    with pytest.raises(OperationFailure) as failure:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE OperationFailure
+=========================== short test summary info ============================
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[cases-delete]
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[messages-update]
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[messages-delete]
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[internal_notes-update]
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[internal_notes-delete]
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[users-delete]
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[teams-delete]
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[memberships-delete]
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[referrals-delete]
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[privileged_grants-delete]
+FAILED tests/integration/test_transaction_foundation.py::test_web_database_identity_cannot_erase_history_or_manage_worker_principals[service_principals-find]
+11 failed, 11 deselected in 0.21s

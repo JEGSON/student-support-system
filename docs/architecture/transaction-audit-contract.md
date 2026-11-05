@@ -30,7 +30,11 @@ correlation IDs. Incoming correlation headers are ignored; response X-Request-ID
 matches audits. Required reads must commit their audit before returning content.
 
 `AuditWriter` accepts only fixed actions, target types, identifiers and changed
-field names. No narrative/free metadata bag. Existing access changes now use it.
+field names. No narrative/free metadata bag. Controlled `archive_read` and
+`audit_reviewed` records additionally retain the required operational purpose in
+one optional, single-line field bounded to 1,000 characters. This field is not for
+case narratives. The offline schema command must install the additive validator
+before running this release. Existing access changes use the same audit writer.
 Public DB identities can insert audits but cannot read/update/delete them; case
 history is find/insert only. `AuditReader` requires current reviewer context,
 approved team/case scope and a nonempty bounded purpose, commits a read audit, then
@@ -41,7 +45,7 @@ Local roles are explicit collection grants, with separate development/test secre
 
 | Identity | Access |
 | --- | --- |
-| support_app / support_web_test | Managed business/session CRUD; history find/insert; audits insert only; outbox find/insert; no DDL |
+| support_app / support_web_test | Business find/insert/update; session/auth-attempt/submission-key CRUD; history find/insert; audits insert only; outbox find/insert/update; no service-principal access or DDL |
 | support_fixture / support_test | Trusted offline dev/test maintenance readWrite, including fixture reset; never a public app credential |
 | support_audit / support_audit_test | Audit find only in their own environment |
 | support_worker / support_worker_test | Outbox find/update; user contact/identity and service principal find; no case/messages/notes/audits or cross-environment access |

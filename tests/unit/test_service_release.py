@@ -8,7 +8,7 @@ from app.config import ConfigurationError, load_config
 from app.services.accounts import LOCAL_ISSUER, Accounts
 from app.services.enrolment import contact_address, invitation_hash
 from app.services.policy import AccessDenied
-from worker.delivery import SMTPDelivery
+from worker.delivery import LocalDelivery, SMTPDelivery
 
 
 @pytest.mark.parametrize(
@@ -67,6 +67,21 @@ def smtp_settings():
         "SMTP_PASSWORD": "unit-test-password",
         "SMTP_FROM": "support@university.ac.uk",
     }
+
+
+@pytest.mark.parametrize("userinfo", ["", ":password", "user", "user:password"])
+def test_notification_links_never_contain_url_credentials(userinfo):
+    with pytest.raises(ValueError):
+        SMTPDelivery(
+            None,
+            str(uuid4()),
+            {
+                **smtp_settings(),
+                "APP_BASE_URL": "https://" + userinfo + "@support.university.ac.uk",
+            },
+        )
+    with pytest.raises(ValueError):
+        LocalDelivery(None, str(uuid4()), "http://" + userinfo + "@127.0.0.1:5050")
 
 
 def test_smtp_requires_optin_and_rejects_plaintext_or_capture_contact():

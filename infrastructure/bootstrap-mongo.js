@@ -28,9 +28,7 @@ if (!admin.getUser('support_schema')) {
 }
 
 // Stage 07 collection privileges replace broad readWrite on the public identity.
-const collections=['users','teams','memberships','cases','messages','internal_notes',
- 'referrals','sessions','auth_attempts','submission_keys','triage_claims',
- 'privileged_grants','service_principals'];
+const collections=['users','teams','memberships','referrals','triage_claims','privileged_grants'];
 function ensureRole(database,name,privileges) {
  const target=admin.getSiblingDB(database);
  const definition={privileges:privileges,roles:[]};
@@ -38,7 +36,10 @@ function ensureRole(database,name,privileges) {
 }
 for(const database of ['student_support_dev','student_support_test']) {
  ensureRole(database,'support_web',[
-  ...collections.map(collection=>({resource:{db:database,collection},actions:['find','insert','update','remove']})),
+  ...collections.map(collection=>({resource:{db:database,collection},actions:['find','insert','update']})),
+  ...['sessions','auth_attempts','submission_keys'].map(collection=>({resource:{db:database,collection},actions:['find','insert','update','remove']})),
+  {resource:{db:database,collection:'cases'},actions:['find','insert','update']},
+  ...['messages','internal_notes'].map(collection=>({resource:{db:database,collection},actions:['find','insert']})),
   {resource:{db:database,collection:'rate_limits'},actions:['find','insert','update']},
   {resource:{db:database,collection:'disposal_records'},actions:['find','insert','update']},
   {resource:{db:database,collection:'account_closures'},actions:['find','insert','update']},
